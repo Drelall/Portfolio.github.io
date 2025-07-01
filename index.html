@@ -5,17 +5,30 @@
     <title>Mon Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header class="header-booki">
-         <div class="logo">
-        <img src="./images/plume-pointue.png" alt="Logo " height="60">
+        <div class="logo">
+            <img src="./images/plume-pointue.png" alt="Logo " height="60">
         </div>
         <nav class="nav-booki">
-            <a href="#projets">Projets</a>
-            <a href="#a-propos">À propos</a>
-            <a href="#contact">Contact</a>
+            <div class="dropdown">
+                <a href="#articles" class="dropdown-toggle">Les articles</a>
+                <div class="dropdown-menu">
+                    <a href="./page1.html">World of Warcraft</a>
+                </div>
+            </div>
+            <a href="#recits">Les récits</a>
         </nav>
     </header>
+    <main>
+        <section id="projets">
+            <h2>World of Warcraft</h2>
+            <div class="projet">
+                <h3>Mon Projet</h3>
+                <p>Description de mon projet sur World of Warcraft.</p>
+            </div>
+        </section>
     <section id="projets">
         <h2>Mes Projets</h2>
         <div class="projet">
@@ -35,6 +48,8 @@
         <h2>Contact</h2>
         <p>Email : jacques.dupont@email.com</p>
     </section>
+    </main>
+    
     <footer>
         &copy; 2025 Jacques Dupont
     </footer>
