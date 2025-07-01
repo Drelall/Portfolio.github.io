@@ -16,7 +16,7 @@ body {
 
 .logo img {
     display: block;
-    height: 60px;
+    height: 53px;
 }
 
 .nav-booki {
@@ -38,31 +38,34 @@ body {
     display: none;
     position: absolute;
     top: 100%;
-    left: 50%; /* centre horizontalement */
-    transform: translateX(-50%); /* décale de la moitié de sa largeur */
+    left: 50%;
+    transform: translateX(-50%);
     min-width: 180px;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: #232b36; /* fond sombre */
     border-radius: 0 0 8px 8px;
     z-index: 10;
+    box-shadow: none; /* pas d'ombre */
+    padding: 0;
 }
 
 .dropdown-menu a {
     display: block;
-    padding: 10px 20px;
-    color: #0065fc;
+    padding: 12px 24px;
+    color: #fff; /* texte clair */
     text-decoration: none;
     font-size: 1rem;
-    border-bottom: 1px solid #f0f0f0;
-    transition: background 0.2s;
+    border: none; /* pas de bordure */
+    background: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.dropdown-menu a:hover {
+    background: #31405a; /* léger fond au survol */
+    color: #7ec3ff;      /* texte bleu clair au survol */
 }
 
 .dropdown-menu a:last-child {
     border-bottom: none;
-}
-
-.dropdown-menu a:hover {
-    background: #f4f4f4;
 }
 
 .dropdown:hover .dropdown-menu,
@@ -76,8 +79,7 @@ body {
     color: black;
     font-weight: 500;
     font-size: 1.1rem;
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
+    border: none;
     padding-top: 8px;
     padding-bottom: 9px; /* augmente pour éloigner la barre */
     transition: border-color 0.2s;
@@ -86,7 +88,7 @@ body {
 
 .nav-booki > a:hover,
 .dropdown > .dropdown-toggle:hover {
-    border-bottom: 2px solid #75052e;
+    border: none;
 }
 
 section {
