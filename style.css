@@ -5,22 +5,47 @@ body {
     color: #222;
 }
 
-header {
-    background: #222;
-    color: #fff;
-    padding: 30px 0;
-    text-align: center;
+.header-booki {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 40px 10px 40px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
-header nav a {
-    color: #fff;
-    margin: 0 15px;
+.logo h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #0065fc;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+
+.logo p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.nav-booki {
+    display: flex;
+    gap: 40px;
+}
+
+.nav-booki a {
     text-decoration: none;
-    font-weight: bold;
+    color:black;
+    font-weight: 500;
+    font-size: 1.1rem;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    padding-top: 8px;
+    padding-bottom: 6px;
+    transition: border-color 0.2s;
 }
 
-header nav a:hover {
-    text-decoration: underline;
+.nav-booki a:hover {
+    border-bottom: 2px solid #75052e;
 }
 
 section {
