@@ -10,13 +10,16 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 30px 40px 10px 40px;
-    background: #fff;
+    background: #226d54;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    background-image:url('');
+    background-size: cover;
+    background-position: center;
 }
 
 .logo img {
     display: block;
-    height: 53px;
+    height: 60px;
 }
 
 .nav-booki {
