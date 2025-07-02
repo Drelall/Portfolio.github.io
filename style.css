@@ -24,7 +24,7 @@ body {
 
 .nav-booki {
     display: flex;
-    gap: 90px;
+    gap: 140px;
     margin-right: 50px;
     align-items: center;
 }
