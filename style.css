@@ -124,3 +124,58 @@ footer {
     color: #fff;
     margin-top: 40px;
 }
+
+/*************carousel****************/
+.carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 0;
+    gap: 10px;
+}
+
+.carousel-track {
+    display: flex;
+    overflow: hidden;
+    width: 320px;
+}
+
+.carousel-item {
+    min-width: 320px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background: #232b36;
+    border-radius: 8px;
+    margin: 0 5px;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.carousel-item img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.carousel-btn {
+    background: #31405a;
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.carousel-btn:hover {
+    background: #7ec3ff;
+    color: #232b36;
+}
