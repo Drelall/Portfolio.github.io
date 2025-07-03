@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background: #f4f4f4;
+    background: rgb(243, 232, 211);
     color: #222;
 }
 
@@ -40,13 +40,13 @@ body {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 235%;
     left: 50%;
     transform: translateX(-50%);
     min-width: 180px;
     background: #232b36; /* fond sombre */
     border-radius: 0 0 8px 8px;
-    z-index: 10;
+    z-index: 1000;
     box-shadow: none; /* pas d'ombre */
     padding: 0;
 }
@@ -79,7 +79,7 @@ body {
 .nav-booki > a,
 .dropdown > .dropdown-toggle {
     text-decoration: none;
-    color: black;
+    color:rgb(244, 243, 242);
     font-weight: 500;
     font-size: 1.1rem;
     border: none;
@@ -94,10 +94,20 @@ body {
     border: none;
 }
 
+.dropdown:first-child .dropdown-toggle {
+    position: relative;
+    top: 20px; /* Ajuste la valeur selon le rendu souhaité */
+}
+.dropdown:nth-child(2) .dropdown-toggle {
+    position: relative;
+    top: 20px; /* même valeur que pour "Les articles" */
+}
+
+
 section {
     max-width: 800px;
     margin: 40px auto;
-    background: #fff;
+    background: #f4f4f4;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
