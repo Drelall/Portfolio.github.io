@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px 20px; /* Réduit le padding vertical de 20px à 10px */
     background: #226d54;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     background-image:url('');
@@ -19,7 +19,7 @@ body {
 
 .logo img {
     display: block;
-    height: 60px;
+    height: 45px; /* Réduit de 60px à 45px pour s'adapter à la barre plus petite */
 }
 
 .nav-booki {
@@ -40,7 +40,7 @@ body {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 235%;
+    top: 120%; /* Ajusté pour un espacement visuellement plus agréable */
     left: 50%;
     transform: translateX(-50%);
     min-width: 180px;
@@ -94,14 +94,7 @@ body {
     border: none;
 }
 
-.dropdown:first-child .dropdown-toggle {
-    position: relative;
-    top: 20px; /* Ajuste la valeur selon le rendu souhaité */
-}
-.dropdown:nth-child(2) .dropdown-toggle {
-    position: relative;
-    top: 20px; /* même valeur que pour "Les articles" */
-}
+/* Suppression des ajustements de position - plus nécessaires avec la barre plus petite */
 
 /*?bannière*/
 .banniere {
@@ -138,7 +131,7 @@ footer {
 /*?animation du logo*/
 .logo img {
     display: block;
-    height: 60px;
+    height: 45px; /* Cohérent avec la règle précédente */
     transition: transform 0.3s;
     cursor: pointer;
 }
