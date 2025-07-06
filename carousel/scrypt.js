@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Animation du logo
     const logoImg = document.querySelector('.logo img');
     const logoLink = document.querySelector('.logo a');
 
@@ -28,5 +29,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     } else {
         console.log('Logo non trouvé !');
+    }
+
+    // Mode nuit
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const body = document.body;
+
+    // Vérifier si le mode sombre est déjà activé (sauvegardé dans localStorage)
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        body.classList.add('dark-mode');
+    }
+
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+
+            // Sauvegarder la préférence dans localStorage
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
     }
 });

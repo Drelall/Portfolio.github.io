@@ -35,20 +35,44 @@ body {
 
 .dropdown-toggle {
     cursor: pointer;
+    position: relative;
+    padding-right: 20px; /* Espace pour la flèche */
+}
+
+/* Flèche indicatrice */
+.dropdown-toggle::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid currentColor;
+    transition: transform 0.3s ease;
+}
+
+/* Animation de la flèche au survol */
+.dropdown:hover .dropdown-toggle::after {
+    transform: translateY(-50%) rotate(180deg);
 }
 
 .dropdown-menu {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
     position: absolute;
     top: 120%; /* Ajusté pour un espacement visuellement plus agréable */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-10px); /* Animation de glissement */
     min-width: 180px;
     background: #232b36; /* fond sombre */
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px; /* Bordures arrondies sur tous les côtés */
     z-index: 1000;
-    box-shadow: none; /* pas d'ombre */
-    padding: 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1); /* Ombre moderne */
+    padding: 0; /* Suppression du padding pour que les liens prennent toute la largeur */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animation fluide */
 }
 
 .dropdown-menu a {
@@ -59,7 +83,8 @@ body {
     font-size: 1rem;
     border: none; /* pas de bordure */
     background: none;
-    transition: background 0.2s, color 0.2s;
+    transition: all 0.3s ease; /* Transition plus fluide */
+    margin: 0; /* Suppression des marges pour prendre toute la largeur */
 }
 
 .dropdown-menu a:hover {
@@ -67,13 +92,25 @@ body {
     color: #7ec3ff;      /* texte bleu clair au survol */
 }
 
-.dropdown-menu a:last-child {
-    border-bottom: none;
+.dropdown-menu a:first-child {
+    border-radius: 8px 8px 0 0; /* Bordures arrondies seulement en haut pour le premier */
 }
 
+.dropdown-menu a:last-child {
+    border-radius: 0 0 8px 8px; /* Bordures arrondies seulement en bas pour le dernier */
+}
+
+/* Cas spécial : quand il n'y a qu'un seul élément dans le menu */
+.dropdown-menu a:only-child {
+    border-radius: 8px; /* Bordures arrondies sur tous les côtés */
+}
+
+/* Animation d'apparition du menu */
 .dropdown:hover .dropdown-menu,
 .dropdown:focus-within .dropdown-menu {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0); /* Position finale */
 }
 
 .nav-booki > a,
@@ -149,5 +186,86 @@ footer {
     100% { transform: rotate(0deg);}
 }
 /*? fin d'animation du logo*/
+
+/* Bouton mode nuit */
+.dark-mode-btn {
+    background: #31405a; /* Couleur du survol du menu déroulant - plus harmonieuse */
+    border: none;
+    border-radius: 20px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: white;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-left: 20px;
+    min-width: 80px; /* Largeur minimale pour plus d'harmonie */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.dark-mode-btn svg {
+    display: block;
+}
+
+.dark-mode-btn:hover {
+    background: #3d4f68; /* Version légèrement plus claire pour le survol */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.dark-mode-btn .moon-icon {
+    display: none;
+}
+
+/* Mode sombre */
+body.dark-mode {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .header-booki {
+    background: #2d2d2d;
+}
+
+body.dark-mode section {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-menu {
+    background: #1a1a1a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée en mode sombre */
+}
+
+body.dark-mode .dropdown-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-menu a:hover {
+    background: #3a3a3a;
+    color: #7ec3ff;
+}
+
+body.dark-mode .dark-mode-btn .sun-icon {
+    display: none;
+}
+
+body.dark-mode .dark-mode-btn .moon-icon {
+    display: inline;
+}
+
+body.dark-mode .dark-mode-btn {
+    background: #1a1a1a; /* Même couleur que le menu déroulant en mode sombre */
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a; /* Bordure subtile pour le définir */
+}
+
+body.dark-mode .dark-mode-btn:hover {
+    background: #3a3a3a; /* Même couleur que le survol du menu déroulant */
+    color: #7ec3ff; /* Texte bleu au survol comme dans le menu */
+}
 
 
