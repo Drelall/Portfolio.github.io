@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 40px 10px 40px;
+    padding: 20px;
     background: #226d54;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     background-image:url('');
@@ -103,6 +103,18 @@ body {
     top: 20px; /* même valeur que pour "Les articles" */
 }
 
+/*?bannière*/
+.banniere {
+    width: 100%;
+    height: 300px; /* ajuste la hauteur selon ton besoin */
+}
+.banniere img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+/*?bannière*/
+
 
 section {
     max-width: 800px;
@@ -122,6 +134,27 @@ footer {
     padding: 20px 0;
     background: #222;
     color: #fff;
-    margin-top: 40px;
 }
+/*?animation du logo*/
+.logo img {
+    display: block;
+    height: 60px;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.logo img.wiggle {
+    animation: plume-wiggle 0.6s;
+}
+
+@keyframes plume-wiggle {
+    0% { transform: rotate(0deg);}
+    20% { transform: rotate(-15deg);}
+    40% { transform: rotate(10deg);}
+    60% { transform: rotate(-10deg);}
+    80% { transform: rotate(5deg);}
+    100% { transform: rotate(0deg);}
+}
+/*? fin d'animation du logo*/
+
 
