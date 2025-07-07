@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon Portfolio</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -46,11 +47,58 @@
 
     <main>
         <div class="banniere">
-            <img src="./images/montagne.png">
+            <img src="./images/cactus.png">
         </div>
+
+        <!-- Carousel des articles -->
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel-track">
+                    <div class="carousel-slide">
+                        <a href="lesrecits/flamel.html" class="carousel-link">
+                            <img src="images/flamel.png" alt="Le journal intime de Nicolas Flamel">
+                            <div class="carousel-caption">
+                                <h3>Le journal intime de Nicolas Flamel</h3>
+                                <p>Découvrez les derniers écrits du célèbre alchimiste</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-slide">
+                        <a href="lesrecits/parapluie.html" class="carousel-link">
+                            <img src="images/sortilègeparapluie.png" alt="L'invention du sortilège du parapluie">
+                            <div class="carousel-caption">
+                                <h3>L'invention du sortilège du parapluie</h3>
+                                <p>L'histoire fascinante de Perry Moppins et son invention</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-slide">
+                        <a href="lesrecits/botaniste.html" class="carousel-link">
+                            <img src="images/botaniste.webp" alt="Le journal d'un botaniste">
+                            <div class="carousel-caption">
+                                <h3>Le journal d'un botaniste</h3>
+                                <p>Les découvertes extraordinaires d'un explorateur de la nature</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-prev" aria-label="Article précédent">‹</button>
+                <button class="carousel-btn carousel-next" aria-label="Article suivant">›</button>
+                <div class="carousel-indicators">
+                    <button class="indicator active" data-slide="0"></button>
+                    <button class="indicator" data-slide="1"></button>
+                    <button class="indicator" data-slide="2"></button>
+                </div>
+            </div>
+        </section>
     </main>
     
     <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <a href="mailto:jacques.bobbio@outlook.fr" class="contact-btn">Me contacter</a>
+            </div>
+        </div>
     </footer>
     <script src="carousel/scrypt.js"></script>
 </body>

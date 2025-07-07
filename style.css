@@ -1,8 +1,20 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
     background: rgb(243, 232, 211);
     color: #222;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
 }
 
 .header-booki {
@@ -142,6 +154,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center bottom;
 }
 /*?bannière*/
 
@@ -161,9 +174,610 @@ section {
 
 footer {
     text-align: center;
-    padding: 20px 0;
+    padding: 40px 20px;
     background: #222;
     color: #fff;
+    width: 100%;
+    margin: 0;
+    margin-top: auto;
+    min-height: 100px;
+    box-sizing: border-box;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section h3 {
+    color: #7ec3ff;
+    font-size: 1.5rem;
+    margin: 0 0 15px 0;
+}
+
+.footer-section p {
+    margin: 10px 0;
+    color: #ccc;
+}
+
+.contact-btn {
+    display: inline-block;
+    background: #226d54;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.contact-btn:hover {
+    background: #7ec3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.email-direct {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.email-direct a {
+    color: #7ec3ff;
+    text-decoration: none;
+    border-bottom: 1px dotted #7ec3ff;
+}
+
+.email-direct a:hover {
+    color: #fff;
+    border-bottom-color: #fff;
+}
+
+/* Styles pour la page de contact */
+.contact-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.contact-container h1 {
+    text-align: center;
+    color: #226d54;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #226d54;
+    padding-bottom: 15px;
+}
+
+.contact-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.contact-form-section h2,
+.contact-info-section h2 {
+    color: #31405a;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    border-left: 4px solid #226d54;
+    padding-left: 15px;
+}
+
+.contact-form {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #226d54;
+}
+
+.submit-btn {
+    background: #226d54;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    background: #7ec3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.contact-info {
+    background: #f4f4f4;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.contact-info p {
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.contact-info a {
+    color: #226d54;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contact-info a:hover {
+    color: #7ec3ff;
+    text-decoration: underline;
+}
+
+.response-time {
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+}
+
+/* Mode sombre pour la page de contact */
+body.dark-mode .contact-container h1 {
+    color: #7ec3ff;
+    border-bottom-color: #7ec3ff;
+}
+
+body.dark-mode .contact-intro {
+    color: #ccc;
+}
+
+body.dark-mode .contact-form-section h2,
+body.dark-mode .contact-info-section h2 {
+    color: #e0e0e0;
+    border-left-color: #7ec3ff;
+}
+
+body.dark-mode .contact-form {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-group label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: #7ec3ff;
+}
+
+body.dark-mode .contact-info {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .contact-info a {
+    color: #7ec3ff;
+}
+
+body.dark-mode .response-time {
+    color: #aaa;
+}
+
+/* Responsive pour la page de contact */
+@media (max-width: 768px) {
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .contact-container h1 {
+        font-size: 2rem;
+    }
+
+    .contact-form {
+        padding: 20px;
+    }
+
+    .contact-page {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+}
+
+/* Styles pour la page de contact simplifiée */
+.contact-page-simple {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgb(243, 232, 211);
+}
+
+.contact-container-simple {
+    max-width: 500px;
+    width: 100%;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #226d54;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.back-btn:hover {
+    color: #7ec3ff;
+}
+
+.contact-container-simple h1 {
+    text-align: center;
+    color: #226d54;
+    font-size: 2rem;
+    margin: 0 0 30px 0;
+    border-bottom: 2px solid #226d54;
+    padding-bottom: 15px;
+}
+
+.contact-form-simple {
+    width: 100%;
+}
+
+.contact-form-simple .form-group {
+    margin-bottom: 20px;
+}
+
+.contact-form-simple .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.contact-form-simple .form-group input,
+.contact-form-simple .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.contact-form-simple .form-group input:focus,
+.contact-form-simple .form-group textarea:focus {
+    outline: none;
+    border-color: #226d54;
+}
+
+.contact-form-simple .submit-btn {
+    background: #226d54;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.contact-form-simple .submit-btn:hover {
+    background: #7ec3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Mode sombre pour la page de contact simplifiée */
+body.dark-mode .contact-page-simple {
+    background: #1a1a1a;
+}
+
+body.dark-mode .contact-container-simple {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .back-btn {
+    color: #7ec3ff;
+}
+
+body.dark-mode .contact-container-simple h1 {
+    color: #7ec3ff;
+    border-bottom-color: #7ec3ff;
+}
+
+body.dark-mode .contact-form-simple .form-group label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .contact-form-simple .form-group input,
+body.dark-mode .contact-form-simple .form-group textarea {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .contact-form-simple .form-group input:focus,
+body.dark-mode .contact-form-simple .form-group textarea:focus {
+    border-color: #7ec3ff;
+}
+
+/* Responsive pour la page de contact simplifiée */
+@media (max-width: 768px) {
+    .contact-container-simple {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+
+    .contact-container-simple h1 {
+        font-size: 1.5rem;
+    }
+
+    .back-btn {
+        top: 15px;
+        left: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Messages de succès et alternative email */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #c3e6cb;
+    text-align: center;
+}
+
+.contact-alternative {
+    margin-top: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e9ecef;
+}
+
+.contact-alternative p {
+    margin: 0 0 10px 0;
+    color: #666;
+}
+
+.email-link {
+    color: #226d54;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.email-link:hover {
+    color: #7ec3ff;
+    text-decoration: underline;
+}
+
+/* Mode sombre pour les nouveaux éléments */
+body.dark-mode .success-message {
+    background: #1e4d3a;
+    color: #a8e6a3;
+    border-color: #2d5a3d;
+}
+
+body.dark-mode .contact-alternative {
+    background: #3a3a3a;
+    border-color: #555;
+}
+
+body.dark-mode .contact-alternative p {
+    color: #ccc;
+}
+
+body.dark-mode .email-link {
+    color: #7ec3ff;
+}
+
+/* Styles pour la page de contact simplifiée */
+.contact-info-display {
+    text-align: center;
+}
+
+.contact-info-display h2 {
+    color: #226d54;
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+.email-display {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 2px solid #e9ecef;
+}
+
+.email-display p {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.email-main {
+    display: inline-block;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #226d54;
+    text-decoration: none;
+    padding: 10px 20px;
+    background: white;
+    border: 2px solid #226d54;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.email-main:hover {
+    background: #226d54;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
+}
+
+.email-copy-instruction {
+    margin-top: 15px !important;
+    font-style: italic;
+    color: #666 !important;
+    font-size: 0.9rem !important;
+}
+
+.contact-template {
+    background: #fff;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.contact-template h3 {
+    color: #31405a;
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+}
+
+.template-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #226d54;
+    margin-bottom: 20px;
+    text-align: left;
+    font-family: monospace;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.template-box p {
+    margin: 8px 0;
+    color: #333;
+}
+
+.copy-template-btn {
+    background: #226d54;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.copy-template-btn:hover {
+    background: #7ec3ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Mode sombre pour la nouvelle interface */
+body.dark-mode .contact-info-display h2 {
+    color: #7ec3ff;
+}
+
+body.dark-mode .email-display {
+    background: #2a2a2a;
+    border-color: #555;
+}
+
+body.dark-mode .email-display p {
+    color: #e0e0e0;
+}
+
+body.dark-mode .email-main {
+    background: #3a3a3a;
+    color: #7ec3ff;
+    border-color: #7ec3ff;
+}
+
+body.dark-mode .email-main:hover {
+    background: #7ec3ff;
+    color: #1a1a1a;
+}
+
+body.dark-mode .email-copy-instruction {
+    color: #aaa !important;
+}
+
+body.dark-mode .contact-template {
+    background: #2a2a2a;
+    border-color: #555;
+}
+
+body.dark-mode .contact-template h3 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .template-box {
+    background: #3a3a3a;
+    border-left-color: #7ec3ff;
+}
+
+body.dark-mode .template-box p {
+    color: #e0e0e0;
 }
 /*?animation du logo*/
 .logo img {
@@ -277,6 +891,16 @@ body.dark-mode .dark-mode-btn:hover {
     background: #f4f4f4;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+    /* Protection contre la sélection et le copier-coller */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Désactiver le menu contextuel */
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .simple-article h1 {
@@ -331,6 +955,569 @@ body.dark-mode .simple-article h2 {
 
     .simple-article h2 {
         font-size: 1.3rem;
+    }
+}
+
+/* Styles pour le carousel */
+.carousel-section {
+    width: 100%;
+    margin: 40px auto;
+    padding: 0;
+}
+
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    position: relative;
+}
+
+.carousel-link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 20px 30px 40px;
+    transform: translateY(0);
+}
+
+
+
+.carousel-caption h3 {
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    color: #7ec3ff;
+}
+
+.carousel-caption p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(34, 109, 84, 0.8);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: #226d54;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev {
+    left: 20px;
+}
+
+.carousel-next {
+    right: 20px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active,
+.indicator:hover {
+    background: white;
+}
+
+/* Mode sombre pour le carousel */
+body.dark-mode .carousel-container {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .carousel-btn {
+    background: rgba(126, 195, 255, 0.8);
+}
+
+body.dark-mode .carousel-btn:hover {
+    background: #7ec3ff;
+}
+
+/* RESPONSIVE DESIGN COMPLET */
+
+/* Tablettes et petits écrans (768px et moins) */
+@media (max-width: 768px) {
+    /* Navigation responsive */
+    .header-booki {
+        padding: 15px;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .logo img {
+        height: 35px;
+    }
+
+    .nav-booki {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .dropdown {
+        flex: 1;
+        min-width: 140px;
+        max-width: 200px;
+    }
+
+    .nav-link {
+        padding: 12px 8px;
+        text-align: center;
+        border: 2px solid #226d54;
+        border-radius: 8px;
+        background: white;
+        display: block;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        min-height: 20px;
+    }
+
+    .nav-link:hover {
+        background: #226d54;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
+    }
+
+    .dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #226d54;
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        display: none;
+        z-index: 1000;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown-content a {
+        border: none !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-content a:last-child {
+        border-bottom: none;
+        border-radius: 0 0 6px 6px !important;
+    }
+
+    .dark-mode-btn {
+        margin-top: 10px;
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Bannière responsive */
+    .banniere {
+        height: 200px;
+    }
+
+    /* Carousel responsive */
+    .carousel-section {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    .carousel-container {
+        height: 250px;
+    }
+
+    .carousel-caption {
+        padding: 15px 20px 30px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+    }
+
+    .carousel-caption p {
+        font-size: 0.9rem;
+        display: none; /* Masquer la description sur tablette */
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .carousel-prev {
+        left: 10px;
+    }
+
+    .carousel-next {
+        right: 10px;
+    }
+
+    /* Footer responsive */
+    footer {
+        padding: 30px 15px;
+    }
+
+    .footer-section h3 {
+        font-size: 1.3rem;
+    }
+
+    .contact-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    /* Mode sombre responsive */
+    body.dark-mode .nav-link {
+        background: #2a2a2a;
+        border-color: #7ec3ff;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .nav-link:hover {
+        background: #7ec3ff;
+        color: #1a1a1a;
+        box-shadow: 0 4px 12px rgba(126, 195, 255, 0.3);
+    }
+
+    body.dark-mode .dropdown-content {
+        background: #2a2a2a;
+        border-color: #7ec3ff;
+    }
+
+    body.dark-mode .dropdown-content a {
+        border-bottom-color: #555 !important;
+    }
+}
+
+/* Mobiles (480px et moins) - Navigation verticale mais carousel desktop */
+@media (max-width: 480px) {
+    /* Navigation mobile */
+    .header-booki {
+        padding: 12px 10px;
+        gap: 15px;
+    }
+
+    .logo img {
+        height: 30px;
+    }
+
+    .nav-booki {
+        flex-direction: column;
+        gap: 12px;
+        max-width: 100%;
+    }
+
+    .dropdown {
+        width: 100%;
+        max-width: none;
+    }
+
+    .nav-link {
+        padding: 14px 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        min-height: 24px;
+    }
+
+    .dark-mode-btn {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* Bannière mobile */
+    .banniere {
+        height: 150px;
+    }
+
+    /* Carousel garde la disposition desktop */
+    .carousel-section {
+        margin: 20px auto;
+        padding: 0 10px;
+    }
+
+    .carousel-container {
+        height: 300px; /* Plus haut pour garder les proportions */
+    }
+
+    .carousel-caption {
+        padding: 15px 20px 30px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+
+    .carousel-caption p {
+        font-size: 0.9rem;
+        display: block; /* Garder la description visible */
+    }
+
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .carousel-prev {
+        left: 10px;
+    }
+
+    .carousel-next {
+        right: 10px;
+    }
+
+    .carousel-indicators {
+        bottom: 15px;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+        margin: 0 4px;
+    }
+
+    /* Footer mobile */
+    footer {
+        padding: 25px 10px;
+    }
+
+    .footer-section h3 {
+        font-size: 1.2rem;
+    }
+
+    .footer-section p {
+        font-size: 0.9rem;
+    }
+
+    .contact-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Très petits écrans (320px et moins) - Titres visibles, carousel desktop */
+@media (max-width: 320px) {
+    /* Navigation très petits écrans - titres bien visibles */
+    .header-booki {
+        padding: 10px 8px;
+        gap: 12px;
+    }
+
+    .logo img {
+        height: 28px;
+    }
+
+    .nav-booki {
+        gap: 10px;
+    }
+
+    .nav-link {
+        padding: 12px 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        min-height: 22px;
+        line-height: 1.2;
+    }
+
+    .dark-mode-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Carousel garde la disposition desktop */
+    .carousel-container {
+        height: 280px; /* Hauteur suffisante pour garder les proportions */
+    }
+
+    .carousel-caption {
+        padding: 12px 15px 25px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+        line-height: 1.2;
+    }
+
+    .carousel-caption p {
+        font-size: 0.85rem;
+        display: block; /* Garder la description */
+        line-height: 1.3;
+    }
+
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+
+    .carousel-prev {
+        left: 8px;
+    }
+
+    .carousel-next {
+        right: 8px;
+    }
+
+    .indicator {
+        width: 8px;
+        height: 8px;
+        margin: 0 3px;
+    }
+}
+
+/* Écrans ultra-petits (310px et moins) - Titres visibles, carousel desktop */
+@media (max-width: 310px) {
+    /* Navigation ultra-compacte mais titres bien visibles */
+    .header-booki {
+        padding: 8px 5px;
+        gap: 10px;
+    }
+
+    .logo img {
+        height: 26px;
+    }
+
+    .nav-booki {
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    .dropdown {
+        min-width: 130px; /* Un peu plus large pour la lisibilité */
+    }
+
+    .nav-link {
+        padding: 10px 4px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        min-height: 20px;
+        line-height: 1.1;
+        /* Pas de text-overflow pour garder les titres visibles */
+    }
+
+    .dark-mode-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Carousel garde la disposition desktop même à 310px */
+    .carousel-container {
+        height: 250px; /* Hauteur réduite mais garde les proportions */
+    }
+
+    .carousel-caption {
+        padding: 10px 12px 20px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 0.9rem;
+        line-height: 1.2;
+        margin-bottom: 4px;
+    }
+
+    .carousel-caption p {
+        font-size: 0.8rem;
+        display: block; /* Garder la description visible */
+        line-height: 1.2;
+    }
+
+    .carousel-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .carousel-prev {
+        left: 5px;
+    }
+
+    .carousel-next {
+        right: 5px;
+    }
+
+    .indicator {
+        width: 7px;
+        height: 7px;
+        margin: 0 2px;
+    }
+
+    /* Footer ultra-compact */
+    footer {
+        padding: 20px 5px;
+    }
+
+    .contact-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
     }
 }
 
