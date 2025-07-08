@@ -294,7 +294,7 @@ body.dark-mode .dark-mode-btn .moon-icon {
     font-size: 1.5rem;
     color: #333;
     transition: all 0.3s ease;
-    z-index: 10;
+    z-index: 15;
 }
 
 .carousel-btn:hover {
@@ -302,12 +302,31 @@ body.dark-mode .dark-mode-btn .moon-icon {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.carousel-btn.prev {
+.carousel-btn.carousel-prev {
     left: 20px;
 }
 
-.carousel-btn.next {
+.carousel-btn.carousel-next {
     right: 20px;
+}
+
+.carousel-caption {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    color: white;
+    z-index: 12;
+    text-align: center;
+}
+
+.carousel-caption h3 {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    color: white;
+    display: inline-block;
 }
 
 .carousel-indicators {
@@ -423,13 +442,18 @@ body.dark-mode .dark-mode-btn .moon-icon {
     border-radius: 8px;
 }
 
+/* Ajustement spécifique pour l'image de Flamel */
+.story-hero-image.flamel-image {
+    width: 50%;
+}
+
 .story-hero-content {
     position: absolute;
     bottom: 120px;
     left: 0;
     right: 0;
     z-index: 10;
-    padding: 20px;
+    padding: 7px;
     color: white;
     text-align: center;
 }
@@ -480,11 +504,17 @@ body.dark-mode .dark-mode-btn .moon-icon {
 
 /* Conteneur pour aligner métadonnées et titre sur une ligne */
 .story-header-line {
-    display: flex;
+    display: inline-flex;
     align-items: baseline;
     justify-content: center;
     flex-wrap: nowrap;
     gap: 30px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 6px 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    flex-direction: row;
+    text-align: center;
 }
 
 .story-title {
@@ -494,6 +524,7 @@ body.dark-mode .dark-mode-btn .moon-icon {
     margin: 0;
     color: white;
     white-space: nowrap;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
 
 .story-excerpt {
@@ -555,7 +586,7 @@ body.dark-mode .dark-mode-btn .moon-icon {
    7. FOOTER
    ======================================== */
 footer {
-    background: #226d54;
+    background: #000000;
     padding: 30px 20px;
     text-align: center;
 }
@@ -673,7 +704,7 @@ body.dark-mode .story-body p {
 }
 
 body.dark-mode footer {
-    background: #2d2d2d;
+    background: #000000;
 }
 
 body.dark-mode .contact-btn {
@@ -747,14 +778,19 @@ body.dark-mode .contact-btn:hover {
         width: 75%;
     }
 
+    .story-hero-image.flamel-image {
+        width: 60%;
+    }
+
     .story-hero-content {
         bottom: 100px;
         padding: 15px;
     }
 
     .story-header-line {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;
+        gap: 20px;
+        padding: 18px 25px;
     }
 
     .story-title {
@@ -822,6 +858,10 @@ body.dark-mode .contact-btn:hover {
         font-size: 1.2rem;
     }
 
+    .carousel-caption h3 {
+        font-size: 1.1rem;
+    }
+
     .story-hero {
         min-height: 65vh;
     }
@@ -830,14 +870,19 @@ body.dark-mode .contact-btn:hover {
         width: 80%;
     }
 
+    .story-hero-image.flamel-image {
+        width: 65%;
+    }
+
     .story-hero-content {
         bottom: 80px;
         padding: 10px;
     }
 
     .story-header-line {
-        flex-direction: column;
-        gap: 8px;
+        flex-direction: row;
+        gap: 15px;
+        padding: 15px 20px;
     }
 
     .story-title {
@@ -896,7 +941,8 @@ body.dark-mode .contact-btn:hover {
 
     .story-header-line {
         flex-direction: column;
-        gap: 5px;
+        gap: 8px;
+        padding: 12px 18px;
     }
 
     .story-excerpt {
@@ -905,6 +951,10 @@ body.dark-mode .contact-btn:hover {
 
     .story-hero-image {
         width: 85%;
+    }
+
+    .story-hero-image.flamel-image {
+        width: 70%;
     }
 
     .story-hero-content {
@@ -924,6 +974,14 @@ body.dark-mode .contact-btn:hover {
 
     .carousel-container {
         height: 200px;
+    }
+
+    .carousel-caption {
+        top: 10px;
+    }
+
+    .carousel-caption h3 {
+        font-size: 0.9rem;
     }
 
     .contact-btn {
