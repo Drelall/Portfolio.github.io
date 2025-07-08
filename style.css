@@ -970,6 +970,8 @@ body.dark-mode .simple-article h2 {
     overflow: hidden;
     width: 100%;
     box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    height: 400px;
+    background: #000;
 }
 
 .carousel-track {
@@ -1093,12 +1095,29 @@ body.dark-mode .carousel-btn:hover {
 
 /* Tablettes et petits écrans (768px et moins) */
 @media (max-width: 768px) {
+    /* Prévention du débordement horizontal */
+    body {
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
     /* Navigation responsive */
     .header-booki {
         padding: 15px;
         flex-direction: column;
-        gap: 20px;
+        gap: 15px;
         align-items: center;
+        justify-content: center;
+    }
+
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
     }
 
     .logo img {
@@ -1109,15 +1128,18 @@ body.dark-mode .carousel-btn:hover {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 15px;
+        align-items: center;
+        gap: 20px;
         width: 100%;
         max-width: 500px;
+        margin: 0 auto;
     }
 
     .dropdown {
         flex: 1;
         min-width: 140px;
         max-width: 200px;
+        text-align: center;
     }
 
     .nav-link {
@@ -1171,9 +1193,12 @@ body.dark-mode .carousel-btn:hover {
     }
 
     .dark-mode-btn {
-        margin-top: 10px;
+        margin: 5px auto 0 auto;
         width: 40px;
         height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     /* Bannière responsive */
@@ -1189,6 +1214,12 @@ body.dark-mode .carousel-btn:hover {
 
     .carousel-container {
         height: 250px;
+    }
+
+    .carousel-slide img {
+        height: 250px;
+        object-fit: cover;
+        object-position: center;
     }
 
     .carousel-caption {
@@ -1269,14 +1300,19 @@ body.dark-mode .carousel-btn:hover {
     }
 
     .nav-booki {
-        flex-direction: column;
-        gap: 12px;
-        max-width: 100%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 20px;
     }
 
     .dropdown {
-        width: 100%;
-        max-width: none;
+        flex: 0 0 auto;
+        width: auto;
+        min-width: 120px;
     }
 
     .nav-link {
@@ -1296,14 +1332,27 @@ body.dark-mode .carousel-btn:hover {
         height: 150px;
     }
 
-    /* Carousel garde la disposition desktop */
+    /* Carousel garde la disposition desktop avec marges */
     .carousel-section {
         margin: 20px auto;
         padding: 0 10px;
+        width: 100%;
+        max-width: 100vw;
+        overflow: hidden;
     }
 
     .carousel-container {
-        height: 300px; /* Plus haut pour garder les proportions */
+        height: 300px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .carousel-slide img {
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
+        object-position: center;
+        max-width: 100%;
     }
 
     .carousel-caption {
@@ -1376,7 +1425,14 @@ body.dark-mode .carousel-btn:hover {
     }
 
     .nav-booki {
-        gap: 10px;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .dropdown {
+        flex: 1;
+        max-width: 130px;
+        min-width: 110px;
     }
 
     .nav-link {
@@ -1392,9 +1448,19 @@ body.dark-mode .carousel-btn:hover {
         height: 32px;
     }
 
-    /* Carousel garde la disposition desktop */
+    /* Carousel garde la disposition desktop avec marges */
+    .carousel-section {
+        padding: 0 10px;
+    }
+
     .carousel-container {
-        height: 280px; /* Hauteur suffisante pour garder les proportions */
+        height: 280px;
+    }
+
+    .carousel-slide img {
+        height: 280px;
+        object-fit: cover;
+        object-position: center;
     }
 
     .carousel-caption {
@@ -1447,12 +1513,15 @@ body.dark-mode .carousel-btn:hover {
     }
 
     .nav-booki {
-        gap: 8px;
+        gap: 6px;
         max-width: 100%;
+        justify-content: center;
     }
 
     .dropdown {
-        min-width: 130px; /* Un peu plus large pour la lisibilité */
+        flex: 1;
+        max-width: 120px;
+        min-width: 100px;
     }
 
     .nav-link {
@@ -1469,9 +1538,19 @@ body.dark-mode .carousel-btn:hover {
         height: 30px;
     }
 
-    /* Carousel garde la disposition desktop même à 310px */
+    /* Carousel garde la disposition desktop même à 310px avec marges */
+    .carousel-section {
+        padding: 0 8px;
+    }
+
     .carousel-container {
-        height: 250px; /* Hauteur réduite mais garde les proportions */
+        height: 250px;
+    }
+
+    .carousel-slide img {
+        height: 250px;
+        object-fit: cover;
+        object-position: center;
     }
 
     .carousel-caption {
