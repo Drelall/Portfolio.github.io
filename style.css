@@ -831,13 +831,28 @@ body.dark-mode .contact-btn:hover {
 
     .nav-booki {
         gap: 15px;
-        flex-direction: column;
         width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-booki .dropdown {
+        display: inline-flex;
+    }
+
+    .nav-booki .dropdown:first-child,
+    .nav-booki .dropdown:nth-child(2) {
+        display: inline-flex;
+    }
+
+    .nav-booki .dropdown:first-child {
+        margin-right: 15px;
     }
 
     .dropdown {
-        width: 100%;
+        width: auto;
         text-align: center;
+        flex: 1;
     }
 
     .dropdown-toggle {
