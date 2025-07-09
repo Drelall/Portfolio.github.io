@@ -888,11 +888,12 @@ body.dark-mode .contact-btn:hover {
     }
 
     .story-hero-image {
-        width: 80%;
+        width: 293%;
+        height: 58%;
     }
 
     .story-hero-image.flamel-image {
-        width: 65%;
+        width: 196%;
     }
 
     .story-hero-content {
