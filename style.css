@@ -25,6 +25,16 @@ main {
     flex: 1;
 }
 
+/* Images générales dans les articles */
+.simple-article img, .story-body img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 /* ========================================
    2. HEADER & NAVIGATION
    ======================================== */
@@ -35,6 +45,13 @@ main {
     padding: 10px 20px;
     background: #226d54;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Conteneur pour navigation + bouton (desktop seulement) */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
 /* Logo avec animation */
@@ -58,11 +75,16 @@ main {
     100% { transform: rotate(0deg);}
 }
 
+/* Zone de navigation */
+.nav-zone {
+    display: flex;
+    align-items: center;
+}
+
 /* Navigation */
 .nav-booki {
     display: flex;
     gap: 140px;
-    margin-right: 50px;
     align-items: center;
 }
 
@@ -169,9 +191,9 @@ main {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    margin-left: 20px;
     min-width: 80px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-left: 20px;
 }
 
 .dark-mode-btn svg {
@@ -729,9 +751,22 @@ body.dark-mode .contact-btn:hover {
 
 /* Tablette (≤ 1024px) */
 @media (max-width: 1024px) {
+    .header-booki {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .nav-zone {
+        align-self: center;
+    }
     .nav-booki {
         gap: 40px;
-        margin-right: 10px;
+    }
+    .dark-mode-btn {
+        margin-left: 0;
+        align-self: center;
+        width: auto;
+        min-width: 80px;
     }
     .carousel-container {
         height: 300px;
@@ -751,44 +786,58 @@ body.dark-mode .contact-btn:hover {
         gap: 10px;
         padding: 6px 10px;
     }
+    /* Ajustement des images pour tablette */
+    .story-hero-image {
+        width: 70%;
+        height: 85%;
+        top: 5%;
+    }
+    .story-hero-image.flamel-image {
+        width: 65%;
+        height: 85%;
+    }
+    .banniere img {
+        max-width: 90%;
+        height: auto;
+    }
+    /* Images dans les articles */
+    .simple-article img, .story-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 15px auto;
+    }
 }
 
 /* Mobile (≤ 768px) */
 @media (max-width: 768px) {
-    .nav-zone {
-        width: 25%;
-        display: flex;
+    .header-booki {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+        align-items: center;
+        padding: 10px 5vw;
+        gap: 10px;
+    }
+    .logo img {
+        height: 38px;
+    }
+    .nav-zone {
+        width: 100%;
+        align-self: center;
+        justify-content: center;
     }
     .nav-booki {
         flex-direction: row;
         gap: 10px;
         margin: 0;
         width: 100%;
-        justify-content: flex-start;
+        justify-content: center;
     }
     .dark-mode-btn {
         width: auto;
+        margin-left: 0;
+        margin-top: 5px;
         min-width: 80px;
-        margin: 0;
-        align-self: flex-start;
-    }
-    .header-booki {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 10px 5vw;
-    }
-    .logo img {
-        height: 38px;
-    }
-    .nav-booki {
-        flex-direction: row; /* Navigation horizontale sur mobile */
-        gap: 10px;
-        margin: 0;
-        width: 100%;
-        justify-content: flex-start;
+        align-self: center;
     }
     .dropdown {
         width: auto;
@@ -796,7 +845,7 @@ body.dark-mode .contact-btn:hover {
     .dropdown-toggle {
         width: auto;
         text-align: left;
-        padding: 12px 16px 12px 12px;
+        padding: 12px 40px 12px 12px;
         font-size: 1rem;
     }
     .dropdown-menu {
@@ -804,12 +853,6 @@ body.dark-mode .contact-btn:hover {
         transform: translateX(0) translateY(-10px);
         min-width: 100vw;
         border-radius: 0 0 8px 8px;
-    }
-    .dark-mode-btn {
-        margin-left: 0;
-        margin-top: 10px;
-        width: 100%;
-        min-width: unset;
     }
     .carousel-container {
         height: 180px;
@@ -840,14 +883,29 @@ body.dark-mode .contact-btn:hover {
         height: 8px;
     }
     .story-hero {
-        min-height: 40vh;
+        min-height: 50vh;
     }
     .story-hero-image,
     .story-hero-image.flamel-image {
-        width: 90vw;
-        height: 40vw;
-        min-height: 120px;
-        max-height: 220px;
+        width: 85%;
+        height: 60%;
+        top: 10%;
+        min-height: 200px;
+        max-height: 350px;
+    }
+    .story-hero-content {
+        bottom: 60px;
+    }
+    /* Images dans les articles pour mobile */
+    .simple-article img, .story-body img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 10px auto;
+    }
+    .banniere img {
+        max-width: 95%;
+        height: auto;
     }
     .story-header-line {
         flex-direction: column;
@@ -896,10 +954,11 @@ body.dark-mode .contact-btn:hover {
     }
     .story-hero-image,
     .story-hero-image.flamel-image {
-        width: 98vw;
-        height: 38vw;
-        min-height: 80px;
-        max-height: 140px;
+        width: 90%;
+        height: 50%;
+        top: 15%;
+        min-height: 150px;
+        max-height: 250px;
     }
     .story-title {
         font-size: 0.95rem;
