@@ -361,14 +361,43 @@ body.dark-mode .dark-mode-btn .moon-icon {
     z-index: 10;
 }
 
-.indicator {
+button.indicator {
     width: 12px;
     height: 12px;
-    border-radius: 50%;
+    border-radius: 50% !important;
     border: 2px solid white;
     background: transparent;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50% !important;
+    border: 2px solid white;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    min-width: 12px;
+    min-height: 12px;
+    max-width: 12px;
+    max-height: 12px;
 }
 
 .indicator.active,
@@ -824,6 +853,25 @@ body.dark-mode .contact-btn:hover {
         padding: 12px 15px;
         font-size: 0.9rem;
     }
+    /* Ajustement des indicateurs du carousel pour tablette */
+    button.indicator,
+    .indicator {
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+        border: 2px solid white;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        min-width: 10px;
+        min-height: 10px;
+        max-width: 10px;
+        max-height: 10px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
 }
 
 /* Mobile (≤ 768px) */
@@ -911,9 +959,23 @@ body.dark-mode .contact-btn:hover {
         bottom: 8px;
         gap: 5px;
     }
+    button.indicator,
     .indicator {
-        width: 8px;
-        height: 8px;
+        width: 8px !important;
+        height: 8px !important;
+        border-radius: 50% !important;
+        border: 1px solid white;
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        min-width: 8px;
+        min-height: 8px;
+        max-width: 8px;
+        max-height: 8px;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
     }
     .story-hero {
         min-height: 50vh;
