@@ -807,6 +807,23 @@ body.dark-mode .contact-btn:hover {
         display: block;
         margin: 15px auto;
     }
+    /* Ajustement des menus déroulants pour tablette */
+    .dropdown-menu {
+        min-width: 180px;
+        max-width: 250px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    .dropdown:hover .dropdown-menu {
+        transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-toggle::after {
+        right: 10px;
+    }
+    .dropdown-menu a {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
 }
 
 /* Mobile (≤ 768px) */
@@ -827,10 +844,11 @@ body.dark-mode .contact-btn:hover {
     }
     .nav-booki {
         flex-direction: row;
-        gap: 10px;
+        gap: 5px;
         margin: 0;
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
     }
     .dark-mode-btn {
         width: auto;
@@ -841,18 +859,33 @@ body.dark-mode .contact-btn:hover {
     }
     .dropdown {
         width: auto;
+        flex: 0 1 auto;
     }
     .dropdown-toggle {
         width: auto;
-        text-align: left;
-        padding: 12px 40px 12px 12px;
-        font-size: 1rem;
+        text-align: center;
+        padding: 10px 30px 10px 8px;
+        font-size: 0.9rem;
+        white-space: nowrap;
     }
     .dropdown-menu {
-        left: 0;
-        transform: translateX(0) translateY(-10px);
-        min-width: 100vw;
-        border-radius: 0 0 8px 8px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-10px);
+        min-width: 200px;
+        max-width: 300px;
+        border-radius: 8px;
+        width: auto;
+    }
+    .dropdown:hover .dropdown-menu {
+        transform: translateX(-50%) translateY(0);
+    }
+    .dropdown-toggle::after {
+        right: 8px;
+    }
+    .dropdown-menu a {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        text-align: left;
     }
     .carousel-container {
         height: 180px;
@@ -951,6 +984,16 @@ body.dark-mode .contact-btn:hover {
     }
     .logo img {
         height: 30px;
+    }
+    .nav-booki {
+        gap: 2px;
+    }
+    .dropdown-toggle {
+        padding: 8px 25px 8px 6px;
+        font-size: 0.85rem;
+    }
+    .dropdown-toggle::after {
+        right: 6px;
     }
     .story-hero-image,
     .story-hero-image.flamel-image {
