@@ -570,8 +570,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Activer Lumos sur les récits Harry Potter
-    const harryPotterLinks = document.querySelectorAll('.dropdown-sub-submenu-content a');
+    // Activer Lumos sur les récits Harry Potter (deux structures différentes)
+    const harryPotterLinks = document.querySelectorAll('.dropdown-sub-submenu-content a, .dropdown-submenu-content a[href*="parapluie"], .dropdown-submenu-content a[href*="botaniste"], .dropdown-submenu-content a[href*="flamel"]');
     harryPotterLinks.forEach(link => {
         link.addEventListener('mouseenter', startLumos);
         link.addEventListener('mouseleave', stopLumos);
