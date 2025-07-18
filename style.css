@@ -184,14 +184,13 @@ main {
 }
 
 .dropdown-submenu-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: block;
     color: white;
     text-decoration: none;
-    padding: 12px 20px;
+    padding: 12px 40px 12px 20px;
     transition: background 0.3s ease;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative;
 }
 
 .dropdown-submenu-toggle:hover {
@@ -200,9 +199,12 @@ main {
 }
 
 .dropdown-submenu-toggle .arrow {
-    font-size: 12px;
-    margin-left: 10px;
-    transition: transform 0.3s ease;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
     color: #888;
 }
 
@@ -211,7 +213,7 @@ main {
 }
 
 .dropdown-submenu:hover .arrow {
-    transform: rotate(90deg);
+    transform: translateY(-50%) rotate(90deg);
 }
 
 .dropdown-submenu-content {
@@ -257,6 +259,87 @@ main {
     background: #7ec3ff !important;
     color: #1a1a1a !important;
 }
+
+/* ========================================
+   STYLES POUR LE TROISIÈME NIVEAU DE MENU (SUB-SUBMENU)
+   ======================================== */
+
+.dropdown-sub-submenu {
+    position: relative;
+}
+
+.dropdown-sub-submenu-toggle {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 12px 40px 12px 20px;
+    transition: background 0.3s ease;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+}
+
+.dropdown-sub-submenu-toggle:hover {
+    background: #7ec3ff;
+    color: #1a1a1a;
+}
+
+.dropdown-sub-submenu-toggle .arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
+    color: #888;
+}
+
+.dropdown-sub-submenu-toggle:hover .arrow {
+    color: #1a1a1a;
+}
+
+.dropdown-sub-submenu:hover .arrow {
+    transform: translateY(-50%) rotate(90deg);
+}
+
+.dropdown-sub-submenu-content {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #0d1117;
+    min-width: 280px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    z-index: 10000;
+    margin-left: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+}
+
+.dropdown-sub-submenu-content a {
+    display: block !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 12px 18px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    transition: background 0.3s ease !important;
+    font-size: 0.9rem !important;
+}
+
+.dropdown-sub-submenu-content a:last-child {
+    border-bottom: none !important;
+}
+
+.dropdown-sub-submenu-content a:hover {
+    background: #7ec3ff !important;
+    color: #1a1a1a !important;
+}
+
+/* ========================================
+   FIN DES STYLES TROISIÈME NIVEAU
+   ======================================== */
 
 /* Bouton mode sombre */
 .dark-mode-btn {
@@ -1215,3 +1298,42 @@ body.dark-mode .contact-btn:hover {
         min-height: 80px;
     }
 }
+
+/* Ajustement des sous-sous-menus pour mobile (troisième niveau) */
+    .dropdown-sub-submenu-content {
+        position: static !important;
+        background: #050a0f !important;
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        box-shadow: inset 0 2px 6px rgba(0,0,0,0.3) !important;
+        border-radius: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        display: none !important;
+        pointer-events: auto !important;
+        z-index: 9999 !important;
+    }
+    
+    .dropdown-sub-submenu:hover .dropdown-sub-submenu-content {
+        display: block !important;
+    }
+    
+    .dropdown-sub-submenu-content a {
+        padding: 12px 35px !important;
+        font-size: 0.85rem !important;
+        border-left: 3px solid #5aa3e0 !important;
+        display: block !important;
+        color: white !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+    }
+    
+    .dropdown-sub-submenu-content a:hover,
+    .dropdown-sub-submenu-content a:active,
+    .dropdown-sub-submenu-content a:focus {
+        background: #5aa3e0 !important;
+        color: #1a1a1a !important;
+    }

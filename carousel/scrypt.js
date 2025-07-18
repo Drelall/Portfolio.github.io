@@ -135,14 +135,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // GESTION DES SOUS-MENUS (Desktop + Mobile/Tablette)
     // ========================================
     const submenuToggles = document.querySelectorAll('.dropdown-submenu-toggle');
+    const subSubmenuToggles = document.querySelectorAll('.dropdown-sub-submenu-toggle');
     let submenuTimeout;
+    let subSubmenuTimeout;
     
     // Fonction pour détecter si on est sur mobile/tablette
     function isMobileDevice() {
         return window.innerWidth <= 768 || ('ontouchstart' in window);
     }
     
-    // Gestion pour desktop avec délais
+    // Gestion du deuxième niveau (submenu)
     submenuToggles.forEach(toggle => {
         const submenu = toggle.closest('.dropdown-submenu');
         const submenuContent = submenu.querySelector('.dropdown-submenu-content');
@@ -160,17 +162,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         submenu.addEventListener('mouseleave', function() {
             if (!isMobileDevice()) {
-                // Délai avant fermeture pour laisser le temps de naviguer
                 submenuTimeout = setTimeout(() => {
                     submenuContent.style.opacity = '0';
                     submenuContent.style.visibility = 'hidden';
                     submenuContent.style.transform = 'translateX(-10px)';
                     submenuContent.style.pointerEvents = 'none';
-                }, 300); // 300ms de délai
+                }, 300);
             }
         });
         
-        // Empêcher la fermeture quand on survole le sous-menu lui-même
         submenuContent.addEventListener('mouseenter', function() {
             clearTimeout(submenuTimeout);
         });
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     submenuContent.style.visibility = 'hidden';
                     submenuContent.style.transform = 'translateX(-10px)';
                     submenuContent.style.pointerEvents = 'none';
-                }, 200); // Délai plus court quand on quitte le sous-menu
+                }, 200);
             }
         });
         
@@ -191,12 +191,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isMobileDevice()) {
                 e.preventDefault();
                 
-                // Basculer l'affichage du sous-menu
                 if (submenuContent.style.display === 'block') {
                     submenuContent.style.display = 'none';
                 } else {
                     submenuContent.style.display = 'block';
-                    // S'assurer que le sous-menu est visible sur mobile
                     submenuContent.style.opacity = '1';
                     submenuContent.style.visibility = 'visible';
                     submenuContent.style.transform = 'none';
@@ -204,17 +202,80 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+    });
+    
+    // Gestion du troisième niveau (sub-submenu)
+    subSubmenuToggles.forEach(toggle => {
+        const subSubmenu = toggle.closest('.dropdown-sub-submenu');
+        const subSubmenuContent = subSubmenu.querySelector('.dropdown-sub-submenu-content');
         
-        // Gestion des redimensionnements de fenêtre
-        window.addEventListener('resize', function() {
-            // Réinitialiser les styles lors du changement de taille d'écran
+        // Gestion du survol (desktop)
+        subSubmenu.addEventListener('mouseenter', function() {
+            clearTimeout(subSubmenuTimeout);
+            if (!isMobileDevice()) {
+                subSubmenuContent.style.opacity = '1';
+                subSubmenuContent.style.visibility = 'visible';
+                subSubmenuContent.style.transform = 'translateX(0)';
+                subSubmenuContent.style.pointerEvents = 'auto';
+            }
+        });
+        
+        subSubmenu.addEventListener('mouseleave', function() {
+            if (!isMobileDevice()) {
+                subSubmenuTimeout = setTimeout(() => {
+                    subSubmenuContent.style.opacity = '0';
+                    subSubmenuContent.style.visibility = 'hidden';
+                    subSubmenuContent.style.transform = 'translateX(-10px)';
+                    subSubmenuContent.style.pointerEvents = 'none';
+                }, 300);
+            }
+        });
+        
+        subSubmenuContent.addEventListener('mouseenter', function() {
+            clearTimeout(subSubmenuTimeout);
+        });
+        
+        subSubmenuContent.addEventListener('mouseleave', function() {
+            if (!isMobileDevice()) {
+                subSubmenuTimeout = setTimeout(() => {
+                    subSubmenuContent.style.opacity = '0';
+                    subSubmenuContent.style.visibility = 'hidden';
+                    subSubmenuContent.style.transform = 'translateX(-10px)';
+                    subSubmenuContent.style.pointerEvents = 'none';
+                }, 200);
+            }
+        });
+        
+        // Gestion du clic (mobile/tablette)
+        toggle.addEventListener('click', function(e) {
             if (isMobileDevice()) {
-                submenuContent.style.opacity = '';
-                submenuContent.style.visibility = '';
-                submenuContent.style.transform = '';
-                submenuContent.style.pointerEvents = '';
+                e.preventDefault();
+                
+                if (subSubmenuContent.style.display === 'block') {
+                    subSubmenuContent.style.display = 'none';
+                } else {
+                    subSubmenuContent.style.display = 'block';
+                    subSubmenuContent.style.opacity = '1';
+                    subSubmenuContent.style.visibility = 'visible';
+                    subSubmenuContent.style.transform = 'none';
+                    subSubmenuContent.style.pointerEvents = 'auto';
+                }
+            }
+        });
+    });
+    
+    // Gestion des redimensionnements de fenêtre
+    window.addEventListener('resize', function() {
+        const allSubmenuContents = document.querySelectorAll('.dropdown-submenu-content, .dropdown-sub-submenu-content');
+        
+        allSubmenuContents.forEach(content => {
+            if (isMobileDevice()) {
+                content.style.opacity = '';
+                content.style.visibility = '';
+                content.style.transform = '';
+                content.style.pointerEvents = '';
             } else {
-                submenuContent.style.display = '';
+                content.style.display = '';
             }
         });
     });
