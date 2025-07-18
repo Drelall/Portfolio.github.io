@@ -132,25 +132,65 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================
-    // GESTION DES SOUS-MENUS (Mobile/Tablette)
+    // GESTION DES SOUS-MENUS (Desktop + Mobile/Tablette)
     // ========================================
     const submenuToggles = document.querySelectorAll('.dropdown-submenu-toggle');
+    let submenuTimeout;
     
+    // Gestion pour desktop avec délais
     submenuToggles.forEach(toggle => {
+        const submenu = toggle.closest('.dropdown-submenu');
+        const submenuContent = submenu.querySelector('.dropdown-submenu-content');
+        
+        // Gestion du survol (desktop)
+        submenu.addEventListener('mouseenter', function() {
+            clearTimeout(submenuTimeout);
+            if (window.innerWidth > 768) {
+                submenuContent.style.opacity = '1';
+                submenuContent.style.visibility = 'visible';
+                submenuContent.style.transform = 'translateX(0)';
+                submenuContent.style.pointerEvents = 'auto';
+            }
+        });
+        
+        submenu.addEventListener('mouseleave', function() {
+            if (window.innerWidth > 768) {
+                // Délai avant fermeture pour laisser le temps de naviguer
+                submenuTimeout = setTimeout(() => {
+                    submenuContent.style.opacity = '0';
+                    submenuContent.style.visibility = 'hidden';
+                    submenuContent.style.transform = 'translateX(-10px)';
+                    submenuContent.style.pointerEvents = 'none';
+                }, 300); // 300ms de délai
+            }
+        });
+        
+        // Empêcher la fermeture quand on survole le sous-menu lui-même
+        submenuContent.addEventListener('mouseenter', function() {
+            clearTimeout(submenuTimeout);
+        });
+        
+        submenuContent.addEventListener('mouseleave', function() {
+            if (window.innerWidth > 768) {
+                submenuTimeout = setTimeout(() => {
+                    submenuContent.style.opacity = '0';
+                    submenuContent.style.visibility = 'hidden';
+                    submenuContent.style.transform = 'translateX(-10px)';
+                    submenuContent.style.pointerEvents = 'none';
+                }, 200); // Délai plus court quand on quitte le sous-menu
+            }
+        });
+        
+        // Gestion du clic (mobile/tablette)
         toggle.addEventListener('click', function(e) {
-            // Sur mobile/tablette, empêcher le comportement de lien et basculer l'affichage
             if (window.innerWidth <= 768) {
                 e.preventDefault();
-                const submenu = this.closest('.dropdown-submenu');
-                const submenuContent = submenu.querySelector('.dropdown-submenu-content');
                 
                 // Basculer l'affichage du sous-menu
-                if (submenuContent) {
-                    if (submenuContent.style.display === 'block') {
-                        submenuContent.style.display = 'none';
-                    } else {
-                        submenuContent.style.display = 'block';
-                    }
+                if (submenuContent.style.display === 'block') {
+                    submenuContent.style.display = 'none';
+                } else {
+                    submenuContent.style.display = 'block';
                 }
             }
         });

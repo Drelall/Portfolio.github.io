@@ -228,17 +228,17 @@ main {
     opacity: 0;
     visibility: hidden;
     transform: translateX(-10px);
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
     pointer-events: none;
 }
 
-/* Affichage au survol avec animation */
-.dropdown-submenu:hover .dropdown-submenu-content {
+/* Affichage au survol - géré par JavaScript maintenant */
+/* .dropdown-submenu:hover .dropdown-submenu-content {
     opacity: 1;
     visibility: visible;
     transform: translateX(0);
     pointer-events: auto;
-}
+} */
 
 .dropdown-submenu-content a {
     display: block !important;
