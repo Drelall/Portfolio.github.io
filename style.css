@@ -1051,6 +1051,8 @@ body.dark-mode .contact-btn:hover {
         visibility: visible !important;
         transform: none !important;
         display: none !important;
+        pointer-events: auto !important;
+        z-index: 9999 !important;
     }
     
     .dropdown-submenu:hover .dropdown-submenu-content {
@@ -1058,9 +1060,22 @@ body.dark-mode .contact-btn:hover {
     }
     
     .dropdown-submenu-content a {
-        padding: 10px 25px !important;
-        font-size: 0.8rem !important;
+        padding: 15px 25px !important;
+        font-size: 0.9rem !important;
         border-left: 3px solid #7ec3ff !important;
+        display: block !important;
+        color: white !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+    }
+    
+    .dropdown-submenu-content a:hover,
+    .dropdown-submenu-content a:active,
+    .dropdown-submenu-content a:focus {
+        background: #7ec3ff !important;
+        color: #1a1a1a !important;
     }
     .carousel-container {
         height: 180px;

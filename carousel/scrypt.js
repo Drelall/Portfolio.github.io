@@ -137,6 +137,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const submenuToggles = document.querySelectorAll('.dropdown-submenu-toggle');
     let submenuTimeout;
     
+    // Fonction pour détecter si on est sur mobile/tablette
+    function isMobileDevice() {
+        return window.innerWidth <= 768 || ('ontouchstart' in window);
+    }
+    
     // Gestion pour desktop avec délais
     submenuToggles.forEach(toggle => {
         const submenu = toggle.closest('.dropdown-submenu');
@@ -145,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Gestion du survol (desktop)
         submenu.addEventListener('mouseenter', function() {
             clearTimeout(submenuTimeout);
-            if (window.innerWidth > 768) {
+            if (!isMobileDevice()) {
                 submenuContent.style.opacity = '1';
                 submenuContent.style.visibility = 'visible';
                 submenuContent.style.transform = 'translateX(0)';
@@ -154,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         submenu.addEventListener('mouseleave', function() {
-            if (window.innerWidth > 768) {
+            if (!isMobileDevice()) {
                 // Délai avant fermeture pour laisser le temps de naviguer
                 submenuTimeout = setTimeout(() => {
                     submenuContent.style.opacity = '0';
@@ -171,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         submenuContent.addEventListener('mouseleave', function() {
-            if (window.innerWidth > 768) {
+            if (!isMobileDevice()) {
                 submenuTimeout = setTimeout(() => {
                     submenuContent.style.opacity = '0';
                     submenuContent.style.visibility = 'hidden';
@@ -183,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Gestion du clic (mobile/tablette)
         toggle.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
+            if (isMobileDevice()) {
                 e.preventDefault();
                 
                 // Basculer l'affichage du sous-menu
@@ -191,7 +196,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     submenuContent.style.display = 'none';
                 } else {
                     submenuContent.style.display = 'block';
+                    // S'assurer que le sous-menu est visible sur mobile
+                    submenuContent.style.opacity = '1';
+                    submenuContent.style.visibility = 'visible';
+                    submenuContent.style.transform = 'none';
+                    submenuContent.style.pointerEvents = 'auto';
                 }
+            }
+        });
+        
+        // Gestion des redimensionnements de fenêtre
+        window.addEventListener('resize', function() {
+            // Réinitialiser les styles lors du changement de taille d'écran
+            if (isMobileDevice()) {
+                submenuContent.style.opacity = '';
+                submenuContent.style.visibility = '';
+                submenuContent.style.transform = '';
+                submenuContent.style.pointerEvents = '';
+            } else {
+                submenuContent.style.display = '';
             }
         });
     });
