@@ -351,4 +351,232 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
     });
+
+    // ========================================
+    // FONCTION DE RECHERCHE
+    // ========================================
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    
+    // Base de données des contenus
+    const contentDatabase = [
+        // Articles
+        {
+            title: "World of Warcraft",
+            url: "./lesarticles/worldofwarcraft.html",
+            category: "Article",
+            type: "article"
+        },
+        // Récits Fanfiction - Harry Potter
+        {
+            title: "L'invention du sortilège du parapluie",
+            url: "./lesrecits/parapluie.html",
+            category: "Fanfiction - Harry Potter",
+            type: "recit"
+        },
+        {
+            title: "Le journal d'un botaniste",
+            url: "./lesrecits/botaniste.html",
+            category: "Fanfiction - Harry Potter", 
+            type: "recit"
+        },
+        {
+            title: "Le journal intime de Nicolas Flamel",
+            url: "./lesrecits/flamel.html",
+            category: "Fanfiction - Harry Potter",
+            type: "recit"
+        },
+        // Récits Fiction
+        {
+            title: "La grotte du loup",
+            url: "./lesrecits/grotte-du-loup.html",
+            category: "Fiction",
+            type: "recit"
+        },
+        {
+            title: "Le tableau frappeur",
+            url: "./lesrecits/tableau-frappeur.html",
+            category: "Fiction",
+            type: "recit"
+        }
+    ];
+
+    if (searchInput && searchResults) {
+        // Fonction de recherche
+        function performSearch(query) {
+            if (query.length === 0) {
+                searchResults.classList.remove('show');
+                return;
+            }
+
+            const results = contentDatabase.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase())
+            );
+
+            displayResults(results, query);
+        }
+
+        // Fonction d'affichage des résultats
+        function displayResults(results, query) {
+            searchResults.innerHTML = '';
+
+            if (results.length === 0) {
+                searchResults.innerHTML = '<div class="search-no-results">Aucun résultat trouvé</div>';
+                searchResults.classList.add('show');
+                return;
+            }
+
+            results.forEach(item => {
+                const resultItem = document.createElement('a');
+                resultItem.href = item.url;
+                resultItem.className = 'search-result-item';
+                
+                // Mettre en surbrillance le terme recherché
+                const highlightedTitle = highlightText(item.title, query);
+                
+                resultItem.innerHTML = `
+                    <div class="search-result-title">${highlightedTitle}</div>
+                    <div class="search-result-category">${item.category}</div>
+                `;
+
+                // Fermer la recherche au clic
+                resultItem.addEventListener('click', () => {
+                    searchResults.classList.remove('show');
+                    searchInput.value = '';
+                });
+
+                searchResults.appendChild(resultItem);
+            });
+
+            searchResults.classList.add('show');
+        }
+
+        // Fonction pour mettre en surbrillance le texte recherché
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<strong style="color: #7ec3ff;">$1</strong>');
+        }
+
+        // Événements de recherche
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            performSearch(query);
+        });
+
+        // Fermer les résultats si on clique ailleurs
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.remove('show');
+            }
+        });
+
+        // Gestion des touches clavier
+        searchInput.addEventListener('keydown', (e) => {
+            const resultItems = searchResults.querySelectorAll('.search-result-item');
+            
+            if (e.key === 'Escape') {
+                searchResults.classList.remove('show');
+                searchInput.blur();
+            } else if (e.key === 'Enter' && resultItems.length > 0) {
+                // Aller au premier résultat
+                resultItems[0].click();
+            }
+        });
+    }
+    
+    // ========================================
+    // EFFET LUMOS ANIMÉ POUR HARRY POTTER
+    // ========================================
+    
+    // Créer l'élément Lumos
+    const lumosOrb = document.createElement('div');
+    lumosOrb.className = 'lumos-orb';
+    lumosOrb.style.cssText = `
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: radial-gradient(circle, 
+            rgba(255, 255, 255, 1) 0%, 
+            rgba(255, 255, 255, 0.9) 20%, 
+            rgba(240, 248, 255, 0.7) 40%, 
+            rgba(200, 220, 255, 0.5) 60%, 
+            rgba(150, 180, 255, 0.3) 80%, 
+            transparent 100%);
+        box-shadow: 
+            0 0 10px rgba(255, 255, 255, 1),
+            0 0 20px rgba(255, 255, 255, 0.8),
+            0 0 30px rgba(240, 248, 255, 0.6),
+            0 0 40px rgba(200, 220, 255, 0.4);
+        pointer-events: none;
+        z-index: 10000;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    `;
+    document.body.appendChild(lumosOrb);
+    
+    let lumosAnimation;
+    let isLumosActive = false;
+    
+    // Animation de pulsation
+    function animateLumos() {
+        let scale = 0.8;
+        let direction = 1;
+        let opacity = 0.9;
+        let opacityDirection = -1;
+        
+        lumosAnimation = setInterval(() => {
+            scale += direction * 0.02;
+            opacity += opacityDirection * 0.02;
+            
+            if (scale >= 1.2) direction = -1;
+            if (scale <= 0.8) direction = 1;
+            if (opacity >= 0.9) opacityDirection = -1;
+            if (opacity <= 0.6) opacityDirection = 1;
+            
+            lumosOrb.style.transform = `scale(${scale})`;
+            lumosOrb.style.opacity = opacity;
+        }, 50);
+    }
+    
+    // Fonction pour démarrer Lumos
+    function startLumos() {
+        if (!isLumosActive) {
+            isLumosActive = true;
+            lumosOrb.style.opacity = '0.8';
+            lumosOrb.style.transform = 'scale(1)';
+            animateLumos();
+        }
+    }
+    
+    // Fonction pour arrêter Lumos
+    function stopLumos() {
+        if (isLumosActive) {
+            isLumosActive = false;
+            clearInterval(lumosAnimation);
+            lumosOrb.style.opacity = '0';
+            lumosOrb.style.transform = 'scale(0.5)';
+        }
+    }
+    
+    // Suivre la position de la souris
+    document.addEventListener('mousemove', (e) => {
+        if (isLumosActive) {
+            // Positionner l'orbe légèrement décalée par rapport au curseur (pour simuler le bout de la baguette)
+            lumosOrb.style.left = (e.clientX - 25) + 'px';
+            lumosOrb.style.top = (e.clientY - 25) + 'px';
+        }
+    });
+    
+    // Activer Lumos sur les récits Harry Potter
+    const harryPotterLinks = document.querySelectorAll('.dropdown-sub-submenu-content a');
+    harryPotterLinks.forEach(link => {
+        link.addEventListener('mouseenter', startLumos);
+        link.addEventListener('mouseleave', stopLumos);
+    });
+    
+    // S'assurer que Lumos s'arrête si on quitte complètement la zone
+    document.addEventListener('mouseleave', stopLumos);
 });
