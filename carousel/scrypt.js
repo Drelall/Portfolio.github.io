@@ -144,6 +144,16 @@ document.addEventListener('DOMContentLoaded', function() {
         return window.innerWidth <= 768 || ('ontouchstart' in window);
     }
     
+    // Fonction pour fermer tous les sous-sous-menus
+    function closeAllSubSubmenus() {
+        document.querySelectorAll('.dropdown-sub-submenu-content').forEach(content => {
+            content.style.opacity = '0';
+            content.style.visibility = 'hidden';
+            content.style.transform = 'translateX(-10px)';
+            content.style.pointerEvents = 'none';
+        });
+    }
+    
     // Gestion du deuxième niveau (submenu)
     submenuToggles.forEach(toggle => {
         const submenu = toggle.closest('.dropdown-submenu');
@@ -152,7 +162,26 @@ document.addEventListener('DOMContentLoaded', function() {
         // Gestion du survol (desktop)
         submenu.addEventListener('mouseenter', function() {
             clearTimeout(submenuTimeout);
+            clearTimeout(subSubmenuTimeout);
+            
             if (!isMobileDevice()) {
+                // Fermer tous les autres sous-menus de même niveau
+                document.querySelectorAll('.dropdown-submenu').forEach(otherSubmenu => {
+                    if (otherSubmenu !== submenu) {
+                        const otherContent = otherSubmenu.querySelector('.dropdown-submenu-content');
+                        if (otherContent) {
+                            otherContent.style.opacity = '0';
+                            otherContent.style.visibility = 'hidden';
+                            otherContent.style.transform = 'translateX(-10px)';
+                            otherContent.style.pointerEvents = 'none';
+                        }
+                    }
+                });
+                
+                // Fermer tous les sous-sous-menus
+                closeAllSubSubmenus();
+                
+                // Ouvrir le sous-menu actuel
                 submenuContent.style.opacity = '1';
                 submenuContent.style.visibility = 'visible';
                 submenuContent.style.transform = 'translateX(0)';
@@ -167,6 +196,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     submenuContent.style.visibility = 'hidden';
                     submenuContent.style.transform = 'translateX(-10px)';
                     submenuContent.style.pointerEvents = 'none';
+                    
+                    // Fermer aussi tous les sous-sous-menus
+                    closeAllSubSubmenus();
                 }, 300);
             }
         });
@@ -182,6 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     submenuContent.style.visibility = 'hidden';
                     submenuContent.style.transform = 'translateX(-10px)';
                     submenuContent.style.pointerEvents = 'none';
+                    
+                    // Fermer aussi tous les sous-sous-menus
+                    closeAllSubSubmenus();
                 }, 200);
             }
         });
