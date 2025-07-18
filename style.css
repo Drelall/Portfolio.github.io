@@ -146,7 +146,8 @@ main {
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
-    overflow: hidden;
+    /* SUPPRIMER overflow: hidden pour permettre aux sous-menus de déborder */
+    /* overflow: hidden; */
 }
 
 .dropdown:hover .dropdown-menu {
@@ -170,11 +171,91 @@ main {
     border-bottom: none;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu a:hover:not(.dropdown-submenu-toggle) {
     background: #7ec3ff;
     color: #1a1a1a;
     padding-left: 25px;
     font-weight: 500;
+}
+
+/* Sous-menus - Version ultra-simplifiée et fonctionnelle */
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    transition: background 0.3s ease;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.dropdown-submenu-toggle:hover {
+    background: #7ec3ff;
+    color: #1a1a1a;
+}
+
+.dropdown-submenu-toggle .arrow {
+    font-size: 12px;
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+    color: #888;
+}
+
+.dropdown-submenu-toggle:hover .arrow {
+    color: #1a1a1a;
+}
+
+.dropdown-submenu:hover .arrow {
+    transform: rotate(90deg);
+}
+
+.dropdown-submenu-content {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    background: #1a2332;
+    min-width: 250px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 9999;
+    margin-left: 10px;
+    /* Utiliser opacity pour des transitions fluides */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+/* Affichage au survol avec animation */
+.dropdown-submenu:hover .dropdown-submenu-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.dropdown-submenu-content a {
+    display: block !important;
+    color: white !important;
+    text-decoration: none !important;
+    padding: 10px 15px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+    transition: background 0.3s ease !important;
+}
+
+.dropdown-submenu-content a:last-child {
+    border-bottom: none !important;
+}
+
+.dropdown-submenu-content a:hover {
+    background: #7ec3ff !important;
+    color: #1a1a1a !important;
 }
 
 /* Bouton mode sombre */
@@ -692,6 +773,16 @@ body.dark-mode .dropdown-menu a:hover {
     color: #1a1a1a;
 }
 
+body.dark-mode .dropdown-submenu-content {
+    background: #2a2a2a;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .dropdown-submenu-content a:hover {
+    background: #7ec3ff;
+    color: #1a1a1a;
+}
+
 body.dark-mode .banniere {
     background: #2a2a2a;
 }
@@ -853,6 +944,19 @@ body.dark-mode .contact-btn:hover {
         padding: 12px 15px;
         font-size: 0.9rem;
     }
+    /* Ajustement des sous-menus pour tablette */
+    .dropdown-submenu-content {
+        position: absolute !important;
+        top: 0 !important;
+        left: 100% !important;
+        min-width: 220px !important;
+        margin-left: 10px !important;
+    }
+    
+    .dropdown-submenu-content a {
+        padding: 10px 15px !important;
+        font-size: 0.85rem !important;
+    }
     /* Ajustement des indicateurs du carousel pour tablette */
     button.indicator,
     .indicator {
@@ -934,6 +1038,29 @@ body.dark-mode .contact-btn:hover {
         padding: 10px 12px;
         font-size: 0.85rem;
         text-align: left;
+    }
+    /* Ajustement des sous-menus pour mobile */
+    .dropdown-submenu-content {
+        position: static !important;
+        background: #0f1419 !important;
+        margin-left: 0 !important;
+        margin-top: 0 !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
+        border-radius: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        display: none !important;
+    }
+    
+    .dropdown-submenu:hover .dropdown-submenu-content {
+        display: block !important;
+    }
+    
+    .dropdown-submenu-content a {
+        padding: 10px 25px !important;
+        font-size: 0.8rem !important;
+        border-left: 3px solid #7ec3ff !important;
     }
     .carousel-container {
         height: 180px;

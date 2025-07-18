@@ -1,12 +1,17 @@
+/* ========================================
+   PORTFOLIO JAVASCRIPT - VERSION PROPRE
+   ======================================== */
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Animation du logo
+    
+    // ========================================
+    // ANIMATION DU LOGO
+    // ========================================
     const logoImg = document.querySelector('.logo img');
     const logoLink = document.querySelector('.logo a');
 
     if (logoImg) {
         logoImg.addEventListener('click', function(event) {
-            console.log('Logo cliqué !'); // Pour débugger
-
             // Empêcher la redirection si le logo est dans un lien
             if (logoLink) {
                 event.preventDefault();
@@ -17,25 +22,24 @@ document.addEventListener('DOMContentLoaded', function() {
             void this.offsetWidth; // force le reflow
             this.classList.add('wiggle');
 
-            // Optionnel : retirer la classe après l'animation pour pouvoir la relancer
+            // Retirer la classe après l'animation
             setTimeout(() => {
                 this.classList.remove('wiggle');
-
                 // Si c'était dans un lien, rediriger après l'animation
                 if (logoLink) {
                     window.location.href = logoLink.href;
                 }
             }, 600);
         });
-    } else {
-        console.log('Logo non trouvé !');
     }
 
-    // Mode nuit
+    // ========================================
+    // MODE SOMBRE
+    // ========================================
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const body = document.body;
 
-    // Vérifier si le mode sombre est déjà activé (sauvegardé dans localStorage)
+    // Vérifier si le mode sombre est déjà activé
     if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark-mode');
     }
@@ -43,8 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (darkModeToggle) {
         darkModeToggle.addEventListener('click', function() {
             body.classList.toggle('dark-mode');
-
-            // Sauvegarder la préférence dans localStorage
+            
+            // Sauvegarder la préférence
             if (body.classList.contains('dark-mode')) {
                 localStorage.setItem('darkMode', 'enabled');
             } else {
@@ -53,41 +57,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Protection contre le copier-coller
-    // Désactiver le clic droit sur les articles
-    const articles = document.querySelectorAll('.simple-article');
-    articles.forEach(article => {
-        article.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            return false;
-        });
-    });
-
-    // Désactiver les raccourcis clavier de copie
-    document.addEventListener('keydown', function(e) {
-        // Désactiver Ctrl+C, Ctrl+A, Ctrl+S, Ctrl+P
-        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 65 || e.keyCode === 83 || e.keyCode === 80)) {
-            e.preventDefault();
-            return false;
-        }
-        // Désactiver F12 (outils de développement)
-        if (e.keyCode === 123) {
-            e.preventDefault();
-            return false;
-        }
-        // Désactiver Ctrl+Shift+I (outils de développement)
-        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-            e.preventDefault();
-            return false;
-        }
-        // Désactiver Ctrl+U (voir le code source)
-        if (e.ctrlKey && e.keyCode === 85) {
-            e.preventDefault();
-            return false;
-        }
-    });
-
-    // Fonctionnalité du carousel
+    // ========================================
+    // CAROUSEL
+    // ========================================
     const carouselTrack = document.querySelector('.carousel-track');
     const carouselSlides = document.querySelectorAll('.carousel-slide');
     const prevBtn = document.querySelector('.carousel-prev');
@@ -123,43 +95,101 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Event listeners pour les boutons
-        if (nextBtn) {
-            nextBtn.addEventListener('click', nextSlide);
-        }
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', prevSlide);
-        }
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
 
         // Event listeners pour les indicateurs
         indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                goToSlide(index);
-            });
+            indicator.addEventListener('click', () => goToSlide(index));
         });
 
-        // Récupérer le conteneur pour le support tactile
-        const carouselContainer = document.querySelector('.carousel-container');
-
         // Support tactile pour mobile
+        const carouselContainer = document.querySelector('.carousel-container');
         let startX = 0;
         let endX = 0;
 
-        carouselContainer.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
+        if (carouselContainer) {
+            carouselContainer.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+            });
 
-        carouselContainer.addEventListener('touchend', (e) => {
-            endX = e.changedTouches[0].clientX;
-            const diffX = startX - endX;
+            carouselContainer.addEventListener('touchend', (e) => {
+                endX = e.changedTouches[0].clientX;
+                const diffX = startX - endX;
 
-            if (Math.abs(diffX) > 50) { // Seuil minimum pour déclencher le swipe
-                if (diffX > 0) {
-                    nextSlide();
-                } else {
-                    prevSlide();
+                if (Math.abs(diffX) > 50) { // Seuil minimum pour déclencher le swipe
+                    if (diffX > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            });
+        }
+
+        // Initialiser le carousel
+        goToSlide(0);
+    }
+
+    // ========================================
+    // GESTION DES SOUS-MENUS (Mobile/Tablette)
+    // ========================================
+    const submenuToggles = document.querySelectorAll('.dropdown-submenu-toggle');
+    
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            // Sur mobile/tablette, empêcher le comportement de lien et basculer l'affichage
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                const submenu = this.closest('.dropdown-submenu');
+                const submenuContent = submenu.querySelector('.dropdown-submenu-content');
+                
+                // Basculer l'affichage du sous-menu
+                if (submenuContent) {
+                    if (submenuContent.style.display === 'block') {
+                        submenuContent.style.display = 'none';
+                    } else {
+                        submenuContent.style.display = 'block';
+                    }
                 }
             }
         });
-    }
+    });
+
+    // ========================================
+    // PROTECTION ANTI-COPIE (Optionnel)
+    // ========================================
+    const articles = document.querySelectorAll('.simple-article, .story-body');
+    
+    articles.forEach(article => {
+        // Désactiver le clic droit
+        article.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+    });
+
+    // Désactiver les raccourcis clavier de copie
+    document.addEventListener('keydown', function(e) {
+        // Désactiver Ctrl+C, Ctrl+A, Ctrl+S, Ctrl+P
+        if (e.ctrlKey && (e.keyCode === 67 || e.keyCode === 65 || e.keyCode === 83 || e.keyCode === 80)) {
+            e.preventDefault();
+            return false;
+        }
+        // Désactiver F12 (outils de développement)
+        if (e.keyCode === 123) {
+            e.preventDefault();
+            return false;
+        }
+        // Désactiver Ctrl+Shift+I (outils de développement)
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+            e.preventDefault();
+            return false;
+        }
+        // Désactiver Ctrl+U (voir le code source)
+        if (e.ctrlKey && e.keyCode === 85) {
+            e.preventDefault();
+            return false;
+        }
+    });
 });
