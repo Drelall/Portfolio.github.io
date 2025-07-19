@@ -386,6 +386,12 @@ document.addEventListener('DOMContentLoaded', function() {
             category: "Fanfiction - Harry Potter",
             type: "recit"
         },
+        {
+            title: "Le trésor des fondateurs",
+            url: "./lesrecits/tresor-fondateurs.html",
+            category: "Fanfiction - Harry Potter",
+            type: "recit"
+        },
         // Récits Fiction
         {
             title: "La grotte du loup",
