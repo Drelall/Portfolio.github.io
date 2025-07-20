@@ -1479,7 +1479,10 @@ body.dark-mode .search-result-item:hover {
 .story-page {
     min-height: 100vh;
     padding: 40px 0;
+<<<<<<< HEAD
     border-radius: 20px;
+=======
+>>>>>>> 3445c46daa0def8bfd4746cd21f4e4eecaa4c2f1
     margin-bottom: 60px;
     border-bottom: 3px solid #ddd;
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
@@ -1656,15 +1659,28 @@ body.dark-mode .search-result-item:hover {
 .story-section {
     margin-bottom: 80px;
     padding-bottom: 60px;
+<<<<<<< HEAD
     border-radius: 5px;
     padding-top: 40px;
     padding-left: 20px;
     padding-right: 20px;
     background: #eaecde;
+=======
+    padding-top: 40px;
+    border-radius: 8px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #fff;
+    border: 2px solid #226d54;
+>>>>>>> 3445c46daa0def8bfd4746cd21f4e4eecaa4c2f1
     box-shadow: 0 4px 12px rgba(34, 109, 84, 0.10);
 }
 
 .story-section:not(:last-child) {
+<<<<<<< HEAD
+=======
+    border-bottom: 3px solid #226d54;
+>>>>>>> 3445c46daa0def8bfd4746cd21f4e4eecaa4c2f1
     box-shadow: 0 4px 12px rgba(34, 109, 84, 0.15);
 }
 
