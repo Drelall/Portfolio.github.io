@@ -1,3 +1,51 @@
+/* Annule la bordure et l'ombre pour les images du hero */
+.story-hero-image {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+/* =============================
+   Styles spécifiques aux récits
+   ============================= */
+
+/* Botaniste */
+.story-hero-image[src*="botaniste.png"] {
+    width: auto;
+    max-width: 500px;
+    height: 70vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+
+/* Parapluie */
+.story-hero-image[src*="parapluie.png"] {
+    width: auto;
+    max-width: 520px;
+    height: 65vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+
+/* Flamel */
+.story-hero-image.flamel-image {
+    width: auto;
+    max-width: 540px;
+    height: 65vh;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+}
+
+.story-hero-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
 /* ========================================
    PORTFOLIO CSS - VERSION NETTOYÉE ET ORGANISÉE
    Dernière mise à jour : 8 juillet 2025
