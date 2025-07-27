@@ -11,6 +11,11 @@
     background: #222;
     display: block;
 }
+/* Cadrage spécifique pour l'image de la grotte du loup dans le carrousel */
+.carousel-slide img[src*="loup.png"],
+.carousel-slide img[src*="loup.jpg"] {
+    object-position: 50% 35% !important;
+}
 /* Annule la bordure et l'ombre pour les images du hero */
 .story-hero-image {
     border-radius: 0 !important;
