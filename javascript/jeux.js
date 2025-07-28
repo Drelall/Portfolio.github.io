@@ -73,7 +73,20 @@ window.onload = function() {
                 const cadreWidth = 220;
                 const cadreHeight = 320;
                 const x = (canvas.width - cadreWidth) / 2;
-                const y = (canvas.height - cadreHeight) / 2 - 80; // déplacement vers le haut
+                const y = (canvas.height - cadreHeight) / 2 - 75; // déplacement vers le haut (descendu de 5px)
+                // Dégradé radial autour du cadre pour fondre les bords
+                ctx.save();
+                let grad = ctx.createRadialGradient(
+                    x + cadreWidth/2, y + cadreHeight/2, cadreWidth/2 - 10,
+                    x + cadreWidth/2, y + cadreHeight/2, cadreWidth/2 + 30
+                );
+                grad.addColorStop(0, 'rgba(180,160,120,0)'); // centre transparent
+                grad.addColorStop(0.7, 'rgba(180,160,120,0.12)'); // couleur mur, léger
+                grad.addColorStop(1, 'rgba(180,160,120,0)');
+                ctx.globalAlpha = 0.7;
+                ctx.fillStyle = grad;
+                ctx.fillRect(x-30, y-30, cadreWidth+60, cadreHeight+60);
+                ctx.restore();
                 ctx.drawImage(cadre, x, y, cadreWidth, cadreHeight);
         }
         }
