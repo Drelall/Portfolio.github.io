@@ -28,7 +28,9 @@ window.onload = function() {
 
             // Lueur diffuse sur les bords (torches hors champ)
             let gradLeft = ctx.createLinearGradient(0, 0, 200, 0);
-            gradLeft.addColorStop(0, 'rgba(255,220,120,0.22)');
+            gradLeft.addColorStop(0, 'rgba(255,220,120,0.18)'); // jaune clair atténué
+            gradLeft.addColorStop(0.4, 'rgba(255,180,60,0.10)'); // reflet orangé atténué
+            gradLeft.addColorStop(0.7, 'rgba(255,140,40,0.05)'); // reflet orangé plus foncé atténué
             gradLeft.addColorStop(1, 'rgba(255,220,120,0)');
             ctx.save();
             ctx.globalAlpha = 0.7 + Math.sin(time/400)*0.08;
@@ -37,7 +39,10 @@ window.onload = function() {
             ctx.restore();
 
             let gradRight = ctx.createLinearGradient(canvas.width, 0, canvas.width-200, 0);
-            gradRight.addColorStop(0, 'rgba(255,220,120,0.22)');
+            gradRight = ctx.createLinearGradient(canvas.width, 0, canvas.width-200, 0);
+            gradRight.addColorStop(0, 'rgba(255,220,120,0.18)'); // jaune clair atténué
+            gradRight.addColorStop(0.4, 'rgba(255,180,60,0.10)'); // reflet orangé atténué
+            gradRight.addColorStop(0.7, 'rgba(255,140,40,0.05)'); // reflet orangé plus foncé atténué
             gradRight.addColorStop(1, 'rgba(255,220,120,0)');
             ctx.save();
             ctx.globalAlpha = 0.7 + Math.cos(time/400)*0.08;
