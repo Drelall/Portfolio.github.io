@@ -1,3 +1,22 @@
+/* === Bandes verticales autour du carrousel === */
+.carousel-section {
+    position: relative;
+    z-index: 1;
+}
+.carousel-section::before {
+    left: 0;
+    right: 50%;
+    border-radius: 0 20px 20px 0;
+}
+.carousel-section::after {
+    left: 50%;
+    right: 0;
+    border-radius: 20px 0 0 20px;
+}
+.carousel-container {
+    position: relative;
+    z-index: 2;
+}
 /* =============================
    Images du carrousel (meilleur cadrage)
    ============================= */
@@ -76,6 +95,12 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+
+/* Décale le contenu principal pour ne pas passer sous la sidebar */
+body {
+    margin-left: 0;
 }
 
 body {
