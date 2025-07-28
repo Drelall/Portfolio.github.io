@@ -2,6 +2,7 @@
 .carousel-section {
     position: relative;
     z-index: 1;
+    background-color: #1a1a1a;
 }
 .carousel-section::before {
     left: 0;
@@ -898,7 +899,7 @@ button.indicator {
    7. FOOTER
    ======================================== */
 footer {
-    background: #000000;
+    background: #1a1a1a;
     padding: 30px 20px;
     text-align: center;
 }
