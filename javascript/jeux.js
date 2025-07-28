@@ -3,112 +3,91 @@ window.onload = function() {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Fond pierre gris
-    ctx.fillStyle = '#a8a8a8';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Utiliser tableau.jpg comme fond du jeu
+    const background = new Image();
+    background.src = '../images/illustration/lemur.png';
+    background.onload = function() {
+        // Animation lumineuse façon torches
+        // Préparer l'image du cadre
+        const cadre = new Image();
+        cadre.src = '../images/illustration/cadre.png';
 
-    // Pierres rectangulaires façon mur massif
-    const stoneWidth = 90;
-    const stoneHeight = 55;
-    ctx.lineWidth = 2;
-    for (let y = 0; y < canvas.height; y += stoneHeight) {
-        for (let x = (y/stoneHeight)%2 ? stoneWidth/2 : 0; x < canvas.width; x += stoneWidth) {
-            // Couleur de pierre aléatoire
-            let r = 160 + Math.floor(Math.random()*30);
-            let g = 160 + Math.floor(Math.random()*30);
-            let b = 160 + Math.floor(Math.random()*30);
-            ctx.fillStyle = `rgb(${r},${g},${b})`;
-            ctx.fillRect(x+2, y+2, stoneWidth-4, stoneHeight-4);
-            ctx.strokeStyle = '#888';
-            ctx.strokeRect(x+2, y+2, stoneWidth-4, stoneHeight-4);
-            // Fissures
-            if (Math.random() < 0.15) {
-                ctx.beginPath();
-                let fx = x + 10 + Math.random() * (stoneWidth-20);
-                let fy = y + 10 + Math.random() * (stoneHeight-20);
-                ctx.moveTo(fx, fy);
-                ctx.lineTo(fx + Math.random()*20-10, fy + Math.random()*20-10);
-                ctx.strokeStyle = 'rgba(60,60,60,0.5)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            }
+        function drawScene(time) {
+            // Dessin du fond
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(background, offsetX, offsetY, drawWidth, drawHeight);
+
+            // Nuit : filtre bleu foncé
+            ctx.save();
+            ctx.globalAlpha = 0.45;
+            ctx.fillStyle = '#0a1330';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.restore();
+
+            // Lueur diffuse sur les bords (torches hors champ)
+            let gradLeft = ctx.createLinearGradient(0, 0, 200, 0);
+            gradLeft.addColorStop(0, 'rgba(255,220,120,0.22)');
+            gradLeft.addColorStop(1, 'rgba(255,220,120,0)');
+            ctx.save();
+            ctx.globalAlpha = 0.7 + Math.sin(time/400)*0.08;
+            ctx.fillStyle = gradLeft;
+            ctx.fillRect(0, 0, 200, canvas.height);
+            ctx.restore();
+
+            let gradRight = ctx.createLinearGradient(canvas.width, 0, canvas.width-200, 0);
+            gradRight.addColorStop(0, 'rgba(255,220,120,0.22)');
+            gradRight.addColorStop(1, 'rgba(255,220,120,0)');
+            ctx.save();
+            ctx.globalAlpha = 0.7 + Math.cos(time/400)*0.08;
+            ctx.fillStyle = gradRight;
+            ctx.fillRect(canvas.width-200, 0, 200, canvas.height);
+            ctx.restore();
+
+            let gradTop = ctx.createLinearGradient(0, 0, 0, 160);
+            gradTop.addColorStop(0, 'rgba(255,220,120,0.13)');
+            gradTop.addColorStop(1, 'rgba(255,220,120,0)');
+            ctx.save();
+            ctx.globalAlpha = 0.5 + Math.sin(time/600)*0.05;
+            ctx.fillStyle = gradTop;
+            ctx.fillRect(0, 0, canvas.width, 160);
+            ctx.restore();
+
+            let gradBottom = ctx.createLinearGradient(0, canvas.height, 0, canvas.height-160);
+            gradBottom.addColorStop(0, 'rgba(255,220,120,0.13)');
+            gradBottom.addColorStop(1, 'rgba(255,220,120,0)');
+            ctx.save();
+            ctx.globalAlpha = 0.5 + Math.cos(time/600)*0.05;
+            ctx.fillStyle = gradBottom;
+            ctx.fillRect(0, canvas.height-160, canvas.width, 160);
+            ctx.restore();
+
+            // Afficher le cadre au centre du mur
+            if (cadre.complete && cadre.naturalWidth > 0) {
+                const cadreWidth = 220;
+                const cadreHeight = 320;
+                const x = (canvas.width - cadreWidth) / 2;
+                const y = (canvas.height - cadreHeight) / 2 - 80; // déplacement vers le haut
+                ctx.drawImage(cadre, x, y, cadreWidth, cadreHeight);
         }
-    }
+        }
 
-    // Texture pierre (petits points irréguliers)
-    for (let i = 0; i < 350; i++) {
-        ctx.beginPath();
-        ctx.arc(
-            Math.random() * canvas.width,
-            Math.random() * canvas.height,
-            Math.random() * 2 + 0.5,
-            0, 2 * Math.PI
-        );
-        ctx.fillStyle = `rgba(120,120,120,${Math.random() * 0.3 + 0.1})`;
-        ctx.fill();
-    }
+        // Calcul du ratio de l'image
+        const imgRatio = background.width / background.height;
+        const canvasRatio = canvas.width / canvas.height;
+        let drawWidth, drawHeight, offsetX, offsetY;
+        let scale = Math.max(canvas.width / background.width, canvas.height / background.height);
+        drawWidth = background.width * scale;
+        drawHeight = background.height * scale;
+        offsetX = (canvas.width - drawWidth) / 2;
+        offsetY = (canvas.height - drawHeight) / 2;
 
-    // Effet de lumière central (halo)
-    let grad = ctx.createRadialGradient(
-        canvas.width/2, canvas.height/2, 100,
-        canvas.width/2, canvas.height/2, 350
-    );
-    grad.addColorStop(0, 'rgba(255,255,220,0.13)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.18)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Ombre haut/bas
-    grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, 'rgba(0,0,0,0.22)');
-    grad.addColorStop(0.1, 'rgba(0,0,0,0)');
-    grad.addColorStop(0.9, 'rgba(0,0,0,0)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.22)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Tableaux accrochés (cadres dorés et rouges)
-    function drawFrame(x, y, w, h, color) {
-        ctx.save();
-        ctx.shadowColor = '#222';
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = color;
-        ctx.fillRect(x, y, w, h);
-        ctx.strokeStyle = '#222';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(x, y, w, h);
-        ctx.restore();
-        // "Toile" sombre
-        ctx.fillStyle = '#2a1c13';
-        ctx.fillRect(x+10, y+10, w-20, h-20);
-    }
-    // Quelques cadres
-    drawFrame(120, 60, 110, 140, '#c9a13b'); // doré
-    drawFrame(260, 40, 90, 110, '#b22222'); // rouge
-    drawFrame(400, 80, 130, 160, '#c9a13b');
-    drawFrame(570, 50, 80, 100, '#b22222');
-    drawFrame(650, 180, 100, 130, '#c9a13b');
-    drawFrame(200, 250, 140, 100, '#c9a13b');
-    drawFrame(500, 300, 120, 90, '#b22222');
-
-    // Lampes murales stylisées
-    function drawLamp(x, y) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(x, y, 18, 0, 2*Math.PI);
-        ctx.fillStyle = 'rgba(255, 230, 120, 0.85)';
-        ctx.shadowColor = 'yellow';
-        ctx.shadowBlur = 18;
-        ctx.fill();
-        ctx.restore();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, y+30);
-        ctx.strokeStyle = '#a89c6a';
-        ctx.lineWidth = 4;
-        ctx.stroke();
-    }
-    drawLamp(170, 220);
-    drawLamp(600, 200);
-    drawLamp(400, 400);
+        // Animation
+        function animate(time) {
+            drawScene(time);
+            requestAnimationFrame(animate);
+        }
+        animate(0);
+    };
 };
