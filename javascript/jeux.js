@@ -1,59 +1,103 @@
-// Fonction pour dessiner une surface liquide type Stargate
+// Fonction pour dessiner un vortex cosmique unique (mélange Stargate + Porte des Ténèbres)
 function drawBlackLiquidSurface(ctx, x, y, width, height, time) {
     // Centre de l'effet
     const centerX = x + width / 2;
     const centerY = y + height / 2;
-    const maxRadius = Math.max(width, height) / 2; // Utiliser le max pour couvrir tout le rectangle
+    const maxRadius = Math.max(width, height) / 2;
     
-    // Base liquide noire profonde qui couvre tout le rectangle
-    ctx.fillStyle = '#000008';
+    // Base cosmique très sombre
+    ctx.fillStyle = '#000005';
     ctx.fillRect(x, y, width, height);
     
-    // Effet de vortex avec ondulations radiales
     ctx.save();
     
-    // Créer plusieurs couches d'ondulations sur toute la surface
-    for (let layer = 0; layer < 6; layer++) {
-        ctx.globalAlpha = 0.4 - layer * 0.05;
+    // Gradient de base cosmique (du noir profond aux bords rougeâtres)
+    ctx.globalAlpha = 0.8;
+    let cosmicGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+    cosmicGradient.addColorStop(0, 'rgba(5, 0, 15, 1)');      // Centre très sombre
+    cosmicGradient.addColorStop(0.4, 'rgba(20, 5, 25, 0.9)'); // Violet sombre
+    cosmicGradient.addColorStop(0.7, 'rgba(60, 20, 10, 0.7)'); // Rouge sombre
+    cosmicGradient.addColorStop(0.9, 'rgba(100, 40, 15, 0.5)'); // Orange/rouge des bords
+    cosmicGradient.addColorStop(1, 'rgba(120, 60, 30, 0.3)');   // Bord orangé
+    
+    ctx.fillStyle = cosmicGradient;
+    ctx.fillRect(x, y, width, height);
+    
+    // Particules d'étoiles scintillantes (style WoW)
+    ctx.globalAlpha = 0.9;
+    for (let i = 0; i < 25; i++) {
+        let starAngle = (time * 0.0003 + i * 0.8) % (Math.PI * 2);
+        let starRadius = (Math.sin(time * 0.002 + i) * 0.3 + 0.7) * maxRadius * 0.8;
+        let px = centerX + Math.cos(starAngle) * starRadius;
+        let py = centerY + Math.sin(starAngle) * starRadius;
         
-        for (let angle = 0; angle < Math.PI * 2; angle += 0.08) {
-            for (let radius = 5; radius < maxRadius * 1.2; radius += 12) { // Augmenter la portée
-                // Calcul de la position avec rotation et ondulation (vitesse réduite)
-                let rotationSpeed = (time * 0.0005) + (layer * 0.3); // Réduit de 0.001 à 0.0005
-                let waveOffset = Math.sin(radius * 0.02 + time * 0.0015 + layer) * 10; // Réduit de 0.003 à 0.0015
-                let spiralAngle = angle + rotationSpeed + (radius * 0.005); // Réduit de 0.008 à 0.005
+        if (px >= x && px <= x + width && py >= y && py <= y + height) {
+            let brightness = Math.sin(time * 0.004 + i) * 0.5 + 0.5;
+            let starSize = 1 + brightness * 2;
+            
+            // Étoile brillante
+            ctx.fillStyle = `rgba(255, 220, 180, ${brightness * 0.8})`;
+            ctx.beginPath();
+            ctx.arc(px, py, starSize, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Halo autour de l'étoile
+            ctx.globalAlpha = brightness * 0.3;
+            ctx.fillStyle = `rgba(200, 150, 100, ${brightness * 0.4})`;
+            ctx.beginPath();
+            ctx.arc(px, py, starSize * 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.globalAlpha = 0.9;
+        }
+    }
+    
+    // Vortex spiralé liquide (style Stargate mais adapté)
+    for (let layer = 0; layer < 4; layer++) {
+        ctx.globalAlpha = 0.15 - layer * 0.02;
+        
+        for (let angle = 0; angle < Math.PI * 2; angle += 0.12) {
+            for (let radius = 20; radius < maxRadius * 0.9; radius += 18) {
+                let rotationSpeed = (time * 0.0003) + (layer * 0.2);
+                let waveOffset = Math.sin(radius * 0.015 + time * 0.001 + layer) * 8;
+                let spiralAngle = angle + rotationSpeed + (radius * 0.003);
                 
                 let px = centerX + Math.cos(spiralAngle) * (radius + waveOffset);
                 let py = centerY + Math.sin(spiralAngle) * (radius + waveOffset);
                 
-                // Vérifier que les points restent dans le rectangle
                 if (px >= x && px <= x + width && py >= y && py <= y + height) {
-                    // Variation des couleurs selon la profondeur (vitesse réduite)
-                    let intensity = Math.sin(time * 0.001 + radius * 0.01) * 0.5 + 0.5; // Réduit de 0.002 à 0.001
-                    let blue = Math.floor(25 + intensity * 120);
-                    let silver = Math.floor(intensity * 180);
+                    // Couleurs qui évoluent du centre vers l'extérieur
+                    let distanceFromCenter = Math.sqrt((px - centerX) ** 2 + (py - centerY) ** 2) / maxRadius;
                     
-                    ctx.fillStyle = `rgba(${silver}, ${silver + 30}, ${blue + silver}, ${0.7 - layer * 0.1})`;
+                    if (distanceFromCenter < 0.3) {
+                        // Centre : tons violets/bleus mystiques
+                        ctx.fillStyle = `rgba(60, 30, 120, ${0.4 - layer * 0.08})`;
+                    } else if (distanceFromCenter < 0.6) {
+                        // Milieu : transition violet-rouge
+                        ctx.fillStyle = `rgba(80, 40, 60, ${0.3 - layer * 0.06})`;
+                    } else {
+                        // Extérieur : tons rouges/orangés
+                        ctx.fillStyle = `rgba(120, 60, 30, ${0.25 - layer * 0.05})`;
+                    }
                     
-                    // Dessiner les "rides" liquides
                     ctx.beginPath();
-                    ctx.arc(px, py, 4 - layer * 0.4, 0, Math.PI * 2);
+                    ctx.arc(px, py, 3 - layer * 0.3, 0, Math.PI * 2);
                     ctx.fill();
                 }
             }
         }
     }
     
-    // Ondulations de surface principale couvrant tout le rectangle
+    // Effet de profondeur central (trou noir cosmique)
     ctx.globalAlpha = 0.6;
-    let surfaceGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
-    surfaceGradient.addColorStop(0, 'rgba(180, 220, 255, 0.5)');
-    surfaceGradient.addColorStop(0.3, 'rgba(80, 140, 220, 0.4)');
-    surfaceGradient.addColorStop(0.6, 'rgba(40, 80, 150, 0.3)');
-    surfaceGradient.addColorStop(1, 'rgba(10, 20, 50, 0.2)');
+    let voidGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius * 0.3);
+    voidGradient.addColorStop(0, 'rgba(0, 0, 0, 1)');
+    voidGradient.addColorStop(0.7, 'rgba(10, 5, 20, 0.8)');
+    voidGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
     
-    ctx.fillStyle = surfaceGradient;
-    ctx.fillRect(x, y, width, height); // Remplir tout le rectangle
+    ctx.fillStyle = voidGradient;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, maxRadius * 0.3, 0, Math.PI * 2);
+    ctx.fill();
     
     ctx.restore();
 }
