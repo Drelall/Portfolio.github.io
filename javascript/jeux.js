@@ -253,3 +253,301 @@ window.onload = function() {
         animate(0);
     };
 };
+
+// ========================================
+// GESTION DU FORMULAIRE DE CRÉATION DE PERSONNAGE
+// ========================================
+
+// Descriptions des classes
+const classDescriptions = {
+    agent: "Agent du Gouvernement : Enquêteur expérimenté travaillant pour les autorités. Spécialisé dans l'investigation, l'infiltration et les techniques de combat moderne. Possède des contacts dans l'administration et un accès privilégié aux informations officielles.",
+    initie: "Initié : Personne ayant découvert les mystères cachés du monde. Possède des connaissances occultes et ésotériques, capable de déchiffrer des symboles anciens et de comprendre les phénomènes paranormaux. Sa curiosité l'a mené aux frontières de la réalité.",
+    sorcier: "Sorcier : Maître des arts magiques et des forces surnaturelles. Capable de lancer des sorts, de créer des potions et d'invoquer des entités mystiques. Son pouvoir provient d'années d'étude des grimoires anciens et de pratique des rituels interdits.",
+    citoyen: "Citoyen : Personne ordinaire prise dans des événements extraordinaires. Compensée sa normalité par sa débrouillardise, son courage et sa capacité d'adaptation. Souvent sous-estimé, mais capable de surprendre par son ingéniosité et sa détermination."
+};
+
+// Types de personnage par classe
+const characterTypes = {
+    agent: {
+        soldat: "Soldat : Combattant professionnel formé aux techniques militaires modernes. Expert en armement, tactiques de combat et opérations spéciales.",
+        archeologue: "Archéologue : Spécialiste de l'étude des civilisations anciennes. Capable de déchiffrer des inscriptions antiques et de naviguer dans des sites historiques dangereux.",
+        medecin: "Médecin : Professionnel de la santé formé aux techniques médicales avancées. Indispensable pour soigner les blessures et analyser les phénomènes biologiques étranges.",
+        ingenieur: "Ingénieur : Expert technique capable de concevoir, réparer et améliorer des équipements complexes. Spécialisé dans la résolution de problèmes technologiques."
+    },
+    initie: {
+        exorciste: "Exorciste : Spécialiste de la lutte contre les entités démoniaques et les possessions. Maîtrise les rituels de purification et de bannissement.",
+        tueur_monstre: "Tueur de Monstre : Chasseur expérimenté spécialisé dans l'élimination des créatures surnaturelles. Expert en combat rapproché et pièges.",
+        chasseur_fantome: "Chasseur de Fantôme : Investigateur du paranormal spécialisé dans la communication avec les esprits et leur apaisement ou bannissement."
+    },
+    sorcier: {
+        necromancien: "Nécromancien : Maître des arts de la mort et de la non-vie. Capable de communiquer avec les morts et de manipuler l'énergie nécrotique.",
+        druide: "Druide : Gardien de la nature et maître des éléments naturels. Capable de contrôler les plantes, les animaux et les phénomènes météorologiques.",
+        chaman: "Chaman : Intermédiaire entre le monde physique et spirituel. Maîtrise la communication avec les esprits et les rituels ancestraux.",
+        alchimiste: "Alchimiste : Savant mystique spécialisé dans la transformation de la matière. Expert en potions, transmutations et sciences occultes.",
+        enchanteur: "Enchanteur : Maître de la magie d'enchantement et d'illusion. Capable de charmer les esprits et de créer des objets magiques.",
+        occultiste: "Occultiste : Érudit des sciences cachées et des mystères interdits. Possède une vaste connaissance des rituels et des entités extraplanaires.",
+        elementaliste: "Élémentaliste : Sorcier spécialisé dans la manipulation des éléments fondamentaux : feu, eau, air et terre.",
+        thaumaturge: "Thaumaturge : Praticien de la magie divine et des miracles. Capable de canaliser des énergies sacrées pour guérir ou détruire.",
+        demonologue: "Démonologue : Expert en invocation et contrôle des démons. Maîtrise les pactes infernaux et les rituels de summoning."
+    },
+    citoyen: {
+        hacker: "Hacker : Expert en informatique et piratage. Capable d'infiltrer des systèmes sécurisés et de manipuler les technologies modernes.",
+        dissident: "Dissident : Rebelle et activiste luttant contre l'autorité établie. Expert en infiltration sociale et résistance organisée.",
+        ouvrier: "Ouvrier : Travailleur manuel expérimenté. Possède une connaissance pratique des outils et des techniques industrielles.",
+        fonctionnaire: "Fonctionnaire : Employé de l'administration publique. Possède une connaissance approfondie des rouages bureaucratiques et légaux.",
+        bourgeois: "Bourgeois : Membre de la classe moyenne aisée. Dispose de ressources financières et de contacts dans les milieux d'affaires.",
+        lobby: "Lobbyiste : Influenceur professionnel et négociateur. Expert en manipulation politique et relations publiques."
+    }
+};
+
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', function() {
+    const frameHoverArea = document.getElementById('frameHoverArea');
+    const characterModal = document.getElementById('characterFormModal');
+    const characterForm = document.getElementById('characterForm');
+    const characterClass = document.getElementById('characterClass');
+    const characterType = document.getElementById('characterType');
+    const classDescription = document.getElementById('classDescription');
+    const typeDescription = document.getElementById('typeDescription');
+    const closeFormBtn = document.getElementById('closeFormBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const nextStepBtn = document.getElementById('nextStepBtn');
+    const prevStepBtn = document.getElementById('prevStepBtn');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    
+    let currentStep = 1;
+    
+    // Ouvrir le formulaire quand on clique sur le tableau
+    frameHoverArea.addEventListener('click', function() {
+        showCharacterForm();
+    });
+    
+    // Fermer le formulaire
+    closeFormBtn.addEventListener('click', hideCharacterForm);
+    cancelBtn.addEventListener('click', hideCharacterForm);
+    
+    // Navigation entre les étapes
+    nextStepBtn.addEventListener('click', function() {
+        if (validateStep1()) {
+            goToStep(2);
+        }
+    });
+    
+    prevStepBtn.addEventListener('click', function() {
+        goToStep(1);
+    });
+    
+    // Fermer en cliquant en dehors du formulaire
+    characterModal.addEventListener('click', function(e) {
+        if (e.target === characterModal) {
+            hideCharacterForm();
+        }
+    });
+    
+    // Mettre à jour la description quand on change de classe
+    characterClass.addEventListener('change', function() {
+        updateClassDescription();
+        updateCharacterTypes();
+    });
+    
+    // Mettre à jour la description quand on change de type
+    characterType.addEventListener('change', function() {
+        updateTypeDescription();
+    });
+    
+    // Gérer la soumission du formulaire
+    characterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleCharacterCreation();
+    });
+    
+    // Fonction pour afficher le formulaire
+    function showCharacterForm() {
+        characterModal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Empêcher le scroll
+        goToStep(1); // Toujours commencer à l'étape 1
+    }
+    
+    // Fonction pour masquer le formulaire
+    function hideCharacterForm() {
+        characterModal.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Rétablir le scroll
+        resetForm();
+        goToStep(1); // Revenir à l'étape 1
+    }
+    
+    // Navigation entre les étapes
+    function goToStep(stepNumber) {
+        currentStep = stepNumber;
+        
+        // Masquer toutes les étapes
+        step1.classList.remove('active');
+        step2.classList.remove('active');
+        
+        // Afficher l'étape courante
+        if (stepNumber === 1) {
+            step1.classList.add('active');
+        } else if (stepNumber === 2) {
+            step2.classList.add('active');
+        }
+    }
+    
+    // Validation de l'étape 1
+    function validateStep1() {
+        const firstName = document.getElementById('characterFirstName').value.trim();
+        const lastName = document.getElementById('characterLastName').value.trim();
+        const selectedClass = characterClass.value;
+        
+        if (!firstName || !lastName || !selectedClass) {
+            alert('Veuillez remplir tous les champs de cette étape.');
+            return false;
+        }
+        return true;
+    }
+    
+    // Mettre à jour la liste des types selon la classe choisie
+    function updateCharacterTypes() {
+        const selectedClass = characterClass.value;
+        const typeSelect = characterType;
+        
+        // Vider la liste des types
+        typeSelect.innerHTML = '<option value="">-- Choisissez un type --</option>';
+        
+        if (selectedClass && characterTypes[selectedClass]) {
+            const types = characterTypes[selectedClass];
+            for (const [key, description] of Object.entries(types)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = getTypeDisplayName(key);
+                typeSelect.appendChild(option);
+            }
+        }
+        
+        // Réinitialiser la description de type
+        updateTypeDescription();
+    }
+    
+    // Mettre à jour la description de classe
+    function updateClassDescription() {
+        const selectedClass = characterClass.value;
+        const descriptionElement = classDescription.querySelector('p');
+        
+        if (selectedClass && classDescriptions[selectedClass]) {
+            descriptionElement.textContent = classDescriptions[selectedClass];
+            classDescription.style.background = 'rgba(34, 109, 84, 0.1)';
+        } else {
+            descriptionElement.textContent = 'Sélectionnez une classe pour voir sa description.';
+            classDescription.style.background = 'rgba(34, 109, 84, 0.05)';
+        }
+    }
+    
+    // Mettre à jour la description de type
+    function updateTypeDescription() {
+        const selectedClass = characterClass.value;
+        const selectedType = characterType.value;
+        const descriptionElement = typeDescription.querySelector('p');
+        
+        if (selectedClass && selectedType && characterTypes[selectedClass] && characterTypes[selectedClass][selectedType]) {
+            descriptionElement.textContent = characterTypes[selectedClass][selectedType];
+            typeDescription.style.background = 'rgba(34, 109, 84, 0.1)';
+        } else {
+            descriptionElement.textContent = 'Sélectionnez un type pour voir sa description.';
+            typeDescription.style.background = 'rgba(34, 109, 84, 0.05)';
+        }
+    }
+    
+    // Gérer la création du personnage
+    function handleCharacterCreation() {
+        const characterFirstName = document.getElementById('characterFirstName').value.trim();
+        const characterLastName = document.getElementById('characterLastName').value.trim();
+        const selectedClass = characterClass.value;
+        const selectedType = characterType.value;
+        
+        if (!characterFirstName || !characterLastName || !selectedClass || !selectedType) {
+            alert('Veuillez remplir tous les champs.');
+            return;
+        }
+        
+        // Créer l'objet personnage
+        const character = {
+            firstName: characterFirstName,
+            lastName: characterLastName,
+            fullName: `${characterFirstName} ${characterLastName}`,
+            class: selectedClass,
+            type: selectedType,
+            createdAt: new Date().toISOString()
+        };
+        
+        // Sauvegarder dans le localStorage
+        localStorage.setItem('rpgCharacter', JSON.stringify(character));
+        
+        // Afficher un message de confirmation
+        alert(`Personnage créé avec succès !\n\nNom : ${character.fullName}\nClasse : ${getClassDisplayName(selectedClass)}\nType : ${getTypeDisplayName(selectedType)}\n\nVotre aventure peut commencer...`);
+        
+        // Fermer le formulaire
+        hideCharacterForm();
+        
+        // Ici vous pourrez ajouter la logique pour démarrer le jeu
+        console.log('Personnage créé:', character);
+    }
+    
+    // Obtenir le nom d'affichage de la classe
+    function getClassDisplayName(classKey) {
+        const classNames = {
+            agent: 'Agent du Gouvernement',
+            initie: 'Initié',
+            sorcier: 'Sorcier',
+            citoyen: 'Citoyen'
+        };
+        return classNames[classKey] || classKey;
+    }
+    
+    // Obtenir le nom d'affichage du type
+    function getTypeDisplayName(typeKey) {
+        const typeNames = {
+            // Agents
+            soldat: 'Soldat',
+            archeologue: 'Archéologue',
+            medecin: 'Médecin',
+            ingenieur: 'Ingénieur',
+            // Initiés
+            exorciste: 'Exorciste',
+            tueur_monstre: 'Tueur de Monstre',
+            chasseur_fantome: 'Chasseur de Fantôme',
+            // Sorciers
+            necromancien: 'Nécromancien',
+            druide: 'Druide',
+            chaman: 'Chaman',
+            alchimiste: 'Alchimiste',
+            enchanteur: 'Enchanteur',
+            occultiste: 'Occultiste',
+            elementaliste: 'Élémentaliste',
+            thaumaturge: 'Thaumaturge',
+            demonologue: 'Démonologue',
+            // Citoyens
+            hacker: 'Hacker',
+            dissident: 'Dissident',
+            ouvrier: 'Ouvrier',
+            fonctionnaire: 'Fonctionnaire',
+            bourgeois: 'Bourgeois',
+            lobby: 'Lobbyiste'
+        };
+        return typeNames[typeKey] || typeKey;
+    }
+    
+    // Réinitialiser le formulaire
+    function resetForm() {
+        characterForm.reset();
+        updateClassDescription();
+        updateTypeDescription();
+        currentStep = 1;
+    }
+    
+    // Gestion des touches du clavier
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && characterModal.classList.contains('show')) {
+            hideCharacterForm();
+        }
+    });
+});

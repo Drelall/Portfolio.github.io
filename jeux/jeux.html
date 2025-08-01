@@ -13,6 +13,72 @@
     <a href="../index.html" class="stone-block-link" title="Retour à l'accueil"></a>
     <!-- Zone de survol pour le tableau -->
     <div class="frame-hover-area" id="frameHoverArea"></div>
+    
+    <!-- Formulaire de création de personnage -->
+    <div id="characterFormModal" class="character-modal">
+        <div class="character-form-container">
+            <div class="character-form-header">
+                <h2>Bienvenue dans l'univers de Saga</h2>
+                <button id="closeFormBtn" class="close-btn">&times;</button>
+            </div>
+            <form id="characterForm" class="character-form">
+                <!-- Étape 1: Informations de base -->
+                <div id="step1" class="form-step active">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="characterFirstName">Prénom :</label>
+                            <input type="text" id="characterFirstName" name="characterFirstName" required maxlength="20" placeholder="prénom">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="characterLastName">Nom :</label>
+                            <input type="text" id="characterLastName" name="characterLastName" required maxlength="20" placeholder="nom">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="characterClass">Classe de personnage :</label>
+                        <select id="characterClass" name="characterClass" required>
+                            <option value="">-- Choisissez une classe --</option>
+                            <option value="agent">Agent du Gouvernement</option>
+                            <option value="initie">Initié</option>
+                            <option value="sorcier">Sorcier</option>
+                            <option value="citoyen">Citoyen</option>
+                        </select>
+                    </div>
+                    
+                    <div class="class-description" id="classDescription">
+                        <p>Sélectionnez une classe pour voir sa description.</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="cancelBtn" class="btn-secondary">Annuler</button>
+                        <button type="button" id="nextStepBtn" class="btn-primary">Suivant</button>
+                    </div>
+                </div>
+
+                <!-- Étape 2: Type de personnage -->
+                <div id="step2" class="form-step">
+                    <div class="form-group">
+                        <label for="characterType">Type de personnage :</label>
+                        <select id="characterType" name="characterType" required>
+                            <option value="">-- Choisissez un type --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="type-description" id="typeDescription">
+                        <p>Sélectionnez un type pour voir sa description.</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="prevStepBtn" class="btn-secondary">Précédent</button>
+                        <button type="submit" class="btn-primary">Créer le personnage</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script src="../javascript/jeux.js"></script>
 </body>
 </html>
