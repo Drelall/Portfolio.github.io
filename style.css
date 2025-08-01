@@ -16,16 +16,14 @@
 /* === Zone de survol pour le tableau === */
 .frame-hover-area {
     position: absolute;
-    left: 825px; /* Position du cadre ajustée : 290 + 60 = 350 */
-    top: 350px; /* Position du cadre calculée : (600-320)/2 - 80 = 60 */
-    width: 220px;
-    height: 320px;
+    left: 730px; /* Position du cadre ajustée : 290 + 60 = 350 */
+    top: 220px; /* Position du cadre calculée : (600-320)/2 - 80 = 60 */
+    width: 400px;
+    height: 600px;
     z-index: 5;
     cursor: pointer;
     background: transparent;
     transition: background 0.3s ease;
-    /* DEBUG : bordure rouge temporaire pour voir la zone */
-    border: 2px solid red;
     box-sizing: border-box;
 }
 
