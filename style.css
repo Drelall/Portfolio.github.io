@@ -21,15 +21,14 @@
     width: 400px;
     height: 600px;
     z-index: 5;
-    cursor: pointer;
+    cursor: url("images/pointeur.png") 16 16, pointer;
     background: transparent;
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.1s ease;
     box-sizing: border-box;
+    /* Bordure rouge supprimée pour rendre la zone invisible */
 }
 
-.frame-hover-area:hover {
-    background: rgba(255, 255, 255, 0.02); /* Très légère indication visuelle */
-}
+
 /* .stone-block-link::after removed: empty rule set */
 /* .stone-block-link:hover::after removed: empty rule set */
 @keyframes lumos-glow {
