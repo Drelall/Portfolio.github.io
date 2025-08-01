@@ -106,15 +106,49 @@ function drawBlackLiquidSurface(ctx, x, y, width, height, time) {
 window.onload = function() {
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
+    const frameHoverArea = document.getElementById('frameHoverArea');
+
+    // Vérifier que l'élément existe
+    console.log('frameHoverArea element:', frameHoverArea);
+
+    // Variables pour le contrôle du vortex
+    let isHovering = false;
+
+    // Gestion des événements de survol sur la zone HTML
+    if (frameHoverArea) {
+        frameHoverArea.addEventListener('mouseenter', function() {
+            console.log('Mouse entered frame area');
+            isHovering = true;
+        });
+
+        frameHoverArea.addEventListener('mouseleave', function() {
+            console.log('Mouse left frame area');
+            isHovering = false;
+        });
+    } else {
+        console.error('frameHoverArea element not found!');
+    }
 
     // Utiliser tableau.jpg comme fond du jeu
     const background = new Image();
     background.src = '../images/illustration/lemur.png';
     background.onload = function() {
+        console.log('Image de fond chargée');
+        
         // Animation lumineuse façon torches
         // Préparer l'image du cadre
         const cadre = new Image();
         cadre.src = '../images/illustration/cadre.png';
+        
+        cadre.onload = function() {
+            console.log('Image du cadre chargée');
+        };
+
+        // Position du cadre (calculée une seule fois)
+        const cadreWidth = 220;
+        const cadreHeight = 320;
+        const cadreX = (canvas.width - cadreWidth) / 2;
+        const cadreY = (canvas.height - cadreHeight) / 2 - 80;
 
         function drawScene(time) {
             // Dessin du fond
@@ -174,19 +208,31 @@ window.onload = function() {
 
             // Afficher le cadre au centre du mur
             if (cadre.complete && cadre.naturalWidth > 0) {
-                const cadreWidth = 220;
-                const cadreHeight = 320;
-                const x = (canvas.width - cadreWidth) / 2;
-                const y = (canvas.height - cadreHeight) / 2 - 80; // déplacement vers le haut
-                
                 // Dessiner d'abord le cadre
-                ctx.drawImage(cadre, x, y, cadreWidth, cadreHeight);
+                ctx.drawImage(cadre, cadreX, cadreY, cadreWidth, cadreHeight);
                 
-                // Puis l'effet Stargate à l'intérieur du cadre (avec marge pour rester visible)
-                const marginX = 20; // Marge pour éviter que l'effet soit caché par le cadre
+                // Afficher un fond noir à l'intérieur du cadre par défaut
+                const marginX = 20;
                 const marginY = 30;
-                drawBlackLiquidSurface(ctx, x + marginX, y + marginY, cadreWidth - (marginX * 2), cadreHeight - (marginY * 2), time);
-        }
+                const innerX = cadreX + marginX;
+                const innerY = cadreY + marginY;
+                const innerWidth = cadreWidth - (marginX * 2);
+                const innerHeight = cadreHeight - (marginY * 2);
+                
+                if (!isHovering) {
+                    // Fond noir simple quand on ne survole pas
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(innerX, innerY, innerWidth, innerHeight);
+                } else {
+                    // L'effet Stargate à l'intérieur du cadre seulement si on survole
+                    console.log('Drawing vortex effect at:', innerX, innerY, innerWidth, innerHeight);
+                    drawBlackLiquidSurface(ctx, innerX, innerY, innerWidth, innerHeight, time);
+                }
+                
+                // TEST TEMPORAIRE : Afficher le vortex en permanence pour tester
+                // Décommentez la ligne suivante pour tester si le vortex fonctionne
+                // drawBlackLiquidSurface(ctx, innerX, innerY, innerWidth, innerHeight, time);
+            }
         }
 
         // Calcul du ratio de l'image

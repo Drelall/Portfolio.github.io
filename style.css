@@ -12,6 +12,26 @@
     transition: box-shadow 0.2s, background 0.2s;
     /* ...version précédente, sans boule lumineuse... */
 }
+
+/* === Zone de survol pour le tableau === */
+.frame-hover-area {
+    position: absolute;
+    left: 290px; /* Position du cadre calculée : (800-220)/2 = 290 */
+    top: 160px; /* Position du cadre calculée : (600-320)/2 - 80 = 160 */
+    width: 220px;
+    height: 320px;
+    z-index: 5;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.3s ease;
+    /* DEBUG : bordure rouge temporaire pour voir la zone */
+    border: 2px solid red;
+    box-sizing: border-box;
+}
+
+.frame-hover-area:hover {
+    background: rgba(255, 255, 255, 0.02); /* Très légère indication visuelle */
+}
 /* .stone-block-link::after removed: empty rule set */
 /* .stone-block-link:hover::after removed: empty rule set */
 @keyframes lumos-glow {
