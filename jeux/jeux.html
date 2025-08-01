@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jeu du Tableau à Poudlard</title>
     <link rel="stylesheet" href="../style.css">
+    <!-- Mode local - pas de dépendances externes -->
     <!-- Le style est déplacé dans style.css -->
 </head>
 <body>
@@ -13,6 +14,45 @@
     <a href="../index.html" class="stone-block-link" title="Retour à l'accueil"></a>
     <!-- Zone de survol pour le tableau -->
     <div class="frame-hover-area" id="frameHoverArea"></div>
+    
+    <!-- Interface d'authentification -->
+    <div id="authSection" class="auth-section">
+        <div id="userInfo" class="user-info" style="display: none;">
+            <span id="userEmail"></span>
+            <button id="logoutBtn" class="btn-secondary">Déconnexion</button>
+        </div>
+        <div id="authButtons" class="auth-buttons">
+            <button id="loginBtn" class="btn-primary">Se connecter</button>
+            <button id="signupBtn" class="btn-secondary">S'inscrire</button>
+        </div>
+    </div>
+
+    <!-- Formulaire de connexion/inscription -->
+    <div id="authModal" class="character-modal" style="display: none;">
+        <div class="character-form-container">
+            <div class="character-form-header">
+                <h2 id="authTitle">Se connecter</h2>
+                <button id="closeAuthBtn" class="close-btn">&times;</button>
+            </div>
+            <form id="authForm" class="character-form">
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" required placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAuthBtn" class="btn-secondary">Annuler</button>
+                    <button type="submit" id="authSubmitBtn" class="btn-primary">Se connecter</button>
+                </div>
+                <div class="auth-switch">
+                    <p id="authSwitchText">Pas encore de compte ? <a href="#" id="authSwitchLink">S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
     
     <!-- Formulaire de création de personnage -->
     <div id="characterFormModal" class="character-modal">
@@ -79,6 +119,9 @@
         </div>
     </div>
     
+    <!-- Scripts en mode local -->
+    <script src="../javascript/auth-manager.js"></script>
+    <script src="../javascript/character-manager.js"></script>
     <script src="../javascript/jeux.js"></script>
 </body>
 </html>

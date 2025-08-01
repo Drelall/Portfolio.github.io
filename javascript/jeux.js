@@ -302,6 +302,7 @@ const characterTypes = {
 
 // Attendre que le DOM soit chargé
 document.addEventListener('DOMContentLoaded', function() {
+    // Éléments du jeu
     const frameHoverArea = document.getElementById('frameHoverArea');
     const characterModal = document.getElementById('characterFormModal');
     const characterForm = document.getElementById('characterForm');
@@ -316,12 +317,53 @@ document.addEventListener('DOMContentLoaded', function() {
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     
+    // Éléments d'authentification
+    const authModal = document.getElementById('authModal');
+    const authForm = document.getElementById('authForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const closeAuthBtn = document.getElementById('closeAuthBtn');
+    const cancelAuthBtn = document.getElementById('cancelAuthBtn');
+    
     let currentStep = 1;
     
     // Ouvrir le formulaire quand on clique sur le tableau
     frameHoverArea.addEventListener('click', function() {
+        // Vérifier si l'utilisateur est connecté
+        if (!window.authManager.requireAuth()) {
+            return; // L'utilisateur sera redirigé vers la connexion
+        }
         showCharacterForm();
     });
+    
+    // === ÉVÉNEMENTS D'AUTHENTIFICATION ===
+    
+    // Boutons de connexion/inscription
+    loginBtn.addEventListener('click', () => window.authManager.openAuthModal('login'));
+    signupBtn.addEventListener('click', () => window.authManager.openAuthModal('signup'));
+    logoutBtn.addEventListener('click', () => window.authManager.signOut());
+    
+    // Fermer le modal d'auth
+    closeAuthBtn.addEventListener('click', () => window.authManager.closeAuthModal());
+    cancelAuthBtn.addEventListener('click', () => window.authManager.closeAuthModal());
+    
+    // Formulaire d'authentification
+    authForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const isSignup = document.getElementById('authTitle').textContent === 'S\'inscrire';
+        
+        if (isSignup) {
+            await window.authManager.signUp(email, password);
+        } else {
+            await window.authManager.signIn(email, password);
+        }
+    });
+    
+    // === ÉVÉNEMENTS DE CRÉATION DE PERSONNAGE ===
     
     // Fermer le formulaire
     closeFormBtn.addEventListener('click', hideCharacterForm);
@@ -357,9 +399,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Gérer la soumission du formulaire
-    characterForm.addEventListener('submit', function(e) {
+    characterForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        handleCharacterCreation();
+        await handleCharacterCreation();
     });
     
     // Fonction pour afficher le formulaire
@@ -458,38 +500,44 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Gérer la création du personnage
-    function handleCharacterCreation() {
-        const characterFirstName = document.getElementById('characterFirstName').value.trim();
-        const characterLastName = document.getElementById('characterLastName').value.trim();
-        const selectedClass = characterClass.value;
-        const selectedType = characterType.value;
-        
-        if (!characterFirstName || !characterLastName || !selectedClass || !selectedType) {
-            alert('Veuillez remplir tous les champs.');
-            return;
+    async function handleCharacterCreation() {
+        try {
+            const characterFirstName = document.getElementById('characterFirstName').value.trim();
+            const characterLastName = document.getElementById('characterLastName').value.trim();
+            const selectedClass = characterClass.value;
+            const selectedType = characterType.value;
+            
+            if (!characterFirstName || !characterLastName || !selectedClass || !selectedType) {
+                alert('Veuillez remplir tous les champs.');
+                return;
+            }
+            
+            // Créer l'objet personnage
+            const character = {
+                first_name: characterFirstName,
+                last_name: characterLastName,
+                full_name: `${characterFirstName} ${characterLastName}`,
+                character_class: selectedClass,
+                character_type: selectedType,
+                class_display_name: getClassDisplayName(selectedClass),
+                type_display_name: getTypeDisplayName(selectedType)
+            };
+            
+            // Sauvegarder avec Supabase ou localStorage
+            const savedCharacter = await window.characterManager.saveCharacterSafely(character);
+            
+            // Afficher un message de confirmation
+            alert(`✨ ${character.full_name} rejoint l'aventure !\n${character.class_display_name} - ${character.type_display_name}`);
+            
+            // Fermer le formulaire
+            hideCharacterForm();
+            
+            console.log('Personnage créé:', savedCharacter);
+            
+        } catch (error) {
+            console.error('Erreur création personnage:', error);
+            alert('❌ Erreur lors de la création du personnage');
         }
-        
-        // Créer l'objet personnage
-        const character = {
-            firstName: characterFirstName,
-            lastName: characterLastName,
-            fullName: `${characterFirstName} ${characterLastName}`,
-            class: selectedClass,
-            type: selectedType,
-            createdAt: new Date().toISOString()
-        };
-        
-        // Sauvegarder dans le localStorage
-        localStorage.setItem('rpgCharacter', JSON.stringify(character));
-        
-        // Afficher un message de confirmation
-        alert(`Personnage créé avec succès !\n\nNom : ${character.fullName}\nClasse : ${getClassDisplayName(selectedClass)}\nType : ${getTypeDisplayName(selectedType)}\n\nVotre aventure peut commencer...`);
-        
-        // Fermer le formulaire
-        hideCharacterForm();
-        
-        // Ici vous pourrez ajouter la logique pour démarrer le jeu
-        console.log('Personnage créé:', character);
     }
     
     // Obtenir le nom d'affichage de la classe
