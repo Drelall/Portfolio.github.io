@@ -1,3 +1,63 @@
+// Fonction pour dessiner une surface liquide type Stargate
+function drawBlackLiquidSurface(ctx, x, y, width, height, time) {
+    // Centre de l'effet
+    const centerX = x + width / 2;
+    const centerY = y + height / 2;
+    const maxRadius = Math.max(width, height) / 2; // Utiliser le max pour couvrir tout le rectangle
+    
+    // Base liquide noire profonde qui couvre tout le rectangle
+    ctx.fillStyle = '#000008';
+    ctx.fillRect(x, y, width, height);
+    
+    // Effet de vortex avec ondulations radiales
+    ctx.save();
+    
+    // Créer plusieurs couches d'ondulations sur toute la surface
+    for (let layer = 0; layer < 6; layer++) {
+        ctx.globalAlpha = 0.4 - layer * 0.05;
+        
+        for (let angle = 0; angle < Math.PI * 2; angle += 0.08) {
+            for (let radius = 5; radius < maxRadius * 1.2; radius += 12) { // Augmenter la portée
+                // Calcul de la position avec rotation et ondulation (vitesse réduite)
+                let rotationSpeed = (time * 0.0005) + (layer * 0.3); // Réduit de 0.001 à 0.0005
+                let waveOffset = Math.sin(radius * 0.02 + time * 0.0015 + layer) * 10; // Réduit de 0.003 à 0.0015
+                let spiralAngle = angle + rotationSpeed + (radius * 0.005); // Réduit de 0.008 à 0.005
+                
+                let px = centerX + Math.cos(spiralAngle) * (radius + waveOffset);
+                let py = centerY + Math.sin(spiralAngle) * (radius + waveOffset);
+                
+                // Vérifier que les points restent dans le rectangle
+                if (px >= x && px <= x + width && py >= y && py <= y + height) {
+                    // Variation des couleurs selon la profondeur (vitesse réduite)
+                    let intensity = Math.sin(time * 0.001 + radius * 0.01) * 0.5 + 0.5; // Réduit de 0.002 à 0.001
+                    let blue = Math.floor(25 + intensity * 120);
+                    let silver = Math.floor(intensity * 180);
+                    
+                    ctx.fillStyle = `rgba(${silver}, ${silver + 30}, ${blue + silver}, ${0.7 - layer * 0.1})`;
+                    
+                    // Dessiner les "rides" liquides
+                    ctx.beginPath();
+                    ctx.arc(px, py, 4 - layer * 0.4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+    }
+    
+    // Ondulations de surface principale couvrant tout le rectangle
+    ctx.globalAlpha = 0.6;
+    let surfaceGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxRadius);
+    surfaceGradient.addColorStop(0, 'rgba(180, 220, 255, 0.5)');
+    surfaceGradient.addColorStop(0.3, 'rgba(80, 140, 220, 0.4)');
+    surfaceGradient.addColorStop(0.6, 'rgba(40, 80, 150, 0.3)');
+    surfaceGradient.addColorStop(1, 'rgba(10, 20, 50, 0.2)');
+    
+    ctx.fillStyle = surfaceGradient;
+    ctx.fillRect(x, y, width, height); // Remplir tout le rectangle
+    
+    ctx.restore();
+}
+
 // Affichage du décor du jeu dans le canevas
 window.onload = function() {
     const canvas = document.getElementById('gameCanvas');
@@ -74,7 +134,14 @@ window.onload = function() {
                 const cadreHeight = 320;
                 const x = (canvas.width - cadreWidth) / 2;
                 const y = (canvas.height - cadreHeight) / 2 - 80; // déplacement vers le haut
+                
+                // Dessiner d'abord le cadre
                 ctx.drawImage(cadre, x, y, cadreWidth, cadreHeight);
+                
+                // Puis l'effet Stargate à l'intérieur du cadre (avec marge pour rester visible)
+                const marginX = 20; // Marge pour éviter que l'effet soit caché par le cadre
+                const marginY = 30;
+                drawBlackLiquidSurface(ctx, x + marginX, y + marginY, cadreWidth - (marginX * 2), cadreHeight - (marginY * 2), time);
         }
         }
 
