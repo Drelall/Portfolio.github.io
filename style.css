@@ -16,8 +16,8 @@
 /* === Zone de survol pour le tableau === */
 .frame-hover-area {
     position: absolute;
-    left: 290px; /* Position du cadre calculée : (800-220)/2 = 290 */
-    top: 160px; /* Position du cadre calculée : (600-320)/2 - 80 = 160 */
+    left: 825px; /* Position du cadre ajustée : 290 + 60 = 350 */
+    top: 350px; /* Position du cadre calculée : (600-320)/2 - 80 = 60 */
     width: 220px;
     height: 320px;
     z-index: 5;
