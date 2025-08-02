@@ -3,6 +3,8 @@ class AuthManager {
     constructor() {
         this.user = null;
         this.isAuthenticated = false;
+        // Données temporaires pour l'inscription en 2 étapes
+        this.tempRegistrationData = null;
         this.init();
     }
 
@@ -37,6 +39,140 @@ class AuthManager {
             if (userInfo) userInfo.style.display = 'none';
             if (authButtons) authButtons.style.display = 'flex';
         }
+    }
+
+    // Première étape de l'inscription - validation des données personnelles
+    async validateRegistrationStep1(email, password, firstName) {
+        try {
+            // Vérifications de base
+            if (!email || !password || !firstName) {
+                throw new Error('Tous les champs sont requis');
+            }
+
+            if (password.length < 6) {
+                throw new Error('Le mot de passe doit contenir au moins 6 caractères');
+            }
+
+            if (!firstName.trim()) {
+                throw new Error('Le prénom ne peut pas être vide');
+            }
+
+            // Vérifier si l'utilisateur existe déjà
+            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+            if (users.find(user => user.email === email)) {
+                throw new Error('Un compte avec cet email existe déjà');
+            }
+
+            // Stocker les données temporairement
+            this.tempRegistrationData = {
+                email: email.trim(),
+                password: password,
+                firstName: firstName.trim(),
+                timestamp: Date.now()
+            };
+
+            console.log('✅ Étape 1 de l\'inscription validée pour:', email);
+            return { success: true, data: this.tempRegistrationData };
+        } catch (error) {
+            console.error('Erreur étape 1 inscription:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Finalisation de l'inscription avec les données du personnage
+    async finalizeRegistration(characterData) {
+        try {
+            if (!this.tempRegistrationData) {
+                throw new Error('Données d\'inscription manquantes. Veuillez recommencer le processus.');
+            }
+
+            // Vérifier que les données temporaires ne sont pas trop anciennes (30 minutes)
+            const timeLimit = 30 * 60 * 1000; // 30 minutes
+            if (Date.now() - this.tempRegistrationData.timestamp > timeLimit) {
+                this.tempRegistrationData = null;
+                throw new Error('Session d\'inscription expirée. Veuillez recommencer.');
+            }
+
+            // Valider les données du personnage
+            if (!characterData.characterFirstName || !characterData.characterLastName || 
+                !characterData.characterClass || !characterData.characterType) {
+                throw new Error('Toutes les informations du personnage sont requises');
+            }
+
+            // Créer le compte complet
+            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+            
+            const newUser = {
+                id: Date.now().toString(),
+                email: this.tempRegistrationData.email,
+                password: this.tempRegistrationData.password,
+                firstName: this.tempRegistrationData.firstName,
+                character: {
+                    firstName: characterData.characterFirstName.trim(),
+                    lastName: characterData.characterLastName.trim(),
+                    class: characterData.characterClass,
+                    type: characterData.characterType
+                },
+                createdAt: new Date().toISOString(),
+                needsEmailConfirmation: true // Pour l'email de confirmation
+            };
+
+            users.push(newUser);
+            localStorage.setItem('saga_users', JSON.stringify(users));
+
+            // Simuler l'envoi d'email de confirmation
+            this.sendConfirmationEmail(newUser);
+
+            // Connecter l'utilisateur automatiquement
+            this.user = { 
+                email: newUser.email, 
+                id: newUser.id, 
+                firstName: newUser.firstName,
+                character: newUser.character 
+            };
+            this.isAuthenticated = true;
+            localStorage.setItem('saga_current_user', JSON.stringify(this.user));
+
+            // Nettoyer les données temporaires
+            this.tempRegistrationData = null;
+
+            this.updateUI();
+            this.showMessage('✅ Inscription finalisée ! Email de confirmation envoyé.', 'success');
+            this.closeAuthModal();
+            this.closeCharacterModal();
+
+            console.log('✅ Inscription complète réussie:', newUser);
+            return { success: true, data: newUser };
+        } catch (error) {
+            console.error('Erreur finalisation inscription:', error);
+            this.showMessage(`❌ Erreur: ${error.message}`, 'error');
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Simulation d'envoi d'email de confirmation
+    sendConfirmationEmail(user) {
+        console.log('📧 Email de confirmation envoyé à:', user.email);
+        console.log('📧 Contenu de l\'email:');
+        console.log('---');
+        console.log(`Bonjour ${user.firstName},`);
+        console.log('');
+        console.log('Bienvenue dans l\'univers de Saga !');
+        console.log('');
+        console.log('Votre compte a été créé avec succès :');
+        console.log(`- Email: ${user.email}`);
+        console.log(`- Prénom: ${user.firstName}`);
+        console.log(`- Personnage: ${user.character.firstName} ${user.character.lastName}`);
+        console.log(`- Classe: ${user.character.class}`);
+        console.log(`- Type: ${user.character.type}`);
+        console.log('');
+        console.log('Vous pouvez maintenant accéder à votre compte et consulter vos informations.');
+        console.log('---');
+        
+        // Simuler un délai d'envoi
+        setTimeout(() => {
+            console.log('✅ Email de confirmation envoyé avec succès !');
+        }, 1000);
     }
 
     async signUp(email, password, firstName) {
@@ -179,6 +315,7 @@ class AuthManager {
         const modal = document.getElementById('authModal');
         const title = document.getElementById('authTitle');
         const submitBtn = document.getElementById('authSubmitBtn');
+        const nextToCharacterBtn = document.getElementById('nextToCharacterBtn');
         const switchText = document.getElementById('authSwitchText');
         const firstNameGroup = document.getElementById('firstNameGroup');
         const firstName = document.getElementById('firstName');
@@ -187,14 +324,22 @@ class AuthManager {
 
         if (mode === 'login') {
             if (title) title.textContent = 'Se connecter';
-            if (submitBtn) submitBtn.textContent = 'Se connecter';
+            if (submitBtn) {
+                submitBtn.textContent = 'Se connecter';
+                submitBtn.style.display = 'inline-block';
+            }
+            if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
             // Masquer le champ prénom pour la connexion
             if (firstNameGroup) firstNameGroup.style.display = 'none';
             if (firstName) firstName.required = false;
         } else {
-            if (title) title.textContent = 'S\'inscrire';
-            if (submitBtn) submitBtn.textContent = 'S\'inscrire';
+            if (title) title.textContent = 'S\'inscrire - Étape 1/2';
+            if (submitBtn) {
+                submitBtn.textContent = 'Valider et continuer';
+                submitBtn.style.display = 'inline-block';
+            }
+            if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
             if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
             // Afficher le champ prénom pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
@@ -234,6 +379,25 @@ class AuthManager {
             }
             console.log('✅ Modal fermé');
         }, 300);
+    }
+
+    closeCharacterModal() {
+        console.log('🔧 Tentative de fermeture du modal de personnage...');
+        const modal = document.getElementById('characterFormModal');
+        const characterForm = document.getElementById('characterForm');
+        
+        if (!modal) {
+            console.error('❌ Modal characterFormModal non trouvé !');
+            return;
+        }
+        
+        console.log('✅ Modal personnage trouvé, fermeture en cours...');
+        modal.style.display = 'none';
+        if (characterForm) {
+            characterForm.reset();
+            console.log('✅ Formulaire personnage réinitialisé');
+        }
+        console.log('✅ Modal personnage fermé');
     }
 
     requireAuth() {

@@ -94,6 +94,7 @@
         <div class="auth-container">
             <div id="userInfo" class="user-info" style="display: none;">
                 <span id="userDisplayName"></span>
+                <button id="accountBtn" class="btn-primary">Mon Compte</button>
                 <button id="logoutBtn" class="btn-secondary">Déconnexion</button>
             </div>
             <div id="authButtons" class="auth-buttons">
@@ -131,6 +132,59 @@
                     <p id="authSwitchText">Pas encore de compte ? <a href="#" id="authSwitchLink">S'inscrire</a></p>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal Mon Compte -->
+    <div id="accountModal" class="character-modal" style="display: none;">
+        <div class="character-form-container">
+            <div class="character-form-header">
+                <h2>Mon Compte</h2>
+                <button id="closeAccountBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="account-content">
+                <!-- Informations personnelles -->
+                <div class="account-section">
+                    <h3>Informations personnelles</h3>
+                    <div class="account-info">
+                        <div class="info-row">
+                            <span class="info-label">Prénom :</span>
+                            <span id="accountFirstName" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email :</span>
+                            <span id="accountEmail" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Membre depuis :</span>
+                            <span id="accountCreatedAt" class="info-value">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informations du personnage -->
+                <div class="account-section">
+                    <h3>Mon Personnage</h3>
+                    <div id="characterInfo" class="account-info">
+                        <div class="info-row">
+                            <span class="info-label">Nom complet :</span>
+                            <span id="characterFullName" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Classe :</span>
+                            <span id="characterClass" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Type :</span>
+                            <span id="characterType" class="info-value">-</span>
+                        </div>
+                    </div>
+                    <div id="noCharacterInfo" class="no-character" style="display: none;">
+                        <p>Aucun personnage créé.</p>
+                        <a href="jeux/jeux.html" class="btn-primary">Créer un personnage</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

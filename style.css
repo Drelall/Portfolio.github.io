@@ -237,6 +237,82 @@
     transform: translateY(-1px);
 }
 
+/* === Styles pour le modal Mon Compte === */
+.account-content {
+    padding: 30px;
+}
+
+.account-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(34, 109, 84, 0.3);
+}
+
+.account-section h3 {
+    margin: 0 0 20px 0;
+    color: #226d54;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-bottom: 2px solid #226d54;
+    padding-bottom: 10px;
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #f3e8d3;
+    min-width: 140px;
+}
+
+.info-value {
+    color: #226d54;
+    font-weight: 500;
+    text-align: right;
+    flex: 1;
+}
+
+.no-character {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+}
+
+.no-character p {
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info #userDisplayName {
+    color: #226d54;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
 html, body {
     height: 100%;
     margin: 0;

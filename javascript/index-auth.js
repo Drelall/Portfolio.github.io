@@ -69,6 +69,7 @@ class IndexAuthManager {
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const logoutBtn = document.getElementById('logoutBtn');
+        const accountBtn = document.getElementById('accountBtn');
 
         if (loginBtn) {
             loginBtn.addEventListener('click', () => this.openAuthModal('login'));
@@ -82,6 +83,10 @@ class IndexAuthManager {
             logoutBtn.addEventListener('click', () => this.signOut());
         }
 
+        if (accountBtn) {
+            accountBtn.addEventListener('click', () => this.openAccountModal());
+        }
+
         // Formulaire d'authentification
         const authForm = document.getElementById('authForm');
         if (authForm) {
@@ -91,6 +96,7 @@ class IndexAuthManager {
         // Fermeture des modals
         const closeAuthBtn = document.getElementById('closeAuthBtn');
         const cancelAuthBtn = document.getElementById('cancelAuthBtn');
+        const closeAccountBtn = document.getElementById('closeAccountBtn');
 
         if (closeAuthBtn) {
             closeAuthBtn.addEventListener('click', () => this.closeAuthModal());
@@ -100,12 +106,25 @@ class IndexAuthManager {
             cancelAuthBtn.addEventListener('click', () => this.closeAuthModal());
         }
 
+        if (closeAccountBtn) {
+            closeAccountBtn.addEventListener('click', () => this.closeAccountModal());
+        }
+
         // Fermeture en cliquant en dehors du modal
         const authModal = document.getElementById('authModal');
         if (authModal) {
             authModal.addEventListener('click', (e) => {
                 if (e.target === authModal) {
                     this.closeAuthModal();
+                }
+            });
+        }
+
+        const accountModal = document.getElementById('accountModal');
+        if (accountModal) {
+            accountModal.addEventListener('click', (e) => {
+                if (e.target === accountModal) {
+                    this.closeAccountModal();
                 }
             });
         }
@@ -271,6 +290,84 @@ class IndexAuthManager {
             const authForm = document.getElementById('authForm');
             if (authForm) authForm.reset();
         }, 300);
+    }
+
+    openAccountModal() {
+        const modal = document.getElementById('accountModal');
+        if (!modal) return;
+
+        // Récupérer les données utilisateur complètes
+        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+        const fullUserData = users.find(user => user.id === this.user.id);
+
+        if (!fullUserData) {
+            this.showMessage('❌ Erreur : données utilisateur introuvables', 'error');
+            return;
+        }
+
+        // Remplir les informations personnelles
+        document.getElementById('accountFirstName').textContent = fullUserData.firstName || '-';
+        document.getElementById('accountEmail').textContent = fullUserData.email || '-';
+        
+        // Formater la date de création
+        const createdDate = fullUserData.createdAt ? 
+            new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '-';
+        document.getElementById('accountCreatedAt').textContent = createdDate;
+
+        // Remplir les informations du personnage
+        const characterInfo = document.getElementById('characterInfo');
+        const noCharacterInfo = document.getElementById('noCharacterInfo');
+
+        if (fullUserData.character) {
+            // Afficher les informations du personnage
+            document.getElementById('characterFullName').textContent = 
+                `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
+            document.getElementById('characterClass').textContent = 
+                this.getClassDisplayName(fullUserData.character.class);
+            document.getElementById('characterType').textContent = 
+                this.getTypeDisplayName(fullUserData.character.type);
+            
+            characterInfo.style.display = 'block';
+            noCharacterInfo.style.display = 'none';
+        } else {
+            // Aucun personnage créé
+            characterInfo.style.display = 'none';
+            noCharacterInfo.style.display = 'block';
+        }
+
+        // Afficher le modal
+        modal.style.display = 'flex';
+        setTimeout(() => modal.style.opacity = '1', 10);
+    }
+
+    closeAccountModal() {
+        const modal = document.getElementById('accountModal');
+        if (!modal) return;
+
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    getClassDisplayName(classKey) {
+        const classNames = {
+            'agent': 'Agent du Gouvernement',
+            'initie': 'Initié',
+            'sorcier': 'Sorcier',
+            'citoyen': 'Citoyen'
+        };
+        return classNames[classKey] || classKey;
+    }
+
+    getTypeDisplayName(typeKey) {
+        // Cette méthode devra être enrichie selon les types disponibles
+        // Pour l'instant, on retourne la clé telle quelle
+        return typeKey || '-';
     }
 
     showMessage(message, type = 'info') {

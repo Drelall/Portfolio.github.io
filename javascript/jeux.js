@@ -387,11 +387,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const firstName = document.getElementById('firstName').value;
-        const isSignup = document.getElementById('authTitle').textContent === 'S\'inscrire';
+        const authTitle = document.getElementById('authTitle').textContent;
         
-        if (isSignup) {
-            await window.authManager.signUp(email, password, firstName);
+        if (authTitle.includes('S\'inscrire')) {
+            // Première étape de l'inscription
+            const result = await window.authManager.validateRegistrationStep1(email, password, firstName);
+            if (result.success) {
+                // Passer au formulaire de création de personnage
+                window.authManager.closeAuthModal();
+                showCharacterForm();
+                window.authManager.showMessage('✅ Étape 1 validée ! Créez maintenant votre personnage.', 'success');
+            } else {
+                window.authManager.showMessage(`❌ ${result.error}`, 'error');
+            }
         } else {
+            // Connexion normale
             await window.authManager.signIn(email, password);
         }
     });
@@ -546,6 +556,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             // Créer l'objet personnage
+            const characterData = {
+                characterFirstName: characterFirstName,
+                characterLastName: characterLastName,
+                characterClass: selectedClass,
+                characterType: selectedType
+            };
+            
+            // Si nous sommes dans un processus d'inscription, finaliser l'inscription
+            if (window.authManager.tempRegistrationData) {
+                console.log('🔧 Finalisation de l\'inscription avec les données du personnage...');
+                const result = await window.authManager.finalizeRegistration(characterData);
+                
+                if (result.success) {
+                    console.log('✅ Inscription finalisée avec succès !');
+                    // Le modal sera fermé par finalizeRegistration
+                } else {
+                    window.authManager.showMessage(`❌ Erreur lors de la finalisation: ${result.error}`, 'error');
+                }
+                return;
+            }
+            
+            // Sinon, créer un personnage normalement (utilisateur déjà connecté)
+            if (!window.authManager.requireAuth()) {
+                return;
+            }
+            
             const character = {
                 first_name: characterFirstName,
                 last_name: characterLastName,
