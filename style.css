@@ -2165,8 +2165,49 @@ body.dark-mode .search-result-item:hover {
 }
 
 /* ========================================
-   INTERFACE D'AUTHENTIFICATION SUPABASE
+   INTERFACE D'AUTHENTIFICATION
    ======================================== */
+
+/* Barre d'authentification principale (index.html) */
+.auth-bar {
+    background: #f3e8d3;
+    border-bottom: 2px solid rgba(34, 109, 84, 0.3);
+    padding: 10px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.auth-bar.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Style pour le logo interactif */
+.logo {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.auth-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    min-height: 50px;
+}
+
+/* Interface d'authentification pour les jeux */
 .auth-section {
     position: absolute;
     top: 20px;
@@ -2191,32 +2232,39 @@ body.dark-mode .search-result-item:hover {
 
 .auth-buttons {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    align-items: center;
 }
 
 .auth-buttons .btn-primary,
 .auth-buttons .btn-secondary {
-    padding: 8px 16px;
+    padding: 10px 20px;
     font-size: 14px;
-    border-radius: 20px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .auth-buttons .btn-primary {
     background: #226d54;
     color: #f3e8d3;
+    border: 2px solid #226d54;
 }
 
 .auth-buttons .btn-primary:hover {
-    background: #2a8a6a;
+    background: #1e5d4a;
+    color: white;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
 }
 
 .auth-buttons .btn-secondary {
-    background: transparent;
+    background: #f3e8d3;
     color: #226d54;
     border: 2px solid #226d54;
 }
@@ -2224,6 +2272,8 @@ body.dark-mode .search-result-item:hover {
 .auth-buttons .btn-secondary:hover {
     background: #226d54;
     color: #f3e8d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
 }
 
 .user-info .btn-secondary {

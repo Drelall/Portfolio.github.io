@@ -88,6 +88,48 @@
             </span>
         </button>
     </header>
+
+    <!-- Barre d'authentification -->
+    <div class="auth-bar">
+        <div class="auth-container">
+            <div id="userInfo" class="user-info" style="display: none;">
+                <span id="userEmail"></span>
+                <button id="logoutBtn" class="btn-secondary">Déconnexion</button>
+            </div>
+            <div id="authButtons" class="auth-buttons">
+                <button id="loginBtn" class="btn-primary">Se connecter</button>
+                <button id="signupBtn" class="btn-secondary">S'inscrire</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de connexion/inscription -->
+    <div id="authModal" class="character-modal" style="display: none;">
+        <div class="character-form-container">
+            <div class="character-form-header">
+                <h2 id="authTitle">Se connecter</h2>
+                <button id="closeAuthBtn" class="close-btn">&times;</button>
+            </div>
+            <form id="authForm" class="character-form">
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" id="email" name="email" required placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="cancelAuthBtn" class="btn-secondary">Annuler</button>
+                    <button type="submit" id="authSubmitBtn" class="btn-primary">Se connecter</button>
+                </div>
+                <div class="auth-switch">
+                    <p id="authSwitchText">Pas encore de compte ? <a href="#" id="authSwitchLink">S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
 <!-- ...existing code... -->
     <main>
 
@@ -169,5 +211,7 @@
     </footer>
     <script src="carousel/scrypt.js"></script>
     <script src="javascript/cursor-animation.js"></script>
+    <!-- Script d'authentification pour la page d'accueil -->
+    <script src="javascript/index-auth.js"></script>
 </body>
 </html>
