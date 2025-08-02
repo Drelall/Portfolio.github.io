@@ -27,16 +27,28 @@ class EmailService {
             // Préparer les données pour l'email
             const templateParams = {
                 to_email: user.email,
-                user_name: user.firstName,
+                user_name: user.firstName || 'Utilisateur',
                 user_email: user.email,
-                character_full_name: `${user.character.firstName} ${user.character.lastName}`,
-                character_class: this.getClassDisplayName(user.character.class),
-                character_type: user.character.type,
-                created_date: new Date(user.createdAt).toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                })
+                character_full_name: user.character ? 
+                    `${user.character.firstName} ${user.character.lastName}` : 
+                    'Aucun personnage créé',
+                character_class: user.character ? 
+                    this.getClassDisplayName(user.character.class) : 
+                    'Non définie',
+                character_type: user.character ? 
+                    user.character.type : 
+                    'Non défini',
+                created_date: user.createdAt ? 
+                    new Date(user.createdAt).toLocaleDateString('fr-FR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }) : 
+                    new Date().toLocaleDateString('fr-FR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })
             };
 
             console.log('📧 Envoi de l\'email de confirmation à:', user.email);
@@ -120,17 +132,21 @@ class EmailService {
         content.innerHTML = `
             <h2 style="color: #226d54; margin-bottom: 20px;">📧 Email de confirmation</h2>
             <div style="background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 8px; border-left: 4px solid #226d54;">
-                <p><strong>Bonjour ${user.firstName},</strong></p>
+                <p><strong>Bonjour ${user.firstName || 'Utilisateur'},</strong></p>
                 <br>
                 <p>Bienvenue dans l'univers de <strong>Saga</strong> !</p>
                 <br>
                 <p>Votre compte a été créé avec succès :</p>
                 <ul style="margin: 15px 0; padding-left: 20px;">
                     <li><strong>Email :</strong> ${user.email}</li>
-                    <li><strong>Prénom :</strong> ${user.firstName}</li>
-                    <li><strong>Personnage :</strong> ${user.character.firstName} ${user.character.lastName}</li>
-                    <li><strong>Classe :</strong> ${this.getClassDisplayName(user.character.class)}</li>
-                    <li><strong>Type :</strong> ${user.character.type}</li>
+                    <li><strong>Prénom :</strong> ${user.firstName || 'Non défini'}</li>
+                    ${user.character ? `
+                        <li><strong>Personnage :</strong> ${user.character.firstName} ${user.character.lastName}</li>
+                        <li><strong>Classe :</strong> ${this.getClassDisplayName(user.character.class)}</li>
+                        <li><strong>Type :</strong> ${user.character.type}</li>
+                    ` : `
+                        <li><strong>Personnage :</strong> <em style="color: #888;">Aucun personnage créé - <a href="jeux/jeux.html" style="color: #226d54;">Créer un personnage</a></em></li>
+                    `}
                 </ul>
                 <br>
                 <p>Vous pouvez maintenant accéder à votre compte et consulter vos informations dans la section "Mon Compte".</p>

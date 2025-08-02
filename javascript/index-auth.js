@@ -361,10 +361,15 @@ class IndexAuthManager {
     }
 
     async resendConfirmationEmail() {
+        console.log('🔄 Tentative de renvoi d\'email...');
+        
         if (!this.user) {
             console.error('❌ Aucun utilisateur connecté pour renvoyer l\'email');
+            this.showResendError('Aucun utilisateur connecté');
             return;
         }
+
+        console.log('👤 Utilisateur connecté:', this.user);
 
         const resendBtn = document.getElementById('resendEmailBtn');
         if (resendBtn) {
@@ -376,20 +381,27 @@ class IndexAuthManager {
         try {
             console.log('📧 Renvoi de l\'email de confirmation pour:', this.user.email);
             
-            // Utiliser le service d'email pour renvoyer la confirmation
-            if (window.emailService) {
-                const result = await window.emailService.sendConfirmationEmail(this.user);
-                
-                if (result.success) {
-                    // Afficher un message de succès
-                    this.showResendSuccess();
-                } else {
-                    console.warn('⚠️ Erreur lors du renvoi:', result.message);
-                    this.showResendError(result.message);
-                }
-            } else {
+            // Vérifier si le service d'email est disponible
+            if (!window.emailService) {
                 console.error('❌ Service d\'email non disponible');
                 this.showResendError('Service d\'email non disponible');
+                return;
+            }
+
+            console.log('✅ Service d\'email trouvé, envoi en cours...');
+            
+            // Utiliser le service d'email pour renvoyer la confirmation
+            const result = await window.emailService.sendConfirmationEmail(this.user);
+            
+            console.log('📧 Résultat de l\'envoi:', result);
+            
+            if (result.success) {
+                // Afficher un message de succès
+                this.showResendSuccess();
+                console.log('✅ Email envoyé avec succès !');
+            } else {
+                console.warn('⚠️ Erreur lors du renvoi:', result.message);
+                this.showResendError(result.message);
             }
         } catch (error) {
             console.error('❌ Erreur lors du renvoi de l\'email:', error);
