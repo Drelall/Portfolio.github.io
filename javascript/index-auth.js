@@ -114,10 +114,12 @@ class IndexAuthManager {
     updateUI() {
         const userInfo = document.getElementById('userInfo');
         const authButtons = document.getElementById('authButtons');
-        const userEmail = document.getElementById('userEmail');
+        const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            if (userEmail) userEmail.textContent = this.user.email;
+            // Si le prénom existe, l'afficher, sinon afficher "Utilisateur connecté"
+            const displayName = this.user.firstName || 'Utilisateur connecté';
+            if (userDisplayName) userDisplayName.textContent = displayName;
             if (userInfo) userInfo.style.display = 'flex';
             if (authButtons) authButtons.style.display = 'none';
         } else {
@@ -131,12 +133,13 @@ class IndexAuthManager {
         
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const firstName = document.getElementById('firstName').value;
         const submitBtn = document.getElementById('authSubmitBtn');
         const isSignup = submitBtn.textContent.includes('inscrire');
 
         try {
             if (isSignup) {
-                await this.signUp(email, password);
+                await this.signUp(email, password, firstName);
             } else {
                 await this.signIn(email, password);
             }
@@ -145,7 +148,7 @@ class IndexAuthManager {
         }
     }
 
-    async signUp(email, password) {
+    async signUp(email, password, firstName) {
         // Mode local - simulation d'inscription
         const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
         
@@ -154,11 +157,17 @@ class IndexAuthManager {
             throw new Error('Un compte avec cet email existe déjà');
         }
         
+        // Validation du prénom pour l'inscription
+        if (!firstName || firstName.trim() === '') {
+            throw new Error('Le prénom est requis pour l\'inscription');
+        }
+        
         // Créer le nouvel utilisateur
         const newUser = {
             id: Date.now().toString(),
             email: email,
             password: password,
+            firstName: firstName.trim(),
             createdAt: new Date().toISOString()
         };
         
@@ -166,7 +175,7 @@ class IndexAuthManager {
         localStorage.setItem('saga_users', JSON.stringify(users));
         
         // Connecter l'utilisateur automatiquement après inscription
-        this.user = { email: email, id: newUser.id };
+        this.user = { email: email, id: newUser.id, firstName: newUser.firstName };
         this.isAuthenticated = true;
         localStorage.setItem('saga_current_user', JSON.stringify(this.user));
         this.updateUI();
@@ -186,8 +195,12 @@ class IndexAuthManager {
             throw new Error('Email ou mot de passe incorrect');
         }
         
-        // Connecter l'utilisateur
-        this.user = { email: user.email, id: user.id };
+        // Connecter l'utilisateur (inclure le prénom s'il existe)
+        this.user = { 
+            email: user.email, 
+            id: user.id, 
+            firstName: user.firstName 
+        };
         this.isAuthenticated = true;
         localStorage.setItem('saga_current_user', JSON.stringify(this.user));
         this.updateUI();
@@ -214,6 +227,8 @@ class IndexAuthManager {
         const title = document.getElementById('authTitle');
         const submitBtn = document.getElementById('authSubmitBtn');
         const switchText = document.getElementById('authSwitchText');
+        const firstNameGroup = document.getElementById('firstNameGroup');
+        const firstName = document.getElementById('firstName');
 
         if (!modal) return;
 
@@ -221,10 +236,16 @@ class IndexAuthManager {
             if (title) title.textContent = 'Se connecter';
             if (submitBtn) submitBtn.textContent = 'Se connecter';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
+            // Masquer le champ prénom pour la connexion
+            if (firstNameGroup) firstNameGroup.style.display = 'none';
+            if (firstName) firstName.required = false;
         } else {
             if (title) title.textContent = 'S\'inscrire';
             if (submitBtn) submitBtn.textContent = 'S\'inscrire';
             if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
+            // Afficher le champ prénom pour l'inscription
+            if (firstNameGroup) firstNameGroup.style.display = 'block';
+            if (firstName) firstName.required = true;
         }
 
         modal.style.display = 'flex';

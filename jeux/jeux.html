@@ -18,7 +18,7 @@
     <!-- Interface d'authentification -->
     <div id="authSection" class="auth-section">
         <div id="userInfo" class="user-info" style="display: none;">
-            <span id="userEmail"></span>
+            <span id="userDisplayName"></span>
             <button id="logoutBtn" class="btn-secondary">Déconnexion</button>
         </div>
         <!-- Boutons de connexion supprimés - authentification via clic sur le tableau -->
@@ -32,6 +32,10 @@
                 <button id="closeAuthBtn" class="close-btn">&times;</button>
             </div>
             <form id="authForm" class="character-form">
+                <div class="form-group" id="firstNameGroup" style="display: none;">
+                    <label for="firstName">Prénom :</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Votre prénom">
+                </div>
                 <div class="form-group">
                     <label for="email">Email :</label>
                     <input type="email" id="email" name="email" required placeholder="votre@email.com">

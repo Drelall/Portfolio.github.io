@@ -339,14 +339,46 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // === ÉVÉNEMENTS D'AUTHENTIFICATION ===
     
+    console.log('🔧 Attachement des événements d\'authentification...');
+    console.log('closeAuthBtn:', closeAuthBtn);
+    console.log('cancelAuthBtn:', cancelAuthBtn);
+    
     // Boutons de connexion/inscription
-    loginBtn.addEventListener('click', () => window.authManager.openAuthModal('login'));
-    signupBtn.addEventListener('click', () => window.authManager.openAuthModal('signup'));
-    logoutBtn.addEventListener('click', () => window.authManager.signOut());
+    if (loginBtn) loginBtn.addEventListener('click', () => window.authManager.openAuthModal('login'));
+    if (signupBtn) signupBtn.addEventListener('click', () => window.authManager.openAuthModal('signup'));
+    if (logoutBtn) logoutBtn.addEventListener('click', () => window.authManager.signOut());
     
     // Fermer le modal d'auth
-    closeAuthBtn.addEventListener('click', () => window.authManager.closeAuthModal());
-    cancelAuthBtn.addEventListener('click', () => window.authManager.closeAuthModal());
+    if (closeAuthBtn) {
+        closeAuthBtn.addEventListener('click', () => {
+            console.log('🖱️ Clic sur le bouton de fermeture (X)');
+            window.authManager.closeAuthModal();
+        });
+        console.log('✅ Événement attaché au bouton de fermeture (X)');
+    } else {
+        console.error('❌ Bouton de fermeture (closeAuthBtn) non trouvé !');
+    }
+    
+    if (cancelAuthBtn) {
+        cancelAuthBtn.addEventListener('click', () => {
+            console.log('🖱️ Clic sur le bouton Annuler');
+            window.authManager.closeAuthModal();
+        });
+        console.log('✅ Événement attaché au bouton Annuler');
+    } else {
+        console.error('❌ Bouton Annuler (cancelAuthBtn) non trouvé !');
+    }
+    
+    // Fermer le modal en cliquant en dehors
+    if (authModal) {
+        authModal.addEventListener('click', function(e) {
+            if (e.target === authModal) {
+                console.log('🖱️ Clic en dehors du modal');
+                window.authManager.closeAuthModal();
+            }
+        });
+        console.log('✅ Événement de fermeture par clic externe attaché');
+    }
     
     // Formulaire d'authentification
     authForm.addEventListener('submit', async function(e) {
@@ -354,10 +386,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const firstName = document.getElementById('firstName').value;
         const isSignup = document.getElementById('authTitle').textContent === 'S\'inscrire';
         
         if (isSignup) {
-            await window.authManager.signUp(email, password);
+            await window.authManager.signUp(email, password, firstName);
         } else {
             await window.authManager.signIn(email, password);
         }

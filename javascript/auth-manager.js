@@ -25,19 +25,21 @@ class AuthManager {
     updateUI() {
         const userInfo = document.getElementById('userInfo');
         const authButtons = document.getElementById('authButtons');
-        const userEmail = document.getElementById('userEmail');
+        const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            userEmail.textContent = this.user.email;
-            userInfo.style.display = 'flex';
-            authButtons.style.display = 'none';
+            // Afficher le prénom s'il existe, sinon l'email
+            const displayName = this.user.firstName || this.user.email;
+            if (userDisplayName) userDisplayName.textContent = displayName;
+            if (userInfo) userInfo.style.display = 'flex';
+            if (authButtons) authButtons.style.display = 'none';
         } else {
-            userInfo.style.display = 'none';
-            authButtons.style.display = 'flex';
+            if (userInfo) userInfo.style.display = 'none';
+            if (authButtons) authButtons.style.display = 'flex';
         }
     }
 
-    async signUp(email, password) {
+    async signUp(email, password, firstName) {
         try {
             // Mode local - simulation d'inscription
             const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
@@ -47,11 +49,17 @@ class AuthManager {
                 throw new Error('Un compte avec cet email existe déjà');
             }
             
+            // Validation du prénom pour l'inscription
+            if (!firstName || firstName.trim() === '') {
+                throw new Error('Le prénom est requis pour l\'inscription');
+            }
+            
             // Créer le nouvel utilisateur
             const newUser = {
                 id: Date.now().toString(),
                 email: email,
                 password: password, // En production, il faudrait hasher le mot de passe
+                firstName: firstName.trim(),
                 createdAt: new Date().toISOString()
             };
             
@@ -59,7 +67,7 @@ class AuthManager {
             localStorage.setItem('saga_users', JSON.stringify(users));
             
             // Connecter l'utilisateur automatiquement après inscription
-            this.user = { email: email, id: newUser.id };
+            this.user = { email: email, id: newUser.id, firstName: newUser.firstName };
             this.isAuthenticated = true;
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
             this.updateUI();
@@ -86,8 +94,12 @@ class AuthManager {
                 throw new Error('Email ou mot de passe incorrect');
             }
             
-            // Connecter l'utilisateur
-            this.user = { email: user.email, id: user.id };
+            // Connecter l'utilisateur (inclure le prénom s'il existe)
+            this.user = { 
+                email: user.email, 
+                id: user.id, 
+                firstName: user.firstName 
+            };
             this.isAuthenticated = true;
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
             this.updateUI();
@@ -163,46 +175,71 @@ class AuthManager {
         }, 4000);
     }
 
-    openAuthModal(mode = 'login') {
+    openAuthModal(mode = 'signup') {
         const modal = document.getElementById('authModal');
         const title = document.getElementById('authTitle');
         const submitBtn = document.getElementById('authSubmitBtn');
         const switchText = document.getElementById('authSwitchText');
-        const switchLink = document.getElementById('authSwitchLink');
+        const firstNameGroup = document.getElementById('firstNameGroup');
+        const firstName = document.getElementById('firstName');
+
+        if (!modal) return;
 
         if (mode === 'login') {
-            title.textContent = 'Se connecter';
-            submitBtn.textContent = 'Se connecter';
-            switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
+            if (title) title.textContent = 'Se connecter';
+            if (submitBtn) submitBtn.textContent = 'Se connecter';
+            if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
+            // Masquer le champ prénom pour la connexion
+            if (firstNameGroup) firstNameGroup.style.display = 'none';
+            if (firstName) firstName.required = false;
         } else {
-            title.textContent = 'S\'inscrire';
-            submitBtn.textContent = 'S\'inscrire';
-            switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
+            if (title) title.textContent = 'S\'inscrire';
+            if (submitBtn) submitBtn.textContent = 'S\'inscrire';
+            if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
+            // Afficher le champ prénom pour l'inscription
+            if (firstNameGroup) firstNameGroup.style.display = 'block';
+            if (firstName) firstName.required = true;
         }
 
         modal.style.display = 'flex';
         setTimeout(() => modal.style.opacity = '1', 10);
 
         // Réattacher l'événement de switch
-        document.getElementById('authSwitchLink').onclick = (e) => {
-            e.preventDefault();
-            this.openAuthModal(mode === 'login' ? 'signup' : 'login');
-        };
+        const switchLink = document.getElementById('authSwitchLink');
+        if (switchLink) {
+            switchLink.onclick = (e) => {
+                e.preventDefault();
+                this.openAuthModal(mode === 'login' ? 'signup' : 'login');
+            };
+        }
     }
 
     closeAuthModal() {
+        console.log('🔧 Tentative de fermeture du modal d\'authentification...');
         const modal = document.getElementById('authModal');
+        const authForm = document.getElementById('authForm');
+        
+        if (!modal) {
+            console.error('❌ Modal authModal non trouvé !');
+            return;
+        }
+        
+        console.log('✅ Modal trouvé, fermeture en cours...');
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
-            document.getElementById('authForm').reset();
+            if (authForm) {
+                authForm.reset();
+                console.log('✅ Formulaire réinitialisé');
+            }
+            console.log('✅ Modal fermé');
         }, 300);
     }
 
     requireAuth() {
         if (!this.isAuthenticated) {
-            this.showMessage('🔒 Veuillez vous connecter pour créer un personnage', 'info');
-            this.openAuthModal();
+            this.showMessage('🔒 Veuillez vous inscrire pour créer un personnage', 'info');
+            this.openAuthModal('signup'); // Ouvrir en mode inscription par défaut
             return false;
         }
         return true;
