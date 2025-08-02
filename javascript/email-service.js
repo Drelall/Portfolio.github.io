@@ -17,12 +17,16 @@ class EmailService {
 
     async sendConfirmationEmail(user) {
         try {
+            console.log('📧 Début de sendConfirmationEmail avec utilisateur:', user);
+            
             // Vérifier si EmailJS est disponible et configuré
             if (typeof emailjs === 'undefined' || this.publicKey === 'YOUR_PUBLIC_KEY') {
                 console.warn('⚠️ EmailJS non configuré, affichage de l\'email de confirmation');
                 this.showEmailConfirmationModal(user);
                 return { success: true, message: 'Email de confirmation affiché (simulation)' };
             }
+
+            console.log('✅ EmailJS disponible, préparation des paramètres...');
 
             // Préparer les données pour l'email
             const templateParams = {
@@ -51,6 +55,13 @@ class EmailService {
                     })
             };
 
+            console.log('📧 Paramètres du template préparés:', templateParams);
+            console.log('📧 Configuration EmailJS:', {
+                serviceId: this.serviceId,
+                templateId: this.templateId,
+                publicKey: this.publicKey
+            });
+
             console.log('📧 Envoi de l\'email de confirmation à:', user.email);
             
             // Envoyer l'email via EmailJS
@@ -68,14 +79,17 @@ class EmailService {
             };
 
         } catch (error) {
-            console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
+            console.error('❌ Erreur détaillée lors de l\'envoi de l\'email:', error);
+            console.error('❌ Type d\'erreur:', typeof error);
+            console.error('❌ Message d\'erreur:', error.message);
+            console.error('❌ Stack trace:', error.stack);
             
             // En cas d'erreur, afficher quand même la confirmation
             this.showEmailConfirmationModal(user);
             
             return { 
                 success: false, 
-                message: 'Erreur lors de l\'envoi de l\'email, mais votre compte a été créé avec succès.',
+                message: `Erreur lors de l'envoi de l'email: ${error.message}`,
                 error: error 
             };
         }
