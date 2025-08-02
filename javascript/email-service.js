@@ -1,11 +1,11 @@
 // Service d'envoi d'emails avec Web3Forms
 class EmailService {
     constructor() {
-        // Configuration Web3Forms - REMPLACEZ PAR VOTRE CLÉ API
-        this.accessKey = 'VOTRE_CLE_API_WEB3FORMS'; // À obtenir sur https://web3forms.com
+        // Configuration Web3Forms - CLÉ API CONFIGURÉE
+        this.accessKey = 'a5cdcbc6-a140-41a6-9dd3-a92c23f42b0a'; // Votre clé API Web3Forms
         this.apiEndpoint = 'https://api.web3forms.com/submit';
         
-        console.log('📧 Service Web3Forms initialisé');
+        console.log('📧 Service Web3Forms initialisé avec votre clé API');
     }
 
     async sendConfirmationEmail(user) {
@@ -24,8 +24,8 @@ class EmailService {
             
             // Configuration de l'email (votre email reste masqué)
             formData.append('access_key', this.accessKey);
-            formData.append('from_name', 'Équipe Saga Universe'); // Nom visible
-            formData.append('reply_to', 'noreply@saga-universe.com'); // Email visible (fictif)
+            formData.append('from_name', 'Drelall'); // Nom visible
+            formData.append('reply_to', 'noreply@drelall.com'); // Email visible (fictif)
             formData.append('subject', 'Bienvenue dans l\'univers de Saga !');
             
             // Données du destinataire
@@ -96,7 +96,7 @@ ${characterInfo}
 Bienvenue dans notre communauté ! Vous pouvez maintenant explorer tous les contenus du site.
 
 ---
-L'équipe Saga Universe
+Drelall
 
 Note : Ceci est un email automatique, merci de ne pas y répondre.`;
     }
@@ -150,7 +150,7 @@ Note : Ceci est un email automatique, merci de ne pas y répondre.`;
             
             <div style="text-align: left; line-height: 1.6;">
                 <p><strong>À :</strong> ${user.email}</p>
-                <p><strong>De :</strong> Équipe Saga Universe</p>
+                <p><strong>De :</strong> Drelall</p>
                 <p><strong>Sujet :</strong> Bienvenue dans l'univers de Saga !</p>
                 
                 <hr style="border: 1px solid #d4af37; margin: 20px 0;">
