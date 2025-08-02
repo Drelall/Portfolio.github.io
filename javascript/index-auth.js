@@ -371,6 +371,19 @@ class IndexAuthManager {
 
         console.log('👤 Utilisateur connecté:', this.user);
 
+        // Vérifier que l'utilisateur a au minimum un email
+        if (!this.user.email) {
+            console.error('❌ Utilisateur sans email défini');
+            this.showResendError('Email utilisateur manquant');
+            return;
+        }
+
+        // S'assurer que l'utilisateur a un firstName défini
+        if (!this.user.firstName) {
+            console.warn('⚠️ Utilisateur sans prénom, utilisation de l\'email comme nom');
+            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme prénom
+        }
+
         const resendBtn = document.getElementById('resendEmailBtn');
         if (resendBtn) {
             // Désactiver le bouton pendant l'envoi
@@ -405,7 +418,10 @@ class IndexAuthManager {
             }
         } catch (error) {
             console.error('❌ Erreur lors du renvoi de l\'email:', error);
-            this.showResendError('Erreur lors du renvoi de l\'email');
+            console.error('❌ Type d\'erreur:', typeof error);
+            console.error('❌ Message d\'erreur:', error.message);
+            console.error('❌ Stack trace:', error.stack);
+            this.showResendError(`Erreur lors du renvoi de l'email: ${error.message}`);
         } finally {
             // Réactiver le bouton
             if (resendBtn) {
