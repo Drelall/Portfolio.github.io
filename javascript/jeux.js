@@ -108,41 +108,27 @@ window.onload = function() {
     const ctx = canvas.getContext('2d');
     const frameHoverArea = document.getElementById('frameHoverArea');
 
-    // Vérifier que l'élément existe
-    console.log('frameHoverArea element:', frameHoverArea);
-
     // Variables pour le contrôle du vortex
     let isHovering = false;
 
     // Gestion des événements de survol sur la zone HTML
     if (frameHoverArea) {
         frameHoverArea.addEventListener('mouseenter', function() {
-            console.log('Mouse entered frame area');
             isHovering = true;
         });
 
         frameHoverArea.addEventListener('mouseleave', function() {
-            console.log('Mouse left frame area');
             isHovering = false;
         });
-    } else {
-        console.error('frameHoverArea element not found!');
     }
 
-    // Utiliser tableau.jpg comme fond du jeu
+    // Utiliser lemur.png comme fond du jeu
     const background = new Image();
     background.src = '../images/illustration/lemur.png';
     background.onload = function() {
-        console.log('Image de fond chargée');
-        
-        // Animation lumineuse façon torches
         // Préparer l'image du cadre
         const cadre = new Image();
         cadre.src = '../images/illustration/cadre.png';
-        
-        cadre.onload = function() {
-            console.log('Image du cadre chargée');
-        };
 
         // Position du cadre (calculée une seule fois)
         const cadreWidth = 220;
@@ -225,7 +211,6 @@ window.onload = function() {
                     ctx.fillRect(innerX, innerY, innerWidth, innerHeight);
                 } else {
                     // L'effet Stargate à l'intérieur du cadre seulement si on survole
-                    console.log('Drawing vortex effect at:', innerX, innerY, innerWidth, innerHeight);
                     drawBlackLiquidSurface(ctx, innerX, innerY, innerWidth, innerHeight, time);
                 }
                 
@@ -339,10 +324,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // === ÉVÉNEMENTS D'AUTHENTIFICATION ===
     
-    console.log('🔧 Attachement des événements d\'authentification...');
-    console.log('closeAuthBtn:', closeAuthBtn);
-    console.log('cancelAuthBtn:', cancelAuthBtn);
-    
     // Boutons de connexion/inscription
     if (loginBtn) loginBtn.addEventListener('click', () => window.authManager.openAuthModal('login'));
     if (signupBtn) signupBtn.addEventListener('click', () => window.authManager.openAuthModal('signup'));
@@ -351,33 +332,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fermer le modal d'auth
     if (closeAuthBtn) {
         closeAuthBtn.addEventListener('click', () => {
-            console.log('🖱️ Clic sur le bouton de fermeture (X)');
             window.authManager.closeAuthModal();
         });
-        console.log('✅ Événement attaché au bouton de fermeture (X)');
-    } else {
-        console.error('❌ Bouton de fermeture (closeAuthBtn) non trouvé !');
     }
     
     if (cancelAuthBtn) {
         cancelAuthBtn.addEventListener('click', () => {
-            console.log('🖱️ Clic sur le bouton Annuler');
             window.authManager.closeAuthModal();
         });
-        console.log('✅ Événement attaché au bouton Annuler');
-    } else {
-        console.error('❌ Bouton Annuler (cancelAuthBtn) non trouvé !');
     }
     
     // Fermer le modal en cliquant en dehors
     if (authModal) {
         authModal.addEventListener('click', function(e) {
             if (e.target === authModal) {
-                console.log('🖱️ Clic en dehors du modal');
                 window.authManager.closeAuthModal();
             }
         });
-        console.log('✅ Événement de fermeture par clic externe attaché');
     }
     
     // Formulaire d'authentification
@@ -565,11 +536,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Si nous sommes dans un processus d'inscription, finaliser l'inscription
             if (window.authManager.tempRegistrationData) {
-                console.log('🔧 Finalisation de l\'inscription avec les données du personnage...');
                 const result = await window.authManager.finalizeRegistration(characterData);
                 
                 if (result.success) {
-                    console.log('✅ Inscription finalisée avec succès !');
                     // Le modal sera fermé par finalizeRegistration
                 } else {
                     window.authManager.showMessage(`❌ Erreur lors de la finalisation: ${result.error}`, 'error');
@@ -600,8 +569,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Fermer le formulaire
             hideCharacterForm();
-            
-            console.log('Personnage créé:', savedCharacter);
             
         } catch (error) {
             console.error('Erreur création personnage:', error);

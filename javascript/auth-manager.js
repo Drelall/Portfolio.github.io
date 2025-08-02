@@ -16,7 +16,6 @@ class AuthManager {
                 this.user = JSON.parse(currentUser);
                 this.isAuthenticated = true;
                 this.updateUI();
-                console.log('✅ Utilisateur connecté (session locale):', this.user.email);
             } catch (error) {
                 console.error('Erreur lors de la récupération de la session:', error);
                 localStorage.removeItem('saga_current_user');
@@ -74,7 +73,6 @@ class AuthManager {
             console.log('✅ Étape 1 de l\'inscription validée pour:', email);
             return { success: true, data: this.tempRegistrationData };
         } catch (error) {
-            console.error('Erreur étape 1 inscription:', error);
             return { success: false, error: error.message };
         }
     }
@@ -382,44 +380,30 @@ class AuthManager {
     }
 
     closeAuthModal() {
-        console.log('🔧 Tentative de fermeture du modal d\'authentification...');
         const modal = document.getElementById('authModal');
         const authForm = document.getElementById('authForm');
         
-        if (!modal) {
-            console.error('❌ Modal authModal non trouvé !');
-            return;
-        }
+        if (!modal) return;
         
-        console.log('✅ Modal trouvé, fermeture en cours...');
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
             if (authForm) {
                 authForm.reset();
-                console.log('✅ Formulaire réinitialisé');
             }
-            console.log('✅ Modal fermé');
         }, 300);
     }
 
     closeCharacterModal() {
-        console.log('🔧 Tentative de fermeture du modal de personnage...');
         const modal = document.getElementById('characterFormModal');
         const characterForm = document.getElementById('characterForm');
         
-        if (!modal) {
-            console.error('❌ Modal characterFormModal non trouvé !');
-            return;
-        }
+        if (!modal) return;
         
-        console.log('✅ Modal personnage trouvé, fermeture en cours...');
         modal.style.display = 'none';
         if (characterForm) {
             characterForm.reset();
-            console.log('✅ Formulaire personnage réinitialisé');
         }
-        console.log('✅ Modal personnage fermé');
     }
 
     requireAuth() {

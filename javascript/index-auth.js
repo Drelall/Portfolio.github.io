@@ -14,7 +14,6 @@ class IndexAuthManager {
                 this.user = JSON.parse(currentUser);
                 this.isAuthenticated = true;
                 this.updateUI();
-                console.log('✅ Utilisateur connecté (session locale):', this.user.email);
             } catch (error) {
                 console.error('Erreur lors de la récupération de la session:', error);
                 localStorage.removeItem('saga_current_user');

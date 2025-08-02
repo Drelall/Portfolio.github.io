@@ -160,46 +160,6 @@ class CharacterManager {
     async loadCharactersSafely() {
         return await this.loadUserCharacters();
     }
-
-    // Nettoyer les données (utile pour les tests)
-    clearAllCharacters() {
-        localStorage.removeItem('saga_characters');
-        this.characters = [];
-        this.currentCharacter = null;
-        console.log('🧹 Toutes les données de personnages supprimées');
-    }
-
-    // Exporter les personnages (pour sauvegarde)
-    exportCharacters() {
-        return {
-            characters: this.characters,
-            exportDate: new Date().toISOString(),
-            userEmail: window.authManager.user?.email || 'unknown'
-        };
-    }
-
-    // Importer des personnages
-    importCharacters(exportData) {
-        if (exportData && exportData.characters) {
-            // Ajouter les personnages importés à ceux existants
-            const existingCharacters = JSON.parse(localStorage.getItem('saga_characters') || '[]');
-            const newCharacters = exportData.characters.map(char => ({
-                ...char,
-                id: Date.now().toString() + Math.random().toString(36).substr(2, 9), // Nouvel ID unique
-                user_id: window.authManager.user.id,
-                imported_at: new Date().toISOString()
-            }));
-            
-            const allCharacters = [...existingCharacters, ...newCharacters];
-            localStorage.setItem('saga_characters', JSON.stringify(allCharacters));
-            
-            console.log(`📥 ${newCharacters.length} personnage(s) importé(s)`);
-            window.authManager.showMessage(`📥 ${newCharacters.length} personnage(s) importé(s)`, 'success');
-            
-            // Recharger
-            return this.loadUserCharacters();
-        }
-    }
 }
 
 // Initialiser le gestionnaire de personnages
