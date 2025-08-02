@@ -110,6 +110,12 @@ class IndexAuthManager {
             closeAccountBtn.addEventListener('click', () => this.closeAccountModal());
         }
 
+        // Bouton de renvoi d'email de confirmation
+        const resendEmailBtn = document.getElementById('resendEmailBtn');
+        if (resendEmailBtn) {
+            resendEmailBtn.addEventListener('click', () => this.resendConfirmationEmail());
+        }
+
         // Fermeture en cliquant en dehors du modal
         const authModal = document.getElementById('authModal');
         if (authModal) {
@@ -352,6 +358,78 @@ class IndexAuthManager {
         setTimeout(() => {
             modal.style.display = 'none';
         }, 300);
+    }
+
+    async resendConfirmationEmail() {
+        if (!this.user) {
+            console.error('❌ Aucun utilisateur connecté pour renvoyer l\'email');
+            return;
+        }
+
+        const resendBtn = document.getElementById('resendEmailBtn');
+        if (resendBtn) {
+            // Désactiver le bouton pendant l'envoi
+            resendBtn.disabled = true;
+            resendBtn.textContent = '📧 Envoi en cours...';
+        }
+
+        try {
+            console.log('📧 Renvoi de l\'email de confirmation pour:', this.user.email);
+            
+            // Utiliser le service d'email pour renvoyer la confirmation
+            if (window.emailService) {
+                const result = await window.emailService.sendConfirmationEmail(this.user);
+                
+                if (result.success) {
+                    // Afficher un message de succès
+                    this.showResendSuccess();
+                } else {
+                    console.warn('⚠️ Erreur lors du renvoi:', result.message);
+                    this.showResendError(result.message);
+                }
+            } else {
+                console.error('❌ Service d\'email non disponible');
+                this.showResendError('Service d\'email non disponible');
+            }
+        } catch (error) {
+            console.error('❌ Erreur lors du renvoi de l\'email:', error);
+            this.showResendError('Erreur lors du renvoi de l\'email');
+        } finally {
+            // Réactiver le bouton
+            if (resendBtn) {
+                resendBtn.disabled = false;
+                resendBtn.textContent = '📧 Renvoyer l\'email de confirmation';
+            }
+        }
+    }
+
+    showResendSuccess() {
+        const resendBtn = document.getElementById('resendEmailBtn');
+        if (resendBtn) {
+            const originalText = resendBtn.textContent;
+            resendBtn.textContent = '✅ Email envoyé !';
+            resendBtn.style.background = '#226d54';
+            
+            setTimeout(() => {
+                resendBtn.textContent = originalText;
+                resendBtn.style.background = '';
+            }, 3000);
+        }
+    }
+
+    showResendError(message) {
+        const resendBtn = document.getElementById('resendEmailBtn');
+        if (resendBtn) {
+            const originalText = resendBtn.textContent;
+            resendBtn.textContent = '❌ Erreur d\'envoi';
+            resendBtn.style.background = '#d32f2f';
+            
+            setTimeout(() => {
+                resendBtn.textContent = originalText;
+                resendBtn.style.background = '';
+            }, 3000);
+        }
+        console.error('Erreur de renvoi d\'email:', message);
     }
 
     getClassDisplayName(classKey) {

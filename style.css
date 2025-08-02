@@ -301,6 +301,30 @@
     font-style: italic;
 }
 
+/* === Styles pour les actions du compte === */
+.account-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.account-actions .btn-secondary {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    min-width: 250px;
+    text-align: center;
+}
+
+.action-help {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
 .user-info {
     display: flex;
     align-items: center;
