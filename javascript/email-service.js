@@ -2,14 +2,14 @@
 class EmailService {
     constructor() {
         // Configuration EmailJS - À PERSONNALISER
-        this.serviceId = 'service_saga_portfolio'; // À remplacer par votre Service ID
-        this.templateId = 'template_confirmation'; // À remplacer par votre Template ID
-        this.publicKey = 'YOUR_PUBLIC_KEY'; // À remplacer par votre Public Key
+        this.serviceId = 'service_b0xzmoe'; // Votre Service ID Outlook
+        this.templateId = 'template_g8revx9'; // Votre Template ID
+        this.publicKey = 'kAy9PcwqSScdLeik4'; // Votre Public Key
         
         // Initialiser EmailJS si disponible
         if (typeof emailjs !== 'undefined') {
             emailjs.init(this.publicKey);
-            console.log('📧 EmailJS initialisé');
+            console.log('📧 EmailJS initialisé avec votre clé API');
         } else {
             console.warn('⚠️ EmailJS non disponible, utilisation de la simulation');
         }
