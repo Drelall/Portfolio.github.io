@@ -121,7 +121,7 @@ class AuthManager {
             localStorage.setItem('saga_users', JSON.stringify(users));
 
             // Simuler l'envoi d'email de confirmation
-            this.sendConfirmationEmail(newUser);
+            const emailResult = await this.sendConfirmationEmail(newUser);
 
             // Connecter l'utilisateur automatiquement
             this.user = { 
@@ -137,7 +137,14 @@ class AuthManager {
             this.tempRegistrationData = null;
 
             this.updateUI();
-            this.showMessage('✅ Inscription finalisée ! Email de confirmation envoyé.', 'success');
+            
+            // Message selon le résultat de l'email
+            if (emailResult.success) {
+                this.showMessage('✅ Inscription finalisée ! Email de confirmation envoyé.', 'success');
+            } else {
+                this.showMessage('✅ Inscription finalisée ! (Problème d\'envoi d\'email)', 'success');
+            }
+            
             this.closeAuthModal();
             this.closeCharacterModal();
 
@@ -151,28 +158,43 @@ class AuthManager {
     }
 
     // Simulation d'envoi d'email de confirmation
-    sendConfirmationEmail(user) {
-        console.log('📧 Email de confirmation envoyé à:', user.email);
-        console.log('📧 Contenu de l\'email:');
-        console.log('---');
-        console.log(`Bonjour ${user.firstName},`);
-        console.log('');
-        console.log('Bienvenue dans l\'univers de Saga !');
-        console.log('');
-        console.log('Votre compte a été créé avec succès :');
-        console.log(`- Email: ${user.email}`);
-        console.log(`- Prénom: ${user.firstName}`);
-        console.log(`- Personnage: ${user.character.firstName} ${user.character.lastName}`);
-        console.log(`- Classe: ${user.character.class}`);
-        console.log(`- Type: ${user.character.type}`);
-        console.log('');
-        console.log('Vous pouvez maintenant accéder à votre compte et consulter vos informations.');
-        console.log('---');
-        
-        // Simuler un délai d'envoi
-        setTimeout(() => {
-            console.log('✅ Email de confirmation envoyé avec succès !');
-        }, 1000);
+    async sendConfirmationEmail(user) {
+        try {
+            // Utiliser le service d'email si disponible
+            if (window.emailService) {
+                const result = await window.emailService.sendConfirmationEmail(user);
+                console.log('📧 Résultat envoi email:', result);
+                return result;
+            } else {
+                // Fallback vers la simulation console
+                console.log('📧 Email de confirmation envoyé à:', user.email);
+                console.log('📧 Contenu de l\'email:');
+                console.log('---');
+                console.log(`Bonjour ${user.firstName},`);
+                console.log('');
+                console.log('Bienvenue dans l\'univers de Saga !');
+                console.log('');
+                console.log('Votre compte a été créé avec succès :');
+                console.log(`- Email: ${user.email}`);
+                console.log(`- Prénom: ${user.firstName}`);
+                console.log(`- Personnage: ${user.character.firstName} ${user.character.lastName}`);
+                console.log(`- Classe: ${user.character.class}`);
+                console.log(`- Type: ${user.character.type}`);
+                console.log('');
+                console.log('Vous pouvez maintenant accéder à votre compte et consulter vos informations.');
+                console.log('---');
+                
+                // Simuler un délai d'envoi
+                setTimeout(() => {
+                    console.log('✅ Email de confirmation envoyé avec succès !');
+                }, 1000);
+                
+                return { success: true, message: 'Email simulé dans la console' };
+            }
+        } catch (error) {
+            console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
+            return { success: false, error: error.message };
+        }
     }
 
     async signUp(email, password, firstName) {
