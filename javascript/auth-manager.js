@@ -21,6 +21,76 @@ class AuthManager {
                 localStorage.removeItem('saga_current_user');
             }
         }
+
+        // Attacher les gestionnaires d'événements
+        this.attachEvents();
+    }
+
+    attachEvents() {
+        // Boutons de connexion/inscription
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const accountBtn = document.getElementById('accountBtn');
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => this.openAuthModal('login'));
+        }
+
+        if (signupBtn) {
+            signupBtn.addEventListener('click', () => this.openAuthModal('signup'));
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.signOut());
+        }
+
+        if (accountBtn) {
+            accountBtn.addEventListener('click', () => this.openAccountModal());
+        }
+
+        // Formulaire d'authentification
+        const authForm = document.getElementById('authForm');
+        if (authForm) {
+            authForm.addEventListener('submit', (e) => this.handleAuthSubmit(e));
+        }
+
+        // Fermeture des modals
+        const closeAuthBtn = document.getElementById('closeAuthBtn');
+        const closeAccountBtn = document.getElementById('closeAccountBtn');
+
+        if (closeAuthBtn) {
+            closeAuthBtn.addEventListener('click', () => this.closeAuthModal());
+        }
+
+        if (closeAccountBtn) {
+            closeAccountBtn.addEventListener('click', () => this.closeAccountModal());
+        }
+
+        // Bouton de renvoi d'email de confirmation
+        const resendEmailBtn = document.getElementById('resendEmailBtn');
+        if (resendEmailBtn) {
+            resendEmailBtn.addEventListener('click', () => this.resendConfirmationEmail());
+        }
+
+        // Fermeture en cliquant en dehors du modal
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.addEventListener('click', (e) => {
+                if (e.target === authModal) {
+                    this.closeAuthModal();
+                }
+            });
+        }
+
+        const accountModal = document.getElementById('accountModal');
+        if (accountModal) {
+            accountModal.addEventListener('click', (e) => {
+                if (e.target === accountModal) {
+                    this.closeAccountModal();
+                }
+            });
+        }
     }
 
     updateUI() {
@@ -184,6 +254,26 @@ class AuthManager {
         } catch (error) {
             console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
             return { success: false, error: error.message };
+        }
+    }
+
+    async handleAuthSubmit(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const firstName = document.getElementById('firstName').value;
+        const submitBtn = document.getElementById('authSubmitBtn');
+        const isSignup = submitBtn.textContent.includes('inscrire');
+
+        try {
+            if (isSignup) {
+                await this.signUp(email, password, firstName);
+            } else {
+                await this.signIn(email, password);
+            }
+        } catch (error) {
+            console.error(`❌ Erreur: ${error.message}`);
         }
     }
 
@@ -387,6 +477,148 @@ class AuthManager {
         modal.style.display = 'none';
         if (characterForm) {
             characterForm.reset();
+        }
+    }
+
+    openAccountModal() {
+        const modal = document.getElementById('accountModal');
+        if (!modal) return;
+
+        // Récupérer les données utilisateur complètes
+        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+        const fullUserData = users.find(user => user.id === this.user.id);
+
+        if (!fullUserData) {
+            console.error('❌ Erreur : données utilisateur introuvables');
+            return;
+        }
+
+        // Remplir les informations personnelles
+        document.getElementById('accountFirstName').textContent = fullUserData.firstName || '-';
+        document.getElementById('accountEmail').textContent = fullUserData.email || '-';
+        
+        // Formater la date de création
+        const createdDate = fullUserData.createdAt ? 
+            new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '-';
+        document.getElementById('accountCreatedAt').textContent = createdDate;
+
+        // Remplir les informations du personnage
+        const characterInfo = document.getElementById('characterInfo');
+        const noCharacterInfo = document.getElementById('noCharacterInfo');
+
+        if (fullUserData.character) {
+            // Afficher les informations du personnage
+            document.getElementById('characterFullName').textContent = 
+                `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
+            document.getElementById('characterClass').textContent = 
+                this.getClassDisplayName(fullUserData.character.class);
+            document.getElementById('characterType').textContent = 
+                this.getTypeDisplayName(fullUserData.character.type);
+            
+            characterInfo.style.display = 'block';
+            noCharacterInfo.style.display = 'none';
+        } else {
+            // Aucun personnage créé
+            characterInfo.style.display = 'none';
+            noCharacterInfo.style.display = 'block';
+        }
+
+        // Afficher le modal
+        modal.style.display = 'flex';
+        setTimeout(() => modal.style.opacity = '1', 10);
+    }
+
+    closeAccountModal() {
+        const modal = document.getElementById('accountModal');
+        if (!modal) return;
+
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    getClassDisplayName(classKey) {
+        const classNames = {
+            'agent': 'Agent du Gouvernement',
+            'initie': 'Initié',
+            'sorcier': 'Sorcier',
+            'citoyen': 'Citoyen'
+        };
+        return classNames[classKey] || classKey;
+    }
+
+    getTypeDisplayName(typeKey) {
+        // Cette méthode devra être enrichie selon les types disponibles
+        // Pour l'instant, on retourne la clé telle quelle
+        return typeKey || '-';
+    }
+
+    async resendConfirmationEmail() {
+        console.log('🔄 Tentative de renvoi d\'email...');
+        
+        if (!this.user) {
+            console.error('❌ Aucun utilisateur connecté pour renvoyer l\'email');
+            return;
+        }
+
+        console.log('👤 Utilisateur connecté:', this.user);
+
+        // Vérifier que l'utilisateur a au minimum un email
+        if (!this.user.email) {
+            console.error('❌ Utilisateur sans email défini');
+            return;
+        }
+
+        // S'assurer que l'utilisateur a un firstName défini
+        if (!this.user.firstName) {
+            console.warn('⚠️ Utilisateur sans prénom, utilisation de l\'email comme nom');
+            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme prénom
+        }
+
+        const resendBtn = document.getElementById('resendEmailBtn');
+        if (resendBtn) {
+            // Désactiver le bouton pendant l'envoi
+            resendBtn.disabled = true;
+            resendBtn.textContent = '📧 Envoi en cours...';
+        }
+
+        try {
+            console.log('📧 Renvoi de l\'email de confirmation pour:', this.user.email);
+            
+            // Vérifier si le service d'email est disponible
+            if (!window.emailService) {
+                console.error('❌ Service d\'email non disponible');
+                return;
+            }
+            
+            console.log('✅ Service d\'email trouvé, envoi en cours...');
+            
+            // Utiliser le service d'email pour renvoyer la confirmation
+            const result = await window.emailService.sendConfirmationEmail(this.user);
+            
+            console.log('📧 Résultat de l\'envoi:', result);
+            
+            if (result.success) {
+                console.log('✅ Email envoyé avec succès !');
+            } else {
+                console.warn('⚠️ Erreur lors du renvoi:', result.message);
+            }
+        } catch (error) {
+            console.error('❌ Erreur lors du renvoi de l\'email:', error);
+            console.error('❌ Type d\'erreur:', typeof error);
+            console.error('❌ Message d\'erreur:', error.message);
+            console.error('❌ Stack trace:', error.stack);
+        } finally {
+            // Réactiver le bouton
+            if (resendBtn) {
+                resendBtn.disabled = false;
+                resendBtn.textContent = '📧 Renvoyer l\'email de confirmation';
+            }
         }
     }
 
