@@ -56,24 +56,26 @@
 }
 
 .character-form-container {
-    background: linear-gradient(135deg, #f3e8d3 0%, #e8dcc4 100%);
-    border: 3px solid #226d54;
+    background: linear-gradient(135deg, #5c3e1f 0%, #3d2914 100%);
+    border: 3px solid #8b4513;
     border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
-    color: #222;
+    color: #f5deb3;
     position: relative;
+    font-family: 'Georgia', serif;
 }
 
 .character-form-header {
-    background: linear-gradient(135deg, #226d54 0%, #1e5d4a 100%);
+    background: linear-gradient(135deg, #3d2914 0%, #2f1b14 100%);
     padding: 20px;
     border-radius: 12px 12px 0 0;
     text-align: center;
     position: relative;
+    border-bottom: 2px solid #8b4513;
 }
 
 .character-form-header h2 {
@@ -136,32 +138,41 @@
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #226d54;
+    color: #f5deb3;
     font-size: 1.1rem;
+    font-family: 'Georgia', serif;
 }
 
 .form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
 .form-group select {
     width: 100%;
     padding: 12px;
-    border: 2px solid #226d54;
+    border: 2px solid #8b4513;
     border-radius: 8px;
-    background: white;
-    color: #333;
+    background: #2f1b14;
+    color: #f5deb3;
     font-size: 1rem;
     box-sizing: border-box;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Georgia', serif;
 }
 
 .form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
 .form-group select:focus {
     outline: none;
-    border-color: #7ec3ff;
-    box-shadow: 0 0 10px rgba(126, 195, 255, 0.3);
+    border-color: #a0522d;
+    box-shadow: 0 0 10px rgba(160, 82, 45, 0.3);
+    background: #3d2914;
 }
 
-.form-group input[type="text"]::placeholder {
-    color: #666;
+.form-group input[type="text"]::placeholder,
+.form-group input[type="email"]::placeholder,
+.form-group input[type="password"]::placeholder {
+    color: #ddc9a3;
 }
 
 .class-description {
@@ -214,27 +225,33 @@
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #226d54 0%, #1e5d4a 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    color: #f5deb3;
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+    border: none;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #1e5d4a 0%, #1a5241 100%);
+    background: linear-gradient(135deg, #a0522d, #8b4513);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(34, 109, 84, 0.4);
+    box-shadow: 0 6px 20px rgba(160, 82, 45, 0.4);
 }
 
 .btn-secondary {
-    background: #31405a;
-    color: white;
-    border: 2px solid #226d54;
+    background: linear-gradient(135deg, #2f1b14, #3d2914);
+    color: #ddc9a3;
+    border: none;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .btn-secondary:hover {
-    background: #7ec3ff;
-    color: #1a1a1a;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #3d2914, #5c3e1f);
+    color: #f5deb3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(101, 67, 33, 0.4);
 }
 
 /* === Styles pour le modal Mon Compte === */
@@ -245,18 +262,19 @@
 .account-section {
     margin-bottom: 30px;
     padding: 20px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(139, 69, 19, 0.1);
     border-radius: 12px;
-    border: 1px solid rgba(34, 109, 84, 0.3);
+    border: 1px solid rgba(139, 69, 19, 0.3);
 }
 
 .account-section h3 {
     margin: 0 0 20px 0;
-    color: #226d54;
+    color: #8b4513;
     font-size: 1.3rem;
     font-weight: bold;
-    border-bottom: 2px solid #226d54;
+    border-bottom: 2px solid #8b4513;
     padding-bottom: 10px;
+    font-family: 'Georgia', serif;
 }
 
 .account-info {
@@ -293,7 +311,7 @@
 .no-character {
     text-align: center;
     padding: 30px;
-    color: #888;
+    color: #ddc9a3;
 }
 
 .no-character p {
@@ -319,7 +337,7 @@
 }
 
 .action-help {
-    color: #888;
+    color: #ddc9a3;
     font-style: italic;
     text-align: center;
     font-size: 0.9rem;
@@ -328,13 +346,16 @@
 .user-info {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
 }
 
 .user-info #userDisplayName {
-    color: #226d54;
+    color: #f5deb3;
     font-weight: bold;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    min-width: 120px;
 }
 
 html, body {
@@ -2270,10 +2291,10 @@ body.dark-mode .search-result-item:hover {
 
 /* Barre d'authentification principale (index.html) */
 .auth-bar {
-    background: #f3e8d3;
-    border-bottom: 2px solid rgba(34, 109, 84, 0.3);
+    background: transparent;
+    border-bottom: none;
     padding: 10px 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -2284,6 +2305,60 @@ body.dark-mode .search-result-item:hover {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+}
+
+/* Barre d'authentification toujours visible dans la page des jeux */
+body:has(#gameCanvas) .auth-bar {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: transparent;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+/* Adaptation des boutons pour la page des jeux - Style bibliothèque */
+body:has(#gameCanvas) .auth-buttons .btn-primary {
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    color: #f5deb3;
+    border: none;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family: 'Georgia', serif;
+}
+
+body:has(#gameCanvas) .auth-buttons .btn-primary:hover {
+    background: linear-gradient(135deg, #a0522d, #8b4513);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(160, 82, 45, 0.3);
+}
+
+body:has(#gameCanvas) .auth-buttons .btn-secondary {
+    background: linear-gradient(135deg, #2f1b14, #3d2914);
+    color: #ddc9a3;
+    border: none;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-family: 'Georgia', serif;
+}
+
+body:has(#gameCanvas) .auth-buttons .btn-secondary:hover {
+    background: linear-gradient(135deg, #3d2914, #5c3e1f);
+    color: #f5deb3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(101, 67, 33, 0.4);
+}
+
+body:has(#gameCanvas) .user-info span {
+    color: #f5deb3;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-family: 'Georgia', serif;
 }
 
 /* Style pour le logo interactif */
@@ -2299,12 +2374,13 @@ body.dark-mode .search-result-item:hover {
 .auth-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 40px;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 20px;
     min-height: 50px;
+    margin-right: -20px;
 }
 
 /* Interface d'authentification pour les jeux */
@@ -2322,9 +2398,9 @@ body.dark-mode .search-result-item:hover {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(34, 109, 84, 0.9);
+    background: transparent;
     padding: 8px 15px;
-    border-radius: 20px;
+    border-radius: 0;
     color: #f3e8d3;
     font-size: 14px;
     font-weight: 500;
@@ -2376,17 +2452,43 @@ body.dark-mode .search-result-item:hover {
     box-shadow: 0 4px 12px rgba(34, 109, 84, 0.3);
 }
 
+.user-info .btn-primary,
 .user-info .btn-secondary {
-    padding: 4px 12px;
-    font-size: 12px;
-    background: rgba(255, 255, 255, 0.2);
-    color: #f3e8d3;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 15px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    min-width: 100px;
+    text-align: center;
+}
+
+.user-info .btn-primary {
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    color: #f5deb3;
+    border: none;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.user-info .btn-primary:hover {
+    background: linear-gradient(135deg, #a0522d, #8b4513);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(160, 82, 45, 0.3);
+}
+
+.user-info .btn-secondary {
+    background: linear-gradient(135deg, #2f1b14, #3d2914);
+    color: #ddc9a3;
+    border: none;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .user-info .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #3d2914, #5c3e1f);
+    color: #f5deb3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(101, 67, 33, 0.4);
 }
 
 /* Formulaire d'authentification */

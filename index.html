@@ -89,117 +89,6 @@
         </button>
     </header>
 
-    <!-- Barre d'authentification -->
-    <div class="auth-bar">
-        <div class="auth-container">
-            <div id="userInfo" class="user-info" style="display: none;">
-                <span id="userDisplayName"></span>
-                <button id="accountBtn" class="btn-primary">Mon Compte</button>
-                <button id="logoutBtn" class="btn-secondary">Déconnexion</button>
-            </div>
-            <div id="authButtons" class="auth-buttons">
-                <button id="loginBtn" class="btn-primary">Se connecter</button>
-                <button id="signupBtn" class="btn-secondary">S'inscrire</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Formulaire de connexion/inscription -->
-    <div id="authModal" class="character-modal" style="display: none;">
-        <div class="character-form-container">
-            <div class="character-form-header">
-                <h2 id="authTitle">Se connecter</h2>
-                <button id="closeAuthBtn" class="close-btn">&times;</button>
-            </div>
-            <form id="authForm" class="character-form">
-                <div class="form-group" id="firstNameGroup" style="display: none;">
-                    <label for="firstName">Prénom :</label>
-                    <input type="text" id="firstName" name="firstName" placeholder="Votre prénom">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email :</label>
-                    <input type="email" id="email" name="email" required placeholder="votre@email.com">
-                </div>
-                <div class="form-group">
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
-                </div>
-                <div class="form-actions">
-                    <button type="button" id="cancelAuthBtn" class="btn-secondary">Annuler</button>
-                    <button type="submit" id="authSubmitBtn" class="btn-primary">Se connecter</button>
-                </div>
-                <div class="auth-switch">
-                    <p id="authSwitchText">Pas encore de compte ? <a href="#" id="authSwitchLink">S'inscrire</a></p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Mon Compte -->
-    <div id="accountModal" class="character-modal" style="display: none;">
-        <div class="character-form-container">
-            <div class="character-form-header">
-                <h2>Mon Compte</h2>
-                <button id="closeAccountBtn" class="close-btn">&times;</button>
-            </div>
-            <div class="account-content">
-                <!-- Informations personnelles -->
-                <div class="account-section">
-                    <h3>Informations personnelles</h3>
-                    <div class="account-info">
-                        <div class="info-row">
-                            <span class="info-label">Prénom :</span>
-                            <span id="accountFirstName" class="info-value">-</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Email :</span>
-                            <span id="accountEmail" class="info-value">-</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Membre depuis :</span>
-                            <span id="accountCreatedAt" class="info-value">-</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Informations du personnage -->
-                <div class="account-section">
-                    <h3>Mon Personnage</h3>
-                    <div id="characterInfo" class="account-info">
-                        <div class="info-row">
-                            <span class="info-label">Nom complet :</span>
-                            <span id="characterFullName" class="info-value">-</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Classe :</span>
-                            <span id="characterClass" class="info-value">-</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Type :</span>
-                            <span id="characterType" class="info-value">-</span>
-                        </div>
-                    </div>
-                    <div id="noCharacterInfo" class="no-character" style="display: none;">
-                        <p>Aucun personnage créé.</p>
-                        <a href="jeux/jeux.html" class="btn-primary">Créer un personnage</a>
-                    </div>
-                </div>
-
-                <!-- Actions du compte -->
-                <div class="account-section">
-                    <h3>Actions</h3>
-                    <div class="account-actions">
-                        <button id="resendEmailBtn" class="btn-secondary">
-                            📧 Renvoyer l'email de confirmation
-                        </button>
-                        <small class="action-help">Cliquez pour recevoir à nouveau l'email de bienvenue</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<!-- ...existing code... -->
     <main>
 
 <!----------- Carousel des articles ----------------------------->
@@ -280,10 +169,5 @@
     </footer>
     <script src="carousel/scrypt.js"></script>
     <script src="javascript/cursor-animation.js"></script>
-    <!-- Script d'authentification pour la page d'accueil -->
-        <!-- Script principal -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script src="javascript/email-service.js"></script>
-    <script src="javascript/index-auth.js"></script>
 </body>
 </html>

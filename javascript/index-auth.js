@@ -141,8 +141,8 @@ class IndexAuthManager {
         const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            // Si le prénom existe, l'afficher, sinon afficher "Utilisateur connecté"
-            const displayName = this.user.firstName || 'Utilisateur connecté';
+            // Si le prénom existe, l'afficher, sinon rien
+            const displayName = this.user.firstName || '';
             if (userDisplayName) userDisplayName.textContent = displayName;
             if (userInfo) userInfo.style.display = 'flex';
             if (authButtons) authButtons.style.display = 'none';
@@ -168,7 +168,7 @@ class IndexAuthManager {
                 await this.signIn(email, password);
             }
         } catch (error) {
-            this.showMessage(`❌ Erreur: ${error.message}`, 'error');
+            console.error(`❌ Erreur: ${error.message}`);
         }
     }
 
@@ -204,7 +204,6 @@ class IndexAuthManager {
         localStorage.setItem('saga_current_user', JSON.stringify(this.user));
         this.updateUI();
         
-        this.showMessage('✅ Inscription réussie ! Vous êtes maintenant connecté.', 'success');
         this.closeAuthModal();
         
         console.log('✅ Inscription réussie (mode local):', newUser);
@@ -229,7 +228,6 @@ class IndexAuthManager {
         localStorage.setItem('saga_current_user', JSON.stringify(this.user));
         this.updateUI();
         
-        this.showMessage('✅ Connexion réussie !', 'success');
         this.closeAuthModal();
         
         console.log('✅ Connexion réussie (mode local):', this.user);
@@ -241,8 +239,6 @@ class IndexAuthManager {
         this.user = null;
         this.isAuthenticated = false;
         this.updateUI();
-        
-        this.showMessage('👋 Déconnexion réussie !', 'success');
         console.log('👋 Utilisateur déconnecté (mode local)');
     }
 
@@ -306,7 +302,7 @@ class IndexAuthManager {
         const fullUserData = users.find(user => user.id === this.user.id);
 
         if (!fullUserData) {
-            this.showMessage('❌ Erreur : données utilisateur introuvables', 'error');
+            console.error('❌ Erreur : données utilisateur introuvables');
             return;
         }
 
@@ -364,7 +360,6 @@ class IndexAuthManager {
         
         if (!this.user) {
             console.error('❌ Aucun utilisateur connecté pour renvoyer l\'email');
-            this.showResendError('Aucun utilisateur connecté');
             return;
         }
 
@@ -373,7 +368,6 @@ class IndexAuthManager {
         // Vérifier que l'utilisateur a au minimum un email
         if (!this.user.email) {
             console.error('❌ Utilisateur sans email défini');
-            this.showResendError('Email utilisateur manquant');
             return;
         }
 
@@ -394,13 +388,10 @@ class IndexAuthManager {
             console.log('📧 Renvoi de l\'email de confirmation pour:', this.user.email);
             
             // Vérifier si le service d'email est disponible
-            if (!window.emailService) {
-                console.error('❌ Service d\'email non disponible');
-                this.showResendError('Service d\'email non disponible');
-                return;
-            }
-
-            console.log('✅ Service d\'email trouvé, envoi en cours...');
+        if (!window.emailService) {
+            console.error('❌ Service d\'email non disponible');
+            return;
+        }            console.log('✅ Service d\'email trouvé, envoi en cours...');
             
             // Utiliser le service d'email pour renvoyer la confirmation
             const result = await window.emailService.sendConfirmationEmail(this.user);
@@ -408,19 +399,15 @@ class IndexAuthManager {
             console.log('📧 Résultat de l\'envoi:', result);
             
             if (result.success) {
-                // Afficher un message de succès
-                this.showResendSuccess();
                 console.log('✅ Email envoyé avec succès !');
             } else {
                 console.warn('⚠️ Erreur lors du renvoi:', result.message);
-                this.showResendError(result.message);
             }
         } catch (error) {
             console.error('❌ Erreur lors du renvoi de l\'email:', error);
             console.error('❌ Type d\'erreur:', typeof error);
             console.error('❌ Message d\'erreur:', error.message);
             console.error('❌ Stack trace:', error.stack);
-            this.showResendError(`Erreur lors du renvoi de l'email: ${error.message}`);
         } finally {
             // Réactiver le bouton
             if (resendBtn) {

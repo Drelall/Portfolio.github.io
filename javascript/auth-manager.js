@@ -29,8 +29,8 @@ class AuthManager {
         const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            // Afficher le prénom s'il existe, sinon l'email
-            const displayName = this.user.firstName || this.user.email;
+            // Afficher le prénom s'il existe, sinon rien
+            const displayName = this.user.firstName || '';
             if (userDisplayName) userDisplayName.textContent = displayName;
             if (userInfo) userInfo.style.display = 'flex';
             if (authButtons) authButtons.style.display = 'none';
@@ -136,13 +136,6 @@ class AuthManager {
 
             this.updateUI();
             
-            // Message selon le résultat de l'email
-            if (emailResult.success) {
-                this.showMessage('✅ Inscription finalisée ! Email de confirmation envoyé.', 'success');
-            } else {
-                this.showMessage('✅ Inscription finalisée ! (Problème d\'envoi d\'email)', 'success');
-            }
-            
             this.closeAuthModal();
             this.closeCharacterModal();
 
@@ -150,7 +143,6 @@ class AuthManager {
             return { success: true, data: newUser };
         } catch (error) {
             console.error('Erreur finalisation inscription:', error);
-            this.showMessage(`❌ Erreur: ${error.message}`, 'error');
             return { success: false, error: error.message };
         }
     }
@@ -228,14 +220,10 @@ class AuthManager {
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
             this.updateUI();
             
-            this.showMessage('✅ Inscription réussie ! Vous êtes maintenant connecté.', 'success');
-            this.closeAuthModal();
-            
             console.log('✅ Inscription réussie (mode local):', newUser);
             return { data: { user: newUser }, error: null };
         } catch (error) {
             console.error('Erreur lors de l\'inscription:', error);
-            this.showMessage(`❌ Erreur d'inscription: ${error.message}`, 'error');
             return { data: null, error };
         }
     }
@@ -260,14 +248,12 @@ class AuthManager {
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
             this.updateUI();
             
-            this.showMessage('✅ Connexion réussie !', 'success');
             this.closeAuthModal();
             
             console.log('✅ Connexion réussie (mode local):', this.user);
             return { data: { user: this.user }, error: null };
         } catch (error) {
             console.error('Erreur connexion:', error);
-            this.showMessage(`❌ Erreur de connexion: ${error.message}`, 'error');
             return { data: null, error };
         }
     }
@@ -280,11 +266,9 @@ class AuthManager {
             this.isAuthenticated = false;
             this.updateUI();
             
-            this.showMessage('👋 Déconnexion réussie !', 'success');
             console.log('👋 Utilisateur déconnecté (mode local)');
         } catch (error) {
             console.error('Erreur déconnexion:', error);
-            this.showMessage(`❌ Erreur de déconnexion: ${error.message}`, 'error');
         }
     }
 
@@ -408,7 +392,6 @@ class AuthManager {
 
     requireAuth() {
         if (!this.isAuthenticated) {
-            this.showMessage('🔒 Veuillez vous inscrire pour créer un personnage', 'info');
             this.openAuthModal('signup'); // Ouvrir en mode inscription par défaut
             return false;
         }
