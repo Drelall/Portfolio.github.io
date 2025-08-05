@@ -128,27 +128,9 @@ class AuthManager {
     }
 
     addAdminButtons() {
-        const userInfo = document.getElementById('userInfo');
-        if (!userInfo) return;
-
-        // Vérifier si les boutons admin existent déjà
-        if (document.getElementById('adminBtn')) return;
-
-        // Créer le bouton d'administration
-        const adminBtn = document.createElement('button');
-        adminBtn.id = 'adminBtn';
-        adminBtn.className = 'btn-primary admin-btn';
-        adminBtn.textContent = 'Admin';
-        adminBtn.style.marginLeft = '10px';
-        
-        // Ajouter l'événement
-        adminBtn.addEventListener('click', () => this.openAdminModal());
-        
-        // Insérer le bouton avant le bouton de déconnexion
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            userInfo.insertBefore(adminBtn, logoutBtn);
-        }
+        // Pour l'administrateur, on n'ajoute plus de bouton séparé
+        // L'interface d'administration sera accessible via "Mon Compte"
+        console.log('✅ Interface d\'administration intégrée au bouton "Mon Compte"');
     }
 
     removeAdminButtons() {
@@ -577,80 +559,69 @@ class AuthManager {
     }
 
     openAccountModal() {
+        // Si c'est un administrateur, ouvrir l'interface d'administration complète
+        if (this.user && this.user.isAdmin) {
+            this.openAdminAccountModal();
+            return;
+        }
+
+        // Pour les utilisateurs normaux, continuer avec le modal compte standard
         const modal = document.getElementById('accountModal');
         if (!modal) {
             console.error('❌ Modal de compte introuvable');
             return;
         }
 
-        // Si c'est un administrateur, afficher des informations simplifiées
-        if (this.user && this.user.isAdmin) {
-            // Remplir les informations administrateur
-            const firstNameEl = document.getElementById('accountFirstName');
-            const emailEl = document.getElementById('accountEmail');
-            const createdAtEl = document.getElementById('accountCreatedAt');
-            
-            if (firstNameEl) firstNameEl.textContent = this.user.firstName || 'Administrateur';
-            if (emailEl) emailEl.textContent = this.user.email || 'g.Drelall';
-            if (createdAtEl) createdAtEl.textContent = 'Compte administrateur';
+        // Récupérer les données utilisateur complètes pour les utilisateurs normaux
+        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+        const fullUserData = users.find(user => user.id === this.user.id);
 
-            // Cacher les informations de personnage pour l'admin
-            const characterInfo = document.getElementById('characterInfo');
-            const noCharacterInfo = document.getElementById('noCharacterInfo');
-            if (characterInfo) characterInfo.style.display = 'none';
+        if (!fullUserData) {
+            console.error('❌ Erreur : données utilisateur introuvables');
+            this.showMessage('Erreur : impossible de charger les données du compte', 'error');
+            return;
+        }
+
+        // Remplir les informations personnelles
+        const firstNameEl = document.getElementById('accountFirstName');
+        const emailEl = document.getElementById('accountEmail');
+        const createdAtEl = document.getElementById('accountCreatedAt');
+        
+        if (firstNameEl) firstNameEl.textContent = fullUserData.firstName || '-';
+        if (emailEl) emailEl.textContent = fullUserData.email || '-';
+            
+        // Formater la date de création
+        const createdDate = fullUserData.createdAt ? 
+            new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) : '-';
+        if (createdAtEl) createdAtEl.textContent = createdDate;
+
+        // Remplir les informations du personnage
+        const characterInfo = document.getElementById('characterInfo');
+        const noCharacterInfo = document.getElementById('noCharacterInfo');
+
+        if (fullUserData.character) {
+            // Afficher les informations du personnage
+            const fullNameEl = document.getElementById('characterFullName');
+            const classEl = document.getElementById('characterClass');
+            const typeEl = document.getElementById('characterType');
+            
+            if (fullNameEl) fullNameEl.textContent = 
+                `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
+            if (classEl) classEl.textContent = 
+                this.getClassDisplayName(fullUserData.character.class);
+            if (typeEl) typeEl.textContent = 
+                this.getTypeDisplayName(fullUserData.character.type);
+            
+            if (characterInfo) characterInfo.style.display = 'block';
             if (noCharacterInfo) noCharacterInfo.style.display = 'none';
         } else {
-            // Récupérer les données utilisateur complètes pour les utilisateurs normaux
-            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
-            const fullUserData = users.find(user => user.id === this.user.id);
-
-            if (!fullUserData) {
-                console.error('❌ Erreur : données utilisateur introuvables');
-                this.showMessage('Erreur : impossible de charger les données du compte', 'error');
-                return;
-            }
-
-            // Remplir les informations personnelles
-            const firstNameEl = document.getElementById('accountFirstName');
-            const emailEl = document.getElementById('accountEmail');
-            const createdAtEl = document.getElementById('accountCreatedAt');
-            
-            if (firstNameEl) firstNameEl.textContent = fullUserData.firstName || '-';
-            if (emailEl) emailEl.textContent = fullUserData.email || '-';
-            
-            // Formater la date de création
-            const createdDate = fullUserData.createdAt ? 
-                new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }) : '-';
-            if (createdAtEl) createdAtEl.textContent = createdDate;
-
-            // Remplir les informations du personnage
-            const characterInfo = document.getElementById('characterInfo');
-            const noCharacterInfo = document.getElementById('noCharacterInfo');
-
-            if (fullUserData.character) {
-                // Afficher les informations du personnage
-                const fullNameEl = document.getElementById('characterFullName');
-                const classEl = document.getElementById('characterClass');
-                const typeEl = document.getElementById('characterType');
-                
-                if (fullNameEl) fullNameEl.textContent = 
-                    `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
-                if (classEl) classEl.textContent = 
-                    this.getClassDisplayName(fullUserData.character.class);
-                if (typeEl) typeEl.textContent = 
-                    this.getTypeDisplayName(fullUserData.character.type);
-                
-                if (characterInfo) characterInfo.style.display = 'block';
-                if (noCharacterInfo) noCharacterInfo.style.display = 'none';
-            } else {
-                // Aucun personnage créé
-                if (characterInfo) characterInfo.style.display = 'none';
-                if (noCharacterInfo) noCharacterInfo.style.display = 'block';
-            }
+            // Aucun personnage créé
+            if (characterInfo) characterInfo.style.display = 'none';
+            if (noCharacterInfo) noCharacterInfo.style.display = 'block';
         }
 
         // Afficher le modal avec une animation
@@ -688,6 +659,137 @@ class AuthManager {
         // Cette méthode devra être enrichie selon les types disponibles
         // Pour l'instant, on retourne la clé telle quelle
         return typeKey || '-';
+    }
+
+    openAdminAccountModal() {
+        // Créer le modal d'administration unifié s'il n'existe pas
+        let adminAccountModal = document.getElementById('adminAccountModal');
+        if (!adminAccountModal) {
+            this.createAdminAccountModal();
+            adminAccountModal = document.getElementById('adminAccountModal');
+        }
+
+        // Remplir les informations administrateur
+        const firstNameEl = document.getElementById('adminAccountFirstName');
+        const emailEl = document.getElementById('adminAccountEmail');
+        const createdAtEl = document.getElementById('adminAccountCreatedAt');
+        
+        if (firstNameEl) firstNameEl.textContent = this.user.firstName || 'Administrateur';
+        if (emailEl) emailEl.textContent = this.user.email || 'g.Drelall';
+        if (createdAtEl) createdAtEl.textContent = 'Compte administrateur';
+
+        // Charger la liste des utilisateurs
+        this.loadUsersListInAccountModal();
+
+        // Afficher le modal
+        adminAccountModal.style.display = 'flex';
+        setTimeout(() => adminAccountModal.style.opacity = '1', 10);
+        
+        console.log('✅ Interface d\'administration complète ouverte');
+    }
+
+    createAdminAccountModal() {
+        const modalHTML = `
+            <div id="adminAccountModal" class="character-modal" style="display: none; opacity: 0;">
+                <div class="character-form-container" style="max-width: 900px;">
+                    <div class="character-form-header">
+                        <h2 style="color: #ddc9a3;">Compte administrateur</h2>
+                        <button id="closeAdminAccountBtn" class="close-btn">&times;</button>
+                    </div>
+                    <div class="account-content">
+                        <!-- Informations de l'administrateur -->
+                        <div class="account-section">
+                            <h3 style="color: #ddc9a3;">Informations Administrateur</h3>
+                            <div class="account-info">
+                                <div class="info-row">
+                                    <span class="info-label">Prénom :</span>
+                                    <span id="adminAccountFirstName" class="info-value">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Email :</span>
+                                    <span id="adminAccountEmail" class="info-value">-</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Statut :</span>
+                                    <span id="adminAccountCreatedAt" class="info-value">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gestion des utilisateurs -->
+                        <div class="account-section">
+                            <h3 style="color: #ddc9a3;">Gestion des Utilisateurs</h3>
+                            <div id="adminUsersList" class="users-list">
+                                <!-- La liste sera chargée dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Attacher les événements
+        document.getElementById('closeAdminAccountBtn').addEventListener('click', () => this.closeAdminAccountModal());
+        document.getElementById('adminAccountModal').addEventListener('click', (e) => {
+            if (e.target.id === 'adminAccountModal') {
+                this.closeAdminAccountModal();
+            }
+        });
+    }
+
+    closeAdminAccountModal() {
+        const modal = document.getElementById('adminAccountModal');
+        if (!modal) return;
+
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    loadUsersListInAccountModal() {
+        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+        const usersList = document.getElementById('adminUsersList');
+        
+        if (!usersList) return;
+
+        if (users.length === 0) {
+            usersList.innerHTML = '<p style="text-align: center; color: #ddc9a3; font-style: italic;">Aucun utilisateur enregistré</p>';
+            return;
+        }
+
+        let usersHTML = `
+            <div class="users-table">
+                <div class="users-header">
+                    <div class="user-col">Prénom</div>
+                    <div class="user-col">Email</div>
+                    <div class="user-col">Date création</div>
+                    <div class="user-col">Actions</div>
+                </div>
+        `;
+
+        users.forEach(user => {
+            const createdDate = user.createdAt ? 
+                new Date(user.createdAt).toLocaleDateString('fr-FR') : 'Inconnue';
+            
+            usersHTML += `
+                <div class="user-row" data-user-id="${user.id}">
+                    <div class="user-col">${user.firstName || 'N/A'}</div>
+                    <div class="user-col">${user.email}</div>
+                    <div class="user-col">${createdDate}</div>
+                    <div class="user-col">
+                        <button class="btn-secondary delete-user-btn" onclick="window.authManager.deleteUser('${user.id}', '${user.email}')">
+                            🗑️ Supprimer
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        usersHTML += '</div>';
+        usersList.innerHTML = usersHTML;
     }
 
     async resendConfirmationEmail() {
@@ -780,7 +882,7 @@ class AuthManager {
                     </div>
                     <div class="account-content">
                         <div class="account-section">
-                            <h3>👥 Gestion des Utilisateurs</h3>
+                            <h3 style="color: #ddc9a3;">Gestion des Utilisateurs</h3>
                             <div id="usersList" class="users-list">
                                 <!-- La liste sera chargée dynamiquement -->
                             </div>

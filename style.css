@@ -1,3 +1,21 @@
+/* Suppression des liserés orange par défaut */
+* {
+    outline: none !important;
+}
+
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus {
+    outline: none !important;
+}
+
 /* === Bloc de pierre cliquable (retour accueil) === */
 .stone-block-link {
     position: absolute;
@@ -170,7 +188,6 @@
 
 .character-form-container {
     background: linear-gradient(135deg, #5c3e1f 0%, #3d2914 100%);
-    border: 3px solid #8b4513;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     width: 90%;
@@ -183,12 +200,11 @@
 }
 
 .character-form-header {
-    background: linear-gradient(135deg, #3d2914 0%, #2f1b14 100%);
+    background: #31405a;
     padding: 20px;
     border-radius: 12px 12px 0 0;
     text-align: center;
     position: relative;
-    border-bottom: 2px solid #8b4513;
 }
 
 .character-form-header h2 {
@@ -375,9 +391,9 @@
 .account-section {
     margin-bottom: 30px;
     padding: 20px;
-    background: rgba(139, 69, 19, 0.1);
+    background: rgba(245, 222, 179, 0.12);
     border-radius: 12px;
-    border: 1px solid rgba(139, 69, 19, 0.3);
+    border: 1px solid rgba(210, 180, 140, 0.15);
 }
 
 .account-section h3 {
@@ -385,7 +401,6 @@
     color: #8b4513;
     font-size: 1.3rem;
     font-weight: bold;
-    border-bottom: 2px solid #8b4513;
     padding-bottom: 10px;
     font-family: 'Georgia', serif;
 }
