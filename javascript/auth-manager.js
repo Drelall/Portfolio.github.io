@@ -104,9 +104,48 @@ class AuthManager {
             if (userDisplayName) userDisplayName.textContent = displayName;
             if (userInfo) userInfo.style.display = 'flex';
             if (authButtons) authButtons.style.display = 'none';
+
+            // Si c'est un administrateur, ajouter les boutons d'administration
+            if (this.user.isAdmin) {
+                this.addAdminButtons();
+            } else {
+                this.removeAdminButtons();
+            }
         } else {
             if (userInfo) userInfo.style.display = 'none';
             if (authButtons) authButtons.style.display = 'flex';
+            this.removeAdminButtons();
+        }
+    }
+
+    addAdminButtons() {
+        const userInfo = document.getElementById('userInfo');
+        if (!userInfo) return;
+
+        // Vérifier si les boutons admin existent déjà
+        if (document.getElementById('adminBtn')) return;
+
+        // Créer le bouton d'administration
+        const adminBtn = document.createElement('button');
+        adminBtn.id = 'adminBtn';
+        adminBtn.className = 'btn-primary admin-btn';
+        adminBtn.textContent = '⚙️ Admin';
+        adminBtn.style.marginLeft = '10px';
+        
+        // Ajouter l'événement
+        adminBtn.addEventListener('click', () => this.openAdminModal());
+        
+        // Insérer le bouton avant le bouton de déconnexion
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            userInfo.insertBefore(adminBtn, logoutBtn);
+        }
+    }
+
+    removeAdminButtons() {
+        const adminBtn = document.getElementById('adminBtn');
+        if (adminBtn) {
+            adminBtn.remove();
         }
     }
 
@@ -277,6 +316,26 @@ class AuthManager {
         }
     }
 
+    async handleAuthSubmit(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const firstName = document.getElementById('firstName').value;
+        const submitBtn = document.getElementById('authSubmitBtn');
+        const isSignup = submitBtn.textContent.includes('inscrire');
+
+        try {
+            if (isSignup) {
+                await this.signUp(email, password, firstName);
+            } else {
+                await this.signIn(email, password);
+            }
+        } catch (error) {
+            console.error(`❌ Erreur: ${error.message}`);
+        }
+    }
+
     async signUp(email, password, firstName) {
         try {
             // Mode local - simulation d'inscription
@@ -320,7 +379,24 @@ class AuthManager {
 
     async signIn(email, password) {
         try {
-            // Mode local - vérification des identifiants
+            // Vérifier d'abord si c'est le compte administrateur
+            if (email === 'g.Drelall' && password === '#Gran1963font') {
+                // Connecter l'administrateur
+                this.user = { 
+                    email: 'g.Drelall', 
+                    id: 'admin', 
+                    firstName: 'Administrateur',
+                    isAdmin: true
+                };
+                this.isAuthenticated = true;
+                localStorage.setItem('saga_current_user', JSON.stringify(this.user));
+                this.updateUI();
+                this.closeAuthModal();
+                console.log('✅ Connexion administrateur réussie');
+                return { data: { user: this.user }, error: null };
+            }
+
+            // Mode local - vérification des identifiants utilisateurs normaux
             const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
             const user = users.find(u => u.email === email && u.password === password);
             
@@ -328,11 +404,12 @@ class AuthManager {
                 throw new Error('Email ou mot de passe incorrect');
             }
             
-            // Connecter l'utilisateur (inclure le prénom s'il existe)
+            // Connecter l'utilisateur normal
             this.user = { 
                 email: user.email, 
                 id: user.id, 
-                firstName: user.firstName 
+                firstName: user.firstName,
+                isAdmin: false
             };
             this.isAuthenticated = true;
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
@@ -340,7 +417,7 @@ class AuthManager {
             
             this.closeAuthModal();
             
-            console.log('✅ Connexion réussie (mode local):', this.user);
+            console.log('✅ Connexion utilisateur réussie:', this.user);
             return { data: { user: this.user }, error: null };
         } catch (error) {
             console.error('Erreur connexion:', error);
@@ -619,6 +696,139 @@ class AuthManager {
                 resendBtn.disabled = false;
                 resendBtn.textContent = '📧 Renvoyer l\'email de confirmation';
             }
+        }
+    }
+
+    openAdminModal() {
+        // Créer le modal d'administration s'il n'existe pas
+        let adminModal = document.getElementById('adminModal');
+        if (!adminModal) {
+            this.createAdminModal();
+            adminModal = document.getElementById('adminModal');
+        }
+
+        // Charger la liste des utilisateurs
+        this.loadUsersList();
+
+        // Afficher le modal
+        adminModal.style.display = 'flex';
+        setTimeout(() => adminModal.style.opacity = '1', 10);
+    }
+
+    createAdminModal() {
+        const modalHTML = `
+            <div id="adminModal" class="character-modal" style="display: none; opacity: 0;">
+                <div class="character-form-container" style="max-width: 800px;">
+                    <div class="character-form-header">
+                        <h2>🛡️ Administration</h2>
+                        <button id="closeAdminBtn" class="close-btn">&times;</button>
+                    </div>
+                    <div class="account-content">
+                        <div class="account-section">
+                            <h3>👥 Gestion des Utilisateurs</h3>
+                            <div id="usersList" class="users-list">
+                                <!-- La liste sera chargée dynamiquement -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        // Attacher les événements
+        document.getElementById('closeAdminBtn').addEventListener('click', () => this.closeAdminModal());
+        document.getElementById('adminModal').addEventListener('click', (e) => {
+            if (e.target.id === 'adminModal') {
+                this.closeAdminModal();
+            }
+        });
+    }
+
+    closeAdminModal() {
+        const modal = document.getElementById('adminModal');
+        if (!modal) return;
+
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+
+    loadUsersList() {
+        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+        const usersList = document.getElementById('usersList');
+        
+        if (!usersList) return;
+
+        if (users.length === 0) {
+            usersList.innerHTML = '<p style="text-align: center; color: #ddc9a3; font-style: italic;">Aucun utilisateur enregistré</p>';
+            return;
+        }
+
+        let usersHTML = `
+            <div class="users-table">
+                <div class="users-header">
+                    <div class="user-col">Prénom</div>
+                    <div class="user-col">Email</div>
+                    <div class="user-col">Date création</div>
+                    <div class="user-col">Actions</div>
+                </div>
+        `;
+
+        users.forEach(user => {
+            const createdDate = user.createdAt ? 
+                new Date(user.createdAt).toLocaleDateString('fr-FR') : 'Inconnue';
+            
+            usersHTML += `
+                <div class="user-row" data-user-id="${user.id}">
+                    <div class="user-col">${user.firstName || 'N/A'}</div>
+                    <div class="user-col">${user.email}</div>
+                    <div class="user-col">${createdDate}</div>
+                    <div class="user-col">
+                        <button class="btn-secondary delete-user-btn" onclick="window.authManager.deleteUser('${user.id}', '${user.email}')">
+                            🗑️ Supprimer
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+
+        usersHTML += '</div>';
+        usersList.innerHTML = usersHTML;
+    }
+
+    deleteUser(userId, userEmail) {
+        if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur "${userEmail}" ?`)) {
+            return;
+        }
+
+        try {
+            // Récupérer la liste des utilisateurs
+            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+            
+            // Filtrer pour supprimer l'utilisateur
+            const updatedUsers = users.filter(user => user.id !== userId);
+            
+            // Sauvegarder la liste mise à jour
+            localStorage.setItem('saga_users', JSON.stringify(updatedUsers));
+            
+            // Rafraîchir la liste
+            this.loadUsersList();
+            
+            console.log(`✅ Utilisateur ${userEmail} supprimé avec succès`);
+            
+            // Si l'utilisateur supprimé était connecté, le déconnecter
+            const currentUser = JSON.parse(localStorage.getItem('saga_current_user') || 'null');
+            if (currentUser && currentUser.id === userId) {
+                localStorage.removeItem('saga_current_user');
+                window.location.reload(); // Recharger la page pour mettre à jour l'interface
+            }
+            
+        } catch (error) {
+            console.error('❌ Erreur lors de la suppression:', error);
+            alert('Erreur lors de la suppression de l\'utilisateur');
         }
     }
 
