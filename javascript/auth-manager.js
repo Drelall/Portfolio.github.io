@@ -59,6 +59,7 @@ class AuthManager {
         const closeAuthBtn = document.getElementById('closeAuthBtn');
         const closeAccountBtn = document.getElementById('closeAccountBtn');
         const cancelAuthBtn = document.getElementById('cancelAuthBtn');
+        const prevAuthBtn = document.getElementById('prevAuthBtn');
 
         if (closeAuthBtn) {
             closeAuthBtn.addEventListener('click', () => this.closeAuthModal());
@@ -70,6 +71,10 @@ class AuthManager {
 
         if (cancelAuthBtn) {
             cancelAuthBtn.addEventListener('click', () => this.closeAuthModal());
+        }
+
+        if (prevAuthBtn) {
+            prevAuthBtn.addEventListener('click', () => this.handlePrevAuthStep());
         }
 
         // Bouton de renvoi d'email de confirmation
@@ -330,42 +335,225 @@ class AuthManager {
 
     async signUp(email, password, firstName) {
         try {
-            // Mode local - simulation d'inscription
-            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+            // Utiliser la validation d'étape 1 pour préparer l'inscription
+            const step1Result = await this.validateRegistrationStep1(email, password, firstName);
             
-            // Vérifier si l'utilisateur existe déjà
-            if (users.find(user => user.email === email)) {
-                throw new Error('Un compte avec cet email existe déjà');
+            if (!step1Result.success) {
+                throw new Error(step1Result.error);
             }
             
-            // Validation du prénom pour l'inscription
-            if (!firstName || firstName.trim() === '') {
-                throw new Error('Le prénom est requis pour l\'inscription');
-            }
+            // Fermer le modal d'authentification
+            this.closeAuthModal();
             
-            // Créer le nouvel utilisateur
-            const newUser = {
-                id: Date.now().toString(),
-                email: email,
-                password: password, // En production, il faudrait hasher le mot de passe
-                firstName: firstName.trim(),
-                createdAt: new Date().toISOString()
-            };
+            // Afficher un message de transition
+            this.showMessage('Étape 1 validée ! Création de votre personnage...', 'success');
             
-            users.push(newUser);
-            localStorage.setItem('saga_users', JSON.stringify(users));
+            // Attendre un petit moment pour que l'utilisateur voie le message
+            setTimeout(() => {
+                // Ouvrir directement le modal de création de personnage pour l'étape 2
+                this.openCharacterFormModal();
+            }, 1000);
             
-            // Connecter l'utilisateur automatiquement après inscription
-            this.user = { email: email, id: newUser.id, firstName: newUser.firstName };
-            this.isAuthenticated = true;
-            localStorage.setItem('saga_current_user', JSON.stringify(this.user));
-            this.updateUI();
-            
-            console.log('✅ Inscription réussie (mode local):', newUser);
-            return { data: { user: newUser }, error: null };
+            console.log('✅ Étape 1 de l\'inscription terminée, passage à l\'étape 2');
+            return { data: { step: 1, completed: true }, error: null };
         } catch (error) {
-            console.error('Erreur lors de l\'inscription:', error);
-            return { data: null, error };
+            console.error('Erreur lors de l\'inscription (étape 1):', error);
+            throw error;
+        }
+    }
+
+    openCharacterFormModal() {
+        // Chercher le modal dans l'index.html d'abord, sinon dans jeux.html
+        let modal = document.getElementById('characterFormModal');
+        
+        if (!modal) {
+            // Créer le modal de création de personnage dynamiquement
+            this.createCharacterFormModal();
+            modal = document.getElementById('characterFormModal');
+        }
+        
+        if (modal) {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.style.opacity = '1', 10);
+            console.log('✅ Modal de création de personnage ouvert');
+        } else {
+            console.error('❌ Impossible d\'ouvrir le modal de création de personnage');
+            this.showMessage('Erreur : impossible d\'ouvrir le formulaire de personnage', 'error');
+        }
+    }
+
+    createCharacterFormModal() {
+        // Créer le modal de création de personnage s'il n'existe pas
+        const modalHTML = `
+            <div id="characterFormModal" class="character-modal" style="display: none; opacity: 0;">
+                <div class="character-form-container">
+                    <div class="character-form-header">
+                        <h2>Bienvenue dans l'univers de Saga - Étape 2/2</h2>
+                        <button id="closeCharacterFormBtn" class="close-btn">&times;</button>
+                    </div>
+                    <form id="characterForm" class="character-form">
+                        <!-- Étape 1: Informations de base -->
+                        <div id="characterStep1" class="form-step active">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="characterFirstName">Prénom du personnage :</label>
+                                    <input type="text" id="characterFirstName" name="characterFirstName" required maxlength="20" placeholder="Prénom de votre personnage">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="characterLastName">Nom du personnage :</label>
+                                    <input type="text" id="characterLastName" name="characterLastName" required maxlength="20" placeholder="Nom de votre personnage">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="characterClass">Classe de personnage :</label>
+                                <select id="characterClass" name="characterClass" required>
+                                    <option value="">-- Choisissez une classe --</option>
+                                    <option value="agent">Agent du Gouvernement</option>
+                                    <option value="initie">Initié</option>
+                                    <option value="sorcier">Sorcier</option>
+                                    <option value="citoyen">Citoyen</option>
+                                </select>
+                            </div>
+                            
+                            <div class="class-description" id="classDescription">
+                                <p>Sélectionnez une classe pour voir sa description.</p>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" id="prevToAuthBtn" class="btn-secondary">Précédent</button>
+                                <button type="button" id="cancelCharacterBtn" class="btn-secondary">Annuler</button>
+                                <button type="button" id="nextCharacterStepBtn" class="btn-primary">Suivant</button>
+                            </div>
+                        </div>
+
+                        <!-- Étape 2: Type de personnage -->
+                        <div id="characterStep2" class="form-step" style="display: none;">
+                            <div class="form-group">
+                                <label for="characterType">Type de personnage :</label>
+                                <select id="characterType" name="characterType" required>
+                                    <option value="">-- Choisissez un type --</option>
+                                </select>
+                            </div>
+                            
+                            <div class="type-description" id="typeDescription">
+                                <p>Sélectionnez un type pour voir sa description.</p>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" id="prevCharacterStepBtn" class="btn-secondary">Précédent</button>
+                                <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Attacher les événements pour le nouveau modal
+        this.attachCharacterFormEvents();
+    }
+
+    attachCharacterFormEvents() {
+        const modal = document.getElementById('characterFormModal');
+        const closeBtn = document.getElementById('closeCharacterFormBtn');
+        const cancelBtn = document.getElementById('cancelCharacterBtn');
+        const prevToAuthBtn = document.getElementById('prevToAuthBtn');
+        const nextStepBtn = document.getElementById('nextCharacterStepBtn');
+        const prevStepBtn = document.getElementById('prevCharacterStepBtn');
+        const characterForm = document.getElementById('characterForm');
+        
+        // Fermeture du modal
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closeCharacterModal();
+                // Nettoyer les données temporaires
+                this.tempRegistrationData = null;
+            });
+        }
+        
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                this.closeCharacterModal();
+                // Nettoyer les données temporaires
+                this.tempRegistrationData = null;
+            });
+        }
+        
+        // Bouton précédent vers l'authentification
+        if (prevToAuthBtn) {
+            prevToAuthBtn.addEventListener('click', () => this.handlePrevAuthStep());
+        }
+        
+        // Navigation entre les étapes du personnage
+        if (nextStepBtn) {
+            nextStepBtn.addEventListener('click', () => this.nextCharacterStep());
+        }
+        
+        if (prevStepBtn) {
+            prevStepBtn.addEventListener('click', () => this.prevCharacterStep());
+        }
+        
+        // Soumission du formulaire de personnage
+        if (characterForm) {
+            characterForm.addEventListener('submit', (e) => this.handleCharacterFormSubmit(e));
+        }
+        
+        // Fermeture en cliquant en dehors
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    this.closeCharacterModal();
+                    this.tempRegistrationData = null;
+                }
+            });
+        }
+    }
+
+    nextCharacterStep() {
+        const step1 = document.getElementById('characterStep1');
+        const step2 = document.getElementById('characterStep2');
+        
+        if (step1 && step2) {
+            step1.style.display = 'none';
+            step2.style.display = 'block';
+        }
+    }
+
+    prevCharacterStep() {
+        const step1 = document.getElementById('characterStep1');
+        const step2 = document.getElementById('characterStep2');
+        
+        if (step1 && step2) {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+        }
+    }
+
+    async handleCharacterFormSubmit(e) {
+        e.preventDefault();
+        
+        // Récupérer les données du formulaire
+        const characterData = {
+            characterFirstName: document.getElementById('characterFirstName').value.trim(),
+            characterLastName: document.getElementById('characterLastName').value.trim(),
+            characterClass: document.getElementById('characterClass').value,
+            characterType: document.getElementById('characterType').value
+        };
+        
+        try {
+            const result = await this.finalizeRegistration(characterData);
+            if (result.success) {
+                this.showMessage('🎉 Inscription terminée avec succès !', 'success');
+            } else {
+                throw new Error(result.error);
+            }
+        } catch (error) {
+            this.showMessage(error.message, 'error');
+            console.error('❌ Erreur finalisation inscription:', error);
         }
     }
 
@@ -482,6 +670,7 @@ class AuthManager {
         const title = document.getElementById('authTitle');
         const submitBtn = document.getElementById('authSubmitBtn');
         const nextToCharacterBtn = document.getElementById('nextToCharacterBtn');
+        const prevAuthBtn = document.getElementById('prevAuthBtn');
         const switchText = document.getElementById('authSwitchText');
         const firstNameGroup = document.getElementById('firstNameGroup');
         const firstName = document.getElementById('firstName');
@@ -495,6 +684,7 @@ class AuthManager {
                 submitBtn.style.display = 'inline-block';
             }
             if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
+            if (prevAuthBtn) prevAuthBtn.style.display = 'none';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
             // Masquer le champ prénom pour la connexion
             if (firstNameGroup) firstNameGroup.style.display = 'none';
@@ -506,6 +696,13 @@ class AuthManager {
                 submitBtn.style.display = 'inline-block';
             }
             if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
+            
+            // Afficher le bouton "Précédent" seulement si nous avons des données temporaires
+            // (cela signifie que nous revenons de l'étape 2)
+            if (prevAuthBtn) {
+                prevAuthBtn.style.display = this.tempRegistrationData ? 'inline-block' : 'none';
+            }
+            
             if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
             // Afficher le champ prénom pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
@@ -555,6 +752,35 @@ class AuthManager {
         modal.style.display = 'none';
         if (characterForm) {
             characterForm.reset();
+        }
+    }
+
+    handlePrevAuthStep() {
+        // Si nous avons des données temporaires d'inscription, cela signifie 
+        // que nous sommes à l'étape de création de personnage et voulons revenir à l'étape 1
+        if (this.tempRegistrationData) {
+            // Fermer le modal de création de personnage
+            this.closeCharacterModal();
+            
+            // Rouvrir le modal d'authentification avec les données pré-remplies
+            this.openAuthModal('signup');
+            
+            // Pré-remplir les champs avec les données temporaires
+            const emailInput = document.getElementById('email');
+            const firstNameInput = document.getElementById('firstName');
+            const passwordInput = document.getElementById('password');
+            
+            if (emailInput) emailInput.value = this.tempRegistrationData.email || '';
+            if (firstNameInput) firstNameInput.value = this.tempRegistrationData.firstName || '';
+            if (passwordInput) passwordInput.value = this.tempRegistrationData.password || '';
+            
+            // Afficher le bouton "Précédent" puisque nous venons de l'étape 2
+            const prevAuthBtn = document.getElementById('prevAuthBtn');
+            if (prevAuthBtn) {
+                prevAuthBtn.style.display = 'inline-block';
+            }
+            
+            console.log('🔙 Retour à l\'étape 1 de l\'inscription');
         }
     }
 

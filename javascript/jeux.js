@@ -302,6 +302,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     
+    // Bouton pour revenir à l'authentification depuis le formulaire de personnage
+    const prevToAuthBtnCharacter = document.getElementById('prevToAuthBtn');
+    
     // Éléments d'authentification
     const authModal = document.getElementById('authModal');
     const authForm = document.getElementById('authForm');
@@ -310,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const closeAuthBtn = document.getElementById('closeAuthBtn');
     const cancelAuthBtn = document.getElementById('cancelAuthBtn');
+    const prevToAuthBtn = document.getElementById('prevToAuthBtn');
     
     let currentStep = 1;
     
@@ -335,14 +339,21 @@ document.addEventListener('DOMContentLoaded', function() {
             window.authManager.closeAuthModal();
         });
     }
-    
+
     if (cancelAuthBtn) {
         cancelAuthBtn.addEventListener('click', () => {
             window.authManager.closeAuthModal();
         });
     }
-    
-    // Fermer le modal en cliquant en dehors
+
+    // Bouton précédent vers l'authentification depuis le formulaire de personnage
+    if (prevToAuthBtn) {
+        prevToAuthBtn.addEventListener('click', () => {
+            if (window.authManager && typeof window.authManager.handlePrevAuthStep === 'function') {
+                window.authManager.handlePrevAuthStep();
+            }
+        });
+    }    // Fermer le modal en cliquant en dehors
     if (authModal) {
         authModal.addEventListener('click', function(e) {
             if (e.target === authModal) {
@@ -382,6 +393,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fermer le formulaire
     closeFormBtn.addEventListener('click', hideCharacterForm);
     cancelBtn.addEventListener('click', hideCharacterForm);
+    
+    // Bouton pour revenir à l'étape d'authentification depuis le formulaire de personnage
+    if (prevToAuthBtnCharacter) {
+        prevToAuthBtnCharacter.addEventListener('click', function() {
+            if (window.authManager && typeof window.authManager.handlePrevAuthStep === 'function') {
+                hideCharacterForm(); // Fermer d'abord le formulaire de personnage
+                window.authManager.handlePrevAuthStep();
+            }
+        });
+    }
     
     // Navigation entre les étapes
     nextStepBtn.addEventListener('click', function() {
