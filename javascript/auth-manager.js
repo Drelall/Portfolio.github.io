@@ -58,6 +58,7 @@ class AuthManager {
         // Fermeture des modals
         const closeAuthBtn = document.getElementById('closeAuthBtn');
         const closeAccountBtn = document.getElementById('closeAccountBtn');
+        const cancelAuthBtn = document.getElementById('cancelAuthBtn');
 
         if (closeAuthBtn) {
             closeAuthBtn.addEventListener('click', () => this.closeAuthModal());
@@ -65,6 +66,10 @@ class AuthManager {
 
         if (closeAccountBtn) {
             closeAccountBtn.addEventListener('click', () => this.closeAccountModal());
+        }
+
+        if (cancelAuthBtn) {
+            cancelAuthBtn.addEventListener('click', () => this.closeAuthModal());
         }
 
         // Bouton de renvoi d'email de confirmation
@@ -299,31 +304,31 @@ class AuthManager {
     async handleAuthSubmit(e) {
         e.preventDefault();
         
-        const email = document.getElementById('email').value;
+        const emailInput = document.getElementById('email');
+        const email = emailInput.value.trim();
         const password = document.getElementById('password').value;
         const firstName = document.getElementById('firstName').value;
         const submitBtn = document.getElementById('authSubmitBtn');
         const isSignup = submitBtn.textContent.includes('inscrire');
 
-        try {
-            if (isSignup) {
-                await this.signUp(email, password, firstName);
-            } else {
-                await this.signIn(email, password);
+        // Validation personnalisée pour l'email
+        if (!isSignup) {
+            // Pour la connexion, accepter soit un email valide, soit le nom d'utilisateur admin
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const isAdminUsername = email === 'g.Drelall';
+            
+            if (!isValidEmail && !isAdminUsername) {
+                this.showMessage('Veuillez saisir un email valide ou utilisez votre nom d\'utilisateur administrateur', 'error');
+                return;
             }
-        } catch (error) {
-            console.error(`❌ Erreur: ${error.message}`);
+        } else {
+            // Pour l'inscription, exiger un email valide
+            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if (!isValidEmail) {
+                this.showMessage('Veuillez saisir un email valide pour l\'inscription', 'error');
+                return;
+            }
         }
-    }
-
-    async handleAuthSubmit(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const firstName = document.getElementById('firstName').value;
-        const submitBtn = document.getElementById('authSubmitBtn');
-        const isSignup = submitBtn.textContent.includes('inscrire');
 
         try {
             if (isSignup) {
@@ -332,6 +337,7 @@ class AuthManager {
                 await this.signIn(email, password);
             }
         } catch (error) {
+            this.showMessage(error.message, 'error');
             console.error(`❌ Erreur: ${error.message}`);
         }
     }
@@ -392,6 +398,7 @@ class AuthManager {
                 localStorage.setItem('saga_current_user', JSON.stringify(this.user));
                 this.updateUI();
                 this.closeAuthModal();
+                this.showMessage('Connexion administrateur réussie !', 'success');
                 console.log('✅ Connexion administrateur réussie');
                 return { data: { user: this.user }, error: null };
             }
@@ -409,6 +416,7 @@ class AuthManager {
                 email: user.email, 
                 id: user.id, 
                 firstName: user.firstName,
+                character: user.character, // Inclure les données du personnage
                 isAdmin: false
             };
             this.isAuthenticated = true;
@@ -416,12 +424,13 @@ class AuthManager {
             this.updateUI();
             
             this.closeAuthModal();
+            this.showMessage(`Bienvenue ${user.firstName} !`, 'success');
             
             console.log('✅ Connexion utilisateur réussie:', this.user);
             return { data: { user: this.user }, error: null };
         } catch (error) {
             console.error('Erreur connexion:', error);
-            return { data: null, error };
+            throw error; // Relancer l'erreur pour qu'elle soit gérée par handleAuthSubmit
         }
     }
 
@@ -517,6 +526,7 @@ class AuthManager {
             if (firstName) firstName.required = true;
         }
 
+        modal.classList.add('show');
         modal.style.display = 'flex';
         setTimeout(() => modal.style.opacity = '1', 10);
 
@@ -528,6 +538,8 @@ class AuthManager {
                 this.openAuthModal(mode === 'login' ? 'signup' : 'login');
             };
         }
+        
+        console.log('✅ Modal d\'authentification ouvert en mode:', mode);
     }
 
     closeAuthModal() {
@@ -536,6 +548,7 @@ class AuthManager {
         
         if (!modal) return;
         
+        modal.classList.remove('show');
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
@@ -543,6 +556,8 @@ class AuthManager {
                 authForm.reset();
             }
         }, 300);
+        
+        console.log('✅ Modal d\'authentification fermé');
     }
 
     closeCharacterModal() {
@@ -559,64 +574,100 @@ class AuthManager {
 
     openAccountModal() {
         const modal = document.getElementById('accountModal');
-        if (!modal) return;
-
-        // Récupérer les données utilisateur complètes
-        const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
-        const fullUserData = users.find(user => user.id === this.user.id);
-
-        if (!fullUserData) {
-            console.error('❌ Erreur : données utilisateur introuvables');
+        if (!modal) {
+            console.error('❌ Modal de compte introuvable');
             return;
         }
 
-        // Remplir les informations personnelles
-        document.getElementById('accountFirstName').textContent = fullUserData.firstName || '-';
-        document.getElementById('accountEmail').textContent = fullUserData.email || '-';
-        
-        // Formater la date de création
-        const createdDate = fullUserData.createdAt ? 
-            new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            }) : '-';
-        document.getElementById('accountCreatedAt').textContent = createdDate;
-
-        // Remplir les informations du personnage
-        const characterInfo = document.getElementById('characterInfo');
-        const noCharacterInfo = document.getElementById('noCharacterInfo');
-
-        if (fullUserData.character) {
-            // Afficher les informations du personnage
-            document.getElementById('characterFullName').textContent = 
-                `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
-            document.getElementById('characterClass').textContent = 
-                this.getClassDisplayName(fullUserData.character.class);
-            document.getElementById('characterType').textContent = 
-                this.getTypeDisplayName(fullUserData.character.type);
+        // Si c'est un administrateur, afficher des informations simplifiées
+        if (this.user && this.user.isAdmin) {
+            // Remplir les informations administrateur
+            const firstNameEl = document.getElementById('accountFirstName');
+            const emailEl = document.getElementById('accountEmail');
+            const createdAtEl = document.getElementById('accountCreatedAt');
             
-            characterInfo.style.display = 'block';
-            noCharacterInfo.style.display = 'none';
+            if (firstNameEl) firstNameEl.textContent = this.user.firstName || 'Administrateur';
+            if (emailEl) emailEl.textContent = this.user.email || 'g.Drelall';
+            if (createdAtEl) createdAtEl.textContent = 'Compte administrateur';
+
+            // Cacher les informations de personnage pour l'admin
+            const characterInfo = document.getElementById('characterInfo');
+            const noCharacterInfo = document.getElementById('noCharacterInfo');
+            if (characterInfo) characterInfo.style.display = 'none';
+            if (noCharacterInfo) noCharacterInfo.style.display = 'none';
         } else {
-            // Aucun personnage créé
-            characterInfo.style.display = 'none';
-            noCharacterInfo.style.display = 'block';
+            // Récupérer les données utilisateur complètes pour les utilisateurs normaux
+            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
+            const fullUserData = users.find(user => user.id === this.user.id);
+
+            if (!fullUserData) {
+                console.error('❌ Erreur : données utilisateur introuvables');
+                this.showMessage('Erreur : impossible de charger les données du compte', 'error');
+                return;
+            }
+
+            // Remplir les informations personnelles
+            const firstNameEl = document.getElementById('accountFirstName');
+            const emailEl = document.getElementById('accountEmail');
+            const createdAtEl = document.getElementById('accountCreatedAt');
+            
+            if (firstNameEl) firstNameEl.textContent = fullUserData.firstName || '-';
+            if (emailEl) emailEl.textContent = fullUserData.email || '-';
+            
+            // Formater la date de création
+            const createdDate = fullUserData.createdAt ? 
+                new Date(fullUserData.createdAt).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) : '-';
+            if (createdAtEl) createdAtEl.textContent = createdDate;
+
+            // Remplir les informations du personnage
+            const characterInfo = document.getElementById('characterInfo');
+            const noCharacterInfo = document.getElementById('noCharacterInfo');
+
+            if (fullUserData.character) {
+                // Afficher les informations du personnage
+                const fullNameEl = document.getElementById('characterFullName');
+                const classEl = document.getElementById('characterClass');
+                const typeEl = document.getElementById('characterType');
+                
+                if (fullNameEl) fullNameEl.textContent = 
+                    `${fullUserData.character.firstName} ${fullUserData.character.lastName}`;
+                if (classEl) classEl.textContent = 
+                    this.getClassDisplayName(fullUserData.character.class);
+                if (typeEl) typeEl.textContent = 
+                    this.getTypeDisplayName(fullUserData.character.type);
+                
+                if (characterInfo) characterInfo.style.display = 'block';
+                if (noCharacterInfo) noCharacterInfo.style.display = 'none';
+            } else {
+                // Aucun personnage créé
+                if (characterInfo) characterInfo.style.display = 'none';
+                if (noCharacterInfo) noCharacterInfo.style.display = 'block';
+            }
         }
 
-        // Afficher le modal
+        // Afficher le modal avec une animation
+        modal.classList.add('show');
         modal.style.display = 'flex';
         setTimeout(() => modal.style.opacity = '1', 10);
+        
+        console.log('✅ Modal de compte ouvert pour:', this.user.email);
     }
 
     closeAccountModal() {
         const modal = document.getElementById('accountModal');
         if (!modal) return;
 
+        modal.classList.remove('show');
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
         }, 300);
+        
+        console.log('✅ Modal de compte fermé');
     }
 
     getClassDisplayName(classKey) {

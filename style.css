@@ -33,6 +33,116 @@
 }
 
 /* ========================================
+   SYSTÈME D'AUTHENTIFICATION GLOBAL
+   ======================================== */
+
+/* Barre d'authentification dans jeux.html */
+.auth-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #226d54;
+    padding: 10px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    z-index: 999;
+}
+
+.auth-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Boutons d'authentification génériques */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons .btn-primary,
+.auth-buttons .btn-secondary,
+.user-info .btn-primary,
+.user-info .btn-secondary {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Georgia', serif;
+}
+
+.auth-buttons .btn-primary,
+.user-info .btn-primary {
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    color: #f5deb3;
+}
+
+.auth-buttons .btn-secondary,
+.user-info .btn-secondary {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.auth-buttons .btn-primary:hover,
+.user-info .btn-primary:hover {
+    background: linear-gradient(135deg, #a0522d, #8b4513);
+    transform: translateY(-1px);
+}
+
+.auth-buttons .btn-secondary:hover,
+.user-info .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+}
+
+/* Informations utilisateur dans le header */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-info #userDisplayName {
+    color: #f5deb3;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    min-width: 120px;
+}
+
+/* Styles pour les modals d'authentification */
+.auth-switch {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(139, 69, 19, 0.3);
+}
+
+.auth-switch p {
+    color: #ddc9a3;
+    margin: 0;
+}
+
+.auth-switch a {
+    color: #8b4513;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.auth-switch a:hover {
+    color: #a0522d;
+    text-decoration: underline;
+}
+
+/* ========================================
    FORMULAIRE DE CRÉATION DE PERSONNAGE
    ======================================== */
 .character-modal {
