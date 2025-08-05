@@ -62,7 +62,7 @@ class AuthManager {
         const prevAuthBtn = document.getElementById('prevAuthBtn');
 
         if (closeAuthBtn) {
-            closeAuthBtn.addEventListener('click', () => this.closeAuthModal());
+            closeAuthBtn.addEventListener('click', () => this.cancelRegistrationProcess());
         }
 
         if (closeAccountBtn) {
@@ -70,7 +70,7 @@ class AuthManager {
         }
 
         if (cancelAuthBtn) {
-            cancelAuthBtn.addEventListener('click', () => this.closeAuthModal());
+            cancelAuthBtn.addEventListener('click', () => this.cancelRegistrationProcess());
         }
 
         if (prevAuthBtn) {
@@ -88,7 +88,7 @@ class AuthManager {
         if (authModal) {
             authModal.addEventListener('click', (e) => {
                 if (e.target === authModal) {
-                    this.closeAuthModal();
+                    this.cancelRegistrationProcess();
                 }
             });
         }
@@ -735,12 +735,35 @@ class AuthManager {
         modal.style.opacity = '0';
         setTimeout(() => {
             modal.style.display = 'none';
-            if (authForm) {
+            // Ne réinitialiser le formulaire que si nous n'avons pas de données temporaires à conserver
+            if (authForm && !this.tempRegistrationData) {
                 authForm.reset();
             }
         }, 300);
         
         console.log('✅ Modal d\'authentification fermé');
+    }
+
+    cancelRegistrationProcess() {
+        // Nettoyer les données temporaires
+        this.tempRegistrationData = null;
+        
+        // Fermer le modal d'authentification
+        const modal = document.getElementById('authModal');
+        const authForm = document.getElementById('authForm');
+        
+        if (!modal) return;
+        
+        modal.classList.remove('show');
+        modal.style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            if (authForm) {
+                authForm.reset(); // Réinitialiser puisque nous annulons tout
+            }
+        }, 300);
+        
+        console.log('❌ Processus d\'inscription annulé - Données temporaires supprimées');
     }
 
     closeCharacterModal() {
@@ -765,20 +788,35 @@ class AuthManager {
             // Rouvrir le modal d'authentification avec les données pré-remplies
             this.openAuthModal('signup');
             
-            // Pré-remplir les champs avec les données temporaires
-            const emailInput = document.getElementById('email');
-            const firstNameInput = document.getElementById('firstName');
-            const passwordInput = document.getElementById('password');
-            
-            if (emailInput) emailInput.value = this.tempRegistrationData.email || '';
-            if (firstNameInput) firstNameInput.value = this.tempRegistrationData.firstName || '';
-            if (passwordInput) passwordInput.value = this.tempRegistrationData.password || '';
-            
-            // Afficher le bouton "Précédent" puisque nous venons de l'étape 2
-            const prevAuthBtn = document.getElementById('prevAuthBtn');
-            if (prevAuthBtn) {
-                prevAuthBtn.style.display = 'inline-block';
-            }
+            // Attendre que le modal soit complètement ouvert avant de pré-remplir
+            setTimeout(() => {
+                // Pré-remplir les champs avec les données temporaires
+                const emailInput = document.getElementById('email');
+                const firstNameInput = document.getElementById('firstName');
+                const passwordInput = document.getElementById('password');
+                
+                if (emailInput && this.tempRegistrationData.email) {
+                    emailInput.value = this.tempRegistrationData.email;
+                }
+                if (firstNameInput && this.tempRegistrationData.firstName) {
+                    firstNameInput.value = this.tempRegistrationData.firstName;
+                }
+                if (passwordInput && this.tempRegistrationData.password) {
+                    passwordInput.value = this.tempRegistrationData.password;
+                }
+                
+                // Afficher le bouton "Précédent" puisque nous venons de l'étape 2
+                const prevAuthBtn = document.getElementById('prevAuthBtn');
+                if (prevAuthBtn) {
+                    prevAuthBtn.style.display = 'inline-block';
+                }
+                
+                console.log('🔙 Retour à l\'étape 1 - Données restaurées:', {
+                    email: this.tempRegistrationData.email,
+                    firstName: this.tempRegistrationData.firstName,
+                    hasPassword: !!this.tempRegistrationData.password
+                });
+            }, 100); // Délai pour laisser le temps au modal de s'ouvrir
             
             console.log('🔙 Retour à l\'étape 1 de l\'inscription');
         }
