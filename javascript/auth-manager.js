@@ -104,8 +104,12 @@ class AuthManager {
         const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            // Afficher le prénom s'il existe, sinon rien
-            const displayName = this.user.firstName || '';
+            // Ne pas afficher de nom pour l'administrateur, afficher le prénom pour les autres
+            let displayName = '';
+            if (!this.user.isAdmin) {
+                displayName = this.user.firstName || '';
+            }
+            
             if (userDisplayName) userDisplayName.textContent = displayName;
             if (userInfo) userInfo.style.display = 'flex';
             if (authButtons) authButtons.style.display = 'none';
@@ -134,7 +138,7 @@ class AuthManager {
         const adminBtn = document.createElement('button');
         adminBtn.id = 'adminBtn';
         adminBtn.className = 'btn-primary admin-btn';
-        adminBtn.textContent = '⚙️ Admin';
+        adminBtn.textContent = 'Admin';
         adminBtn.style.marginLeft = '10px';
         
         // Ajouter l'événement

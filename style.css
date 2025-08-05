@@ -74,6 +74,9 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: 'Georgia', serif;
+    min-width: 110px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .auth-buttons .btn-primary,
@@ -2627,17 +2630,23 @@ body:has(#gameCanvas) .user-info span {
 
 .admin-btn {
     background: linear-gradient(135deg, #c41e3a, #8b0000) !important;
-    border: 2px solid #8b0000 !important;
+    border: none !important;
     color: #ffffff !important;
-    font-weight: bold !important;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
-    box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4) !important;
+    padding: 8px 16px !important;
+    font-size: 0.9rem !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Georgia', serif !important;
+    min-width: 110px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    font-weight: 500 !important;
 }
 
 .admin-btn:hover {
     background: linear-gradient(135deg, #8b0000, #c41e3a) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(196, 30, 58, 0.6) !important;
+    transform: translateY(-1px) !important;
 }
 
 .users-table {
