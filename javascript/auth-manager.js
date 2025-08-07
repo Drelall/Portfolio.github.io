@@ -1,9 +1,6 @@
-// Gestionnaire d'authentification Local (pour tests)
 class AuthManager {
     constructor() {
         this.user = null;
-        this.isAuthenticated = false;
-        // Données temporaires pour l'inscription en 2 étapes
         this.tempRegistrationData = null;
         this.init();
     }
@@ -109,7 +106,7 @@ class AuthManager {
         const userDisplayName = document.getElementById('userDisplayName');
 
         if (this.isAuthenticated && this.user) {
-            // Ne pas afficher de nom pour l'administrateur, afficher le prénom pour les autres
+            // Ne pas afficher de nom pour l'administrateur, afficher le pseudo pour les autres
             let displayName = '';
             if (!this.user.isAdmin) {
                 displayName = this.user.firstName || '';
@@ -158,7 +155,7 @@ class AuthManager {
             }
 
             if (!firstName.trim()) {
-                throw new Error('Le prénom ne peut pas être vide');
+                throw new Error('Le pseudo ne peut pas être vide');
             }
 
             // Vérifier si l'utilisateur existe déjà
@@ -271,7 +268,7 @@ class AuthManager {
                 console.log('');
                 console.log('Votre compte a été créé avec succès :');
                 console.log(`- Email: ${user.email}`);
-                console.log(`- Prénom: ${user.firstName}`);
+                console.log(`- Pseudo: ${user.firstName}`);
                 console.log(`- Personnage: ${user.character.firstName} ${user.character.lastName}`);
                 console.log(`- Classe: ${user.character.class}`);
                 console.log(`- Type: ${user.character.type}`);
@@ -294,7 +291,7 @@ class AuthManager {
 
     async handleAuthSubmit(e) {
         e.preventDefault();
-        
+
         const emailInput = document.getElementById('email');
         const email = emailInput.value.trim();
         const password = document.getElementById('password').value;
@@ -304,12 +301,12 @@ class AuthManager {
 
         // Validation personnalisée pour l'email
         if (!isSignup) {
-            // Pour la connexion, accepter soit un email valide, soit le nom d'utilisateur admin
+            // Pour la connexion, accepter soit un email valide, soit l'email admin
             const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
             const isAdminUsername = email === 'g.Drelall';
-            
+
             if (!isValidEmail && !isAdminUsername) {
-                this.showMessage('Veuillez saisir un email valide ou utilisez votre nom d\'utilisateur administrateur', 'error');
+                this.showMessage('Veuillez saisir un email valide', 'error');
                 return;
             }
         } else {
@@ -332,6 +329,8 @@ class AuthManager {
             console.error(`❌ Erreur: ${error.message}`);
         }
     }
+
+
 
     async signUp(email, password, firstName) {
         try {
@@ -365,13 +364,13 @@ class AuthManager {
     openCharacterFormModal() {
         // Chercher le modal dans l'index.html d'abord, sinon dans jeux.html
         let modal = document.getElementById('characterFormModal');
-        
+
         if (!modal) {
             // Créer le modal de création de personnage dynamiquement
             this.createCharacterFormModal();
             modal = document.getElementById('characterFormModal');
         }
-        
+
         if (modal) {
             modal.style.display = 'flex';
             setTimeout(() => modal.style.opacity = '1', 10);
@@ -399,13 +398,13 @@ class AuthManager {
                                     <label for="characterFirstName">Prénom du personnage :</label>
                                     <input type="text" id="characterFirstName" name="characterFirstName" required maxlength="20" placeholder="Prénom de votre personnage">
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="characterLastName">Nom du personnage :</label>
                                     <input type="text" id="characterLastName" name="characterLastName" required maxlength="20" placeholder="Nom de votre personnage">
                                 </div>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="characterClass">Classe de personnage :</label>
                                 <select id="characterClass" name="characterClass" required>
@@ -416,11 +415,11 @@ class AuthManager {
                                     <option value="citoyen">Citoyen</option>
                                 </select>
                             </div>
-                            
+
                             <div class="class-description" id="classDescription">
                                 <p>Sélectionnez une classe pour voir sa description.</p>
                             </div>
-                            
+
                             <div class="form-actions">
                                 <button type="button" id="prevToAuthBtn" class="btn-secondary">Précédent</button>
                                 <button type="button" id="cancelCharacterBtn" class="btn-secondary">Annuler</button>
@@ -436,11 +435,11 @@ class AuthManager {
                                     <option value="">-- Choisissez un type --</option>
                                 </select>
                             </div>
-                            
+
                             <div class="type-description" id="typeDescription">
                                 <p>Sélectionnez un type pour voir sa description.</p>
                             </div>
-                            
+
                             <div class="form-actions">
                                 <button type="button" id="prevCharacterStepBtn" class="btn-secondary">Précédent</button>
                                 <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
@@ -450,9 +449,9 @@ class AuthManager {
                 </div>
             </div>
         `;
-        
+
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
+
         // Attacher les événements pour le nouveau modal
         this.attachCharacterFormEvents();
     }
@@ -465,7 +464,7 @@ class AuthManager {
         const nextStepBtn = document.getElementById('nextCharacterStepBtn');
         const prevStepBtn = document.getElementById('prevCharacterStepBtn');
         const characterForm = document.getElementById('characterForm');
-        
+
         // Fermeture du modal
         if (closeBtn) {
             closeBtn.addEventListener('click', () => {
@@ -474,7 +473,7 @@ class AuthManager {
                 this.tempRegistrationData = null;
             });
         }
-        
+
         if (cancelBtn) {
             cancelBtn.addEventListener('click', () => {
                 this.closeCharacterModal();
@@ -482,26 +481,26 @@ class AuthManager {
                 this.tempRegistrationData = null;
             });
         }
-        
+
         // Bouton précédent vers l'authentification
         if (prevToAuthBtn) {
             prevToAuthBtn.addEventListener('click', () => this.handlePrevAuthStep());
         }
-        
+
         // Navigation entre les étapes du personnage
         if (nextStepBtn) {
             nextStepBtn.addEventListener('click', () => this.nextCharacterStep());
         }
-        
+
         if (prevStepBtn) {
             prevStepBtn.addEventListener('click', () => this.prevCharacterStep());
         }
-        
+
         // Soumission du formulaire de personnage
         if (characterForm) {
             characterForm.addEventListener('submit', (e) => this.handleCharacterFormSubmit(e));
         }
-        
+
         // Fermeture en cliquant en dehors
         if (modal) {
             modal.addEventListener('click', (e) => {
@@ -516,7 +515,7 @@ class AuthManager {
     nextCharacterStep() {
         const step1 = document.getElementById('characterStep1');
         const step2 = document.getElementById('characterStep2');
-        
+
         if (step1 && step2) {
             step1.style.display = 'none';
             step2.style.display = 'block';
@@ -526,7 +525,7 @@ class AuthManager {
     prevCharacterStep() {
         const step1 = document.getElementById('characterStep1');
         const step2 = document.getElementById('characterStep2');
-        
+
         if (step1 && step2) {
             step2.style.display = 'none';
             step1.style.display = 'block';
@@ -535,7 +534,7 @@ class AuthManager {
 
     async handleCharacterFormSubmit(e) {
         e.preventDefault();
-        
+
         // Récupérer les données du formulaire
         const characterData = {
             characterFirstName: document.getElementById('characterFirstName').value.trim(),
@@ -543,7 +542,7 @@ class AuthManager {
             characterClass: document.getElementById('characterClass').value,
             characterType: document.getElementById('characterType').value
         };
-        
+
         try {
             const result = await this.finalizeRegistration(characterData);
             if (result.success) {
@@ -686,25 +685,25 @@ class AuthManager {
             if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
             if (prevAuthBtn) prevAuthBtn.style.display = 'none';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
-            // Masquer le champ prénom pour la connexion
+            // Masquer le champ pseudo pour la connexion
             if (firstNameGroup) firstNameGroup.style.display = 'none';
             if (firstName) firstName.required = false;
         } else {
             if (title) title.textContent = 'S\'inscrire - Étape 1/2';
             if (submitBtn) {
-                submitBtn.textContent = 'Valider et continuer';
+                submitBtn.textContent = 'Suivant';
                 submitBtn.style.display = 'inline-block';
             }
             if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
-            
+
             // Afficher le bouton "Précédent" seulement si nous avons des données temporaires
             // (cela signifie que nous revenons de l'étape 2)
             if (prevAuthBtn) {
                 prevAuthBtn.style.display = this.tempRegistrationData ? 'inline-block' : 'none';
             }
-            
+
             if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
-            // Afficher le champ prénom pour l'inscription
+            // Afficher le champ pseudo pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
             if (firstName) firstName.required = true;
         }
@@ -966,7 +965,7 @@ class AuthManager {
                             <h3 style="color: #ddc9a3;">Informations Administrateur</h3>
                             <div class="account-info">
                                 <div class="info-row">
-                                    <span class="info-label">Prénom :</span>
+                                    <span class="info-label">Pseudo :</span>
                                     <span id="adminAccountFirstName" class="info-value">-</span>
                                 </div>
                                 <div class="info-row">
@@ -1027,7 +1026,7 @@ class AuthManager {
         let usersHTML = `
             <div class="users-table">
                 <div class="users-header">
-                    <div class="user-col">Prénom</div>
+                    <div class="user-col">Pseudo</div>
                     <div class="user-col">Email</div>
                     <div class="user-col">Date création</div>
                     <div class="user-col">Actions</div>
@@ -1074,8 +1073,8 @@ class AuthManager {
 
         // S'assurer que l'utilisateur a un firstName défini
         if (!this.user.firstName) {
-            console.warn('⚠️ Utilisateur sans prénom, utilisation de l\'email comme nom');
-            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme prénom
+            console.warn('⚠️ Utilisateur sans pseudo, utilisation de l\'email comme nom');
+            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme pseudo
         }
 
         const resendBtn = document.getElementById('resendEmailBtn');
@@ -1191,7 +1190,7 @@ class AuthManager {
         let usersHTML = `
             <div class="users-table">
                 <div class="users-header">
-                    <div class="user-col">Prénom</div>
+                    <div class="user-col">Pseudo</div>
                     <div class="user-col">Email</div>
                     <div class="user-col">Date création</div>
                     <div class="user-col">Actions</div>

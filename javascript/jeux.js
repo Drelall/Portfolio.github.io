@@ -457,11 +457,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Navigation entre les étapes
     function goToStep(stepNumber) {
         currentStep = stepNumber;
-        
+
         // Masquer toutes les étapes
         step1.classList.remove('active');
         step2.classList.remove('active');
-        
+
         // Afficher l'étape courante
         if (stepNumber === 1) {
             step1.classList.add('active');
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const firstName = document.getElementById('characterFirstName').value.trim();
         const lastName = document.getElementById('characterLastName').value.trim();
         const selectedClass = characterClass.value;
-        
+
         if (!firstName || !lastName || !selectedClass) {
             alert('Veuillez remplir tous les champs de cette étape.');
             return false;
@@ -541,12 +541,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const characterLastName = document.getElementById('characterLastName').value.trim();
             const selectedClass = characterClass.value;
             const selectedType = characterType.value;
-            
+
             if (!characterFirstName || !characterLastName || !selectedClass || !selectedType) {
                 alert('Veuillez remplir tous les champs.');
                 return;
             }
-            
+
             // Créer l'objet personnage
             const characterData = {
                 characterFirstName: characterFirstName,
@@ -554,11 +554,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 characterClass: selectedClass,
                 characterType: selectedType
             };
-            
+
             // Si nous sommes dans un processus d'inscription, finaliser l'inscription
             if (window.authManager.tempRegistrationData) {
                 const result = await window.authManager.finalizeRegistration(characterData);
-                
+
                 if (result.success) {
                     // Le modal sera fermé par finalizeRegistration
                 } else {

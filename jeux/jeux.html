@@ -39,12 +39,12 @@
             </div>
             <form id="authForm" class="character-form">
                 <div class="form-group" id="firstNameGroup" style="display: none;">
-                    <label for="firstName">Prénom :</label>
-                    <input type="text" id="firstName" name="firstName" placeholder="Votre prénom">
+                    <label for="firstName">Pseudo :</label>
+                    <input type="text" id="firstName" name="firstName" placeholder="Votre pseudo">
                 </div>
                 <div class="form-group">
-                    <label for="email">Email ou nom d'utilisateur :</label>
-                    <input type="text" id="email" name="email" required placeholder="votre@email.com ou nom d'utilisateur">
+                    <label for="email">Email :</label>
+                    <input type="text" id="email" name="email" required placeholder="votre@email.com">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe :</label>
@@ -78,13 +78,13 @@
                             <label for="characterFirstName">Prénom :</label>
                             <input type="text" id="characterFirstName" name="characterFirstName" required maxlength="20" placeholder="prénom">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="characterLastName">Nom :</label>
                             <input type="text" id="characterLastName" name="characterLastName" required maxlength="20" placeholder="nom">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="characterClass">Classe de personnage :</label>
                         <select id="characterClass" name="characterClass" required>
@@ -95,11 +95,11 @@
                             <option value="citoyen">Citoyen</option>
                         </select>
                     </div>
-                    
+
                     <div class="class-description" id="classDescription">
                         <p>Sélectionnez une classe pour voir sa description.</p>
                     </div>
-                    
+
                     <div class="form-actions">
                         <button type="button" id="prevToAuthBtn" class="btn-secondary">Précédent</button>
                         <button type="button" id="cancelBtn" class="btn-secondary">Annuler</button>
@@ -115,11 +115,11 @@
                             <option value="">-- Choisissez un type --</option>
                         </select>
                     </div>
-                    
+
                     <div class="type-description" id="typeDescription">
                         <p>Sélectionnez un type pour voir sa description.</p>
                     </div>
-                    
+
                     <div class="form-actions">
                         <button type="button" id="prevStepBtn" class="btn-secondary">Précédent</button>
                         <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
@@ -142,7 +142,7 @@
                     <h3>Informations personnelles</h3>
                     <div class="account-info">
                         <div class="info-row">
-                            <span class="info-label">Prénom :</span>
+                            <span class="info-label">Pseudo :</span>
                             <span id="accountFirstName" class="info-value">-</span>
                         </div>
                         <div class="info-row">

@@ -181,9 +181,9 @@ class IndexAuthManager {
             throw new Error('Un compte avec cet email existe déjà');
         }
         
-        // Validation du prénom pour l'inscription
+        // Validation du pseudo pour l'inscription
         if (!firstName || firstName.trim() === '') {
-            throw new Error('Le prénom est requis pour l\'inscription');
+            throw new Error('Le pseudo est requis pour l\'inscription');
         }
         
         // Créer le nouvel utilisateur
@@ -256,14 +256,14 @@ class IndexAuthManager {
             if (title) title.textContent = 'Se connecter';
             if (submitBtn) submitBtn.textContent = 'Se connecter';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
-            // Masquer le champ prénom pour la connexion
+            // Masquer le champ pseudo pour la connexion
             if (firstNameGroup) firstNameGroup.style.display = 'none';
             if (firstName) firstName.required = false;
         } else {
             if (title) title.textContent = 'S\'inscrire';
             if (submitBtn) submitBtn.textContent = 'S\'inscrire';
             if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
-            // Afficher le champ prénom pour l'inscription
+            // Afficher le champ pseudo pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
             if (firstName) firstName.required = true;
         }
@@ -373,8 +373,8 @@ class IndexAuthManager {
 
         // S'assurer que l'utilisateur a un firstName défini
         if (!this.user.firstName) {
-            console.warn('⚠️ Utilisateur sans prénom, utilisation de l\'email comme nom');
-            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme prénom
+            console.warn('⚠️ Utilisateur sans pseudo, utilisation de l\'email comme nom');
+            this.user.firstName = this.user.email.split('@')[0]; // Utiliser la partie avant @ comme pseudo
         }
 
         const resendBtn = document.getElementById('resendEmailBtn');
