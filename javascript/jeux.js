@@ -299,8 +299,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelBtn = document.getElementById('cancelBtn');
     const nextStepBtn = document.getElementById('nextStepBtn');
     const prevStepBtn = document.getElementById('prevStepBtn');
+    const nextStepBtn2 = document.getElementById('nextStepBtn2');
+    const prevStepBtn2 = document.getElementById('prevStepBtn2');
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const characterDeity = document.getElementById('characterDeity');
+    const deityDescription = document.getElementById('deityDescription');
     
     // Bouton pour revenir à l'authentification depuis le formulaire de personnage
     const prevToAuthBtnCharacter = document.getElementById('prevToAuthBtn');
@@ -362,7 +367,33 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
+    // Gestionnaire pour la sélection de divinité
+    if (characterDeity) {
+        characterDeity.addEventListener('change', function() {
+            const selectedDeity = this.value;
+            const descriptions = {
+                'apophis': 'Apophis, le serpent du chaos, représente la destruction créatrice et la transformation.',
+                'thor': 'Thor, le dieu du tonnerre, symbolise la force, la protection et la justice.',
+                'magicien_oz': 'Le Magicien d\'Oz représente l\'illusion, la sagesse cachée et la révélation de la vérité.',
+                'sphinx': 'Le Sphinx incarne les mystères, les énigmes et la connaissance ésotérique.',
+                'phenix': 'Le Phénix symbolise la renaissance, la transformation et l\'immortalité.',
+                'dragon': 'Le Dragon représente la puissance primordiale, la sagesse ancienne et la magie.',
+                'obscurium': 'L\'Obscurium incarne les ténèbres créatrices et les secrets de l\'univers.',
+                'lapin_blanc': 'Le Lapin Blanc symbolise le temps, l\'urgence et les passages vers d\'autres réalités.',
+                'grand_architecte': 'Le Grand Architecte représente l\'ordre, la construction et la planification divine.'
+            };
+
+            if (deityDescription) {
+                if (selectedDeity && descriptions[selectedDeity]) {
+                    deityDescription.innerHTML = `<p><strong>${this.options[this.selectedIndex].text}</strong></p><p>${descriptions[selectedDeity]}</p>`;
+                } else {
+                    deityDescription.innerHTML = '<p>Sélectionnez une divinité pour voir sa description.</p>';
+                }
+            }
+        });
+    }
+
     // ANCIEN Formulaire d'authentification - DÉSACTIVÉ pour navigation libre
     // authForm.addEventListener('submit', async function(e) {
     //     e.preventDefault();
@@ -416,6 +447,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (prevStepBtn) {
         prevStepBtn.addEventListener('click', function() {
             goToStep(1);
+        });
+    }
+
+    // Navigation étape 2 → étape 3
+    if (nextStepBtn2) {
+        nextStepBtn2.addEventListener('click', function() {
+            // Permettre la navigation libre sans validation
+            goToStep(3);
+        });
+    }
+
+    // Navigation étape 3 → étape 2
+    if (prevStepBtn2) {
+        prevStepBtn2.addEventListener('click', function() {
+            goToStep(2);
         });
     }
 
@@ -475,20 +521,72 @@ document.addEventListener('DOMContentLoaded', function() {
     function goToStep(stepNumber) {
         currentStep = stepNumber;
 
-        if (step1 && step2) {
+        // Changer le titre selon l'étape
+        const titleElement = document.getElementById('characterFormTitle');
+
+        if (step1 && step2 && step3) {
             // Masquer toutes les étapes
             step1.classList.remove('active');
             step2.classList.remove('active');
+            step3.classList.remove('active');
 
-            // Afficher l'étape courante
+            // Afficher l'étape courante et changer le titre
             if (stepNumber === 1) {
                 step1.classList.add('active');
+                if (titleElement) titleElement.textContent = 'Étape 2 - Classe du personnage';
             } else if (stepNumber === 2) {
                 step2.classList.add('active');
+                if (titleElement) titleElement.textContent = 'Étape 3 - Type de personnage';
+            } else if (stepNumber === 3) {
+                step3.classList.add('active');
+                if (titleElement) titleElement.textContent = 'Étape 4 - Divinité';
+                // Mettre à jour les options de divinité selon le type choisi
+                updateDeityOptions();
             }
         }
     }
-    
+
+    // Mettre à jour les options de divinité selon le type de personnage
+    function updateDeityOptions() {
+        if (!characterDeity || !characterType) return;
+
+        const selectedType = characterType.value;
+        const deities = {
+            'agent': [
+                { value: 'apophis', text: 'Apophis' },
+                { value: 'thor', text: 'Thor' }
+            ],
+            'initie': [
+                { value: 'magicien_oz', text: 'Magicien d\'Oz' },
+                { value: 'sphinx', text: 'Le Sphinx' }
+            ],
+            'sorcier': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'citoyen': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ]
+        };
+
+        // Vider les options actuelles
+        characterDeity.innerHTML = '<option value="">-- Choisissez une divinité --</option>';
+
+        // Ajouter les nouvelles options selon le type
+        if (deities[selectedType]) {
+            deities[selectedType].forEach(deity => {
+                const option = document.createElement('option');
+                option.value = deity.value;
+                option.textContent = deity.text;
+                characterDeity.appendChild(option);
+            });
+        }
+
+        console.log('✅ Options de divinité mises à jour pour le type:', selectedType);
+    }
+
     // Validation de l'étape 1
     function validateStep1() {
         const firstName = document.getElementById('characterFirstName').value.trim();

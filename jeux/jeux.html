@@ -67,7 +67,7 @@
     <div id="characterFormModal" class="character-modal">
         <div class="character-form-container">
             <div class="character-form-header">
-                <h2>Étape 2</h2>
+                <h2 id="characterFormTitle">Étape 2 - Classe du personnage</h2>
                 <button id="closeFormBtn" class="close-btn">&times;</button>
             </div>
             <form id="characterForm" class="character-form">
@@ -113,6 +113,10 @@
                         <label for="characterType">Type de personnage :</label>
                         <select id="characterType" name="characterType">
                             <option value="">-- Choisissez un type --</option>
+                            <option value="agent">Agent du Gouvernement</option>
+                            <option value="initie">Initié</option>
+                            <option value="sorcier">Sorcier</option>
+                            <option value="citoyen">Citoyen</option>
                         </select>
                     </div>
 
@@ -122,6 +126,25 @@
 
                     <div class="form-actions">
                         <button type="button" id="prevStepBtn" class="btn-secondary">Précédent</button>
+                        <button type="button" id="nextStepBtn2" class="btn-primary">Suivant</button>
+                    </div>
+                </div>
+
+                <!-- Étape 4: Divinité -->
+                <div id="step3" class="form-step">
+                    <div class="form-group">
+                        <label for="characterDeity">Divinité :</label>
+                        <select id="characterDeity" name="characterDeity">
+                            <option value="">-- Choisissez une divinité --</option>
+                        </select>
+                    </div>
+
+                    <div class="deity-description" id="deityDescription">
+                        <p>Sélectionnez une divinité pour voir sa description.</p>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="prevStepBtn2" class="btn-secondary">Précédent</button>
                         <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
                     </div>
                 </div>

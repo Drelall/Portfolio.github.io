@@ -379,7 +379,7 @@ class AuthManager {
             <div id="characterFormModal" class="character-modal" style="display: none; opacity: 0;">
                 <div class="character-form-container">
                     <div class="character-form-header">
-                        <h2>Étape 2</h2>
+                        <h2 id="characterFormTitle">Étape 2 - Classe du personnage</h2>
                         <button id="closeCharacterFormBtn" class="close-btn">&times;</button>
                     </div>
                     <form id="characterForm" class="character-form">
@@ -434,6 +434,25 @@ class AuthManager {
 
                             <div class="form-actions">
                                 <button type="button" id="prevCharacterStepBtn" class="btn-secondary">Précédent</button>
+                                <button type="button" id="nextCharacterStepBtn2" class="btn-primary">Suivant</button>
+                            </div>
+                        </div>
+
+                        <!-- Étape 3: Divinité -->
+                        <div id="characterStep3" class="form-step" style="display: none;">
+                            <div class="form-group">
+                                <label for="characterDeity">Divinité :</label>
+                                <select id="characterDeity" name="characterDeity">
+                                    <option value="">-- Choisissez une divinité --</option>
+                                </select>
+                            </div>
+
+                            <div class="deity-description" id="deityDescription">
+                                <p>Sélectionnez une divinité pour voir sa description.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" id="prevCharacterStepBtn2" class="btn-secondary">Précédent</button>
                                 <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
                             </div>
                         </div>
@@ -704,7 +723,7 @@ class AuthManager {
             if (firstNameGroup) firstNameGroup.style.display = 'none';
             if (firstName) firstName.required = false;
         } else {
-            if (title) title.textContent = 'S\'inscrire - Étape 1/2';
+            if (title) title.textContent = 'Étape 1 - Inscription';
             if (submitBtn) {
                 submitBtn.textContent = 'Suivant';
                 submitBtn.style.display = 'inline-block';
