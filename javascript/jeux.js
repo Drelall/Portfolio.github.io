@@ -552,20 +552,104 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const selectedType = characterType.value;
         const deities = {
-            'agent': [
+            // Types d'Agent du Gouvernement
+            'soldat': [
                 { value: 'apophis', text: 'Apophis' },
                 { value: 'thor', text: 'Thor' }
             ],
-            'initie': [
+            'archeologue': [
+                { value: 'apophis', text: 'Apophis' },
+                { value: 'thor', text: 'Thor' }
+            ],
+            'medecin': [
+                { value: 'apophis', text: 'Apophis' },
+                { value: 'thor', text: 'Thor' }
+            ],
+            'ingenieur': [
+                { value: 'apophis', text: 'Apophis' },
+                { value: 'thor', text: 'Thor' }
+            ],
+            // Types d'Initié
+            'exorciste': [
                 { value: 'magicien_oz', text: 'Magicien d\'Oz' },
                 { value: 'sphinx', text: 'Le Sphinx' }
             ],
-            'sorcier': [
+            'tueur_monstre': [
+                { value: 'magicien_oz', text: 'Magicien d\'Oz' },
+                { value: 'sphinx', text: 'Le Sphinx' }
+            ],
+            'chasseur_fantome': [
+                { value: 'magicien_oz', text: 'Magicien d\'Oz' },
+                { value: 'sphinx', text: 'Le Sphinx' }
+            ],
+            // Types de Sorcier
+            'necromancien': [
                 { value: 'phenix', text: 'Le Phénix' },
                 { value: 'dragon', text: 'Le Dragon' },
                 { value: 'obscurium', text: 'L\'Obscurium' }
             ],
-            'citoyen': [
+            'druide': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'chaman': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'alchimiste': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'enchanteur': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'occultiste': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'elementaliste': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'thaumaturge': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            'demonologue': [
+                { value: 'phenix', text: 'Le Phénix' },
+                { value: 'dragon', text: 'Le Dragon' },
+                { value: 'obscurium', text: 'L\'Obscurium' }
+            ],
+            // Types de Citoyen
+            'hacker': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ],
+            'dissident': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ],
+            'ouvrier': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ],
+            'fonctionnaire': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ],
+            'bourgeois': [
+                { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
+                { value: 'grand_architecte', text: 'Le Grand Architecte' }
+            ],
+            'lobby': [
                 { value: 'lapin_blanc', text: 'Le Lapin Blanc' },
                 { value: 'grand_architecte', text: 'Le Grand Architecte' }
             ]
