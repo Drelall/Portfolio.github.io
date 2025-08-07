@@ -313,6 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const closeAuthBtn = document.getElementById('closeAuthBtn');
     const cancelAuthBtn = document.getElementById('cancelAuthBtn');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
     const prevToAuthBtn = document.getElementById('prevToAuthBtn');
     
     let currentStep = 1;
@@ -362,31 +363,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Formulaire d'authentification
-    authForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const firstName = document.getElementById('firstName').value;
-        const authTitle = document.getElementById('authTitle').textContent;
-        
-        if (authTitle.includes('S\'inscrire')) {
-            // Première étape de l'inscription
-            const result = await window.authManager.validateRegistrationStep1(email, password, firstName);
-            if (result.success) {
-                // Passer au formulaire de création de personnage
-                window.authManager.closeAuthModal();
-                showCharacterForm();
-                window.authManager.showMessage('✅ Étape 1 validée ! Créez maintenant votre personnage.', 'success');
-            } else {
-                window.authManager.showMessage(`❌ ${result.error}`, 'error');
-            }
-        } else {
-            // Connexion normale
-            await window.authManager.signIn(email, password);
-        }
-    });
+    // ANCIEN Formulaire d'authentification - DÉSACTIVÉ pour navigation libre
+    // authForm.addEventListener('submit', async function(e) {
+    //     e.preventDefault();
+    //
+    //     const email = document.getElementById('email').value;
+    //     const password = document.getElementById('password').value;
+    //     const firstName = document.getElementById('firstName').value;
+    //     const authTitle = document.getElementById('authTitle').textContent;
+    //
+    //     if (authTitle.includes('S\'inscrire')) {
+    //         // Première étape de l'inscription
+    //         const result = await window.authManager.validateRegistrationStep1(email, password, firstName);
+    //         if (result.success) {
+    //             // Passer au formulaire de création de personnage
+    //             window.authManager.closeAuthModal();
+    //             showCharacterForm();
+    //             window.authManager.showMessage('✅ Étape 1 validée ! Créez maintenant votre personnage.', 'success');
+    //         } else {
+    //             window.authManager.showMessage(`❌ ${result.error}`, 'error');
+    //         }
+    //     } else {
+    //         // Connexion normale
+    //         await window.authManager.signIn(email, password);
+    //     }
+    // });
     
     // === ÉVÉNEMENTS DE CRÉATION DE PERSONNAGE ===
     
@@ -415,6 +416,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (prevStepBtn) {
         prevStepBtn.addEventListener('click', function() {
             goToStep(1);
+        });
+    }
+
+    // Navigation libre pour l'étape 1 (authentification) - comme l'étape 2
+    if (authSubmitBtn) {
+        authSubmitBtn.addEventListener('click', function() {
+            console.log('🔧 MODE TEST : Navigation libre étape 1 → étape 2');
+            // Fermer le modal d'authentification
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+            // Ouvrir directement le formulaire de personnage (étape 2)
+            showCharacterForm();
         });
     }
     

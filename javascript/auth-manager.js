@@ -145,37 +145,29 @@ class AuthManager {
     // Première étape de l'inscription - validation des données personnelles
     async validateRegistrationStep1(email, password, firstName) {
         try {
-            // Vérifications de base
-            if (!email || !password || !firstName) {
-                throw new Error('Tous les champs sont requis');
-            }
+            // MODE TEST : Pas de validation, toujours réussir
+            console.log('🔧 MODE TEST : Validation étape 1 forcée à succès');
 
-            if (password.length < 6) {
-                throw new Error('Le mot de passe doit contenir au moins 6 caractères');
-            }
-
-            if (!firstName.trim()) {
-                throw new Error('Le pseudo ne peut pas être vide');
-            }
-
-            // Vérifier si l'utilisateur existe déjà
-            const users = JSON.parse(localStorage.getItem('saga_users') || '[]');
-            if (users.find(user => user.email === email)) {
-                throw new Error('Un compte avec cet email existe déjà');
-            }
-
-            // Stocker les données temporairement
+            // Stocker les données temporairement (avec des valeurs par défaut si vides)
             this.tempRegistrationData = {
-                email: email.trim(),
-                password: password,
-                firstName: firstName.trim(),
+                email: email.trim() || 'test@example.com',
+                password: password || 'password123',
+                firstName: firstName.trim() || 'TestUser',
                 timestamp: Date.now()
             };
 
-            console.log('✅ Étape 1 de l\'inscription validée pour:', email);
+            console.log('✅ Étape 1 de l\'inscription validée pour:', this.tempRegistrationData.email);
             return { success: true, data: this.tempRegistrationData };
         } catch (error) {
-            return { success: false, error: error.message };
+            // En mode test, toujours retourner succès
+            console.log('🔧 MODE TEST : Erreur ignorée, succès forcé');
+            this.tempRegistrationData = {
+                email: 'test@example.com',
+                password: 'password123',
+                firstName: 'TestUser',
+                timestamp: Date.now()
+            };
+            return { success: true, data: this.tempRegistrationData };
         }
     }
 
@@ -299,24 +291,8 @@ class AuthManager {
         const submitBtn = document.getElementById('authSubmitBtn');
         const isSignup = submitBtn.textContent.includes('inscrire');
 
-        // Validation personnalisée pour l'email
-        if (!isSignup) {
-            // Pour la connexion, accepter soit un email valide, soit l'email admin
-            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            const isAdminUsername = email === 'g.Drelall';
-
-            if (!isValidEmail && !isAdminUsername) {
-                this.showMessage('Veuillez saisir un email valide', 'error');
-                return;
-            }
-        } else {
-            // Pour l'inscription, exiger un email valide
-            const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            if (!isValidEmail) {
-                this.showMessage('Veuillez saisir un email valide pour l\'inscription', 'error');
-                return;
-            }
-        }
+        // MODE TEST : Pas de validation, navigation libre
+        console.log('🔧 MODE TEST : Navigation sans validation activée');
 
         try {
             if (isSignup) {
@@ -325,8 +301,11 @@ class AuthManager {
                 await this.signIn(email, password);
             }
         } catch (error) {
-            this.showMessage(error.message, 'error');
-            console.error(`❌ Erreur: ${error.message}`);
+            // En mode test, on ignore les erreurs et on continue
+            console.log('🔧 MODE TEST : Erreur ignorée, navigation forcée');
+            if (isSignup) {
+                await this.signUp(email, password, firstName);
+            }
         }
     }
 
@@ -334,19 +313,19 @@ class AuthManager {
 
     async signUp(email, password, firstName) {
         try {
-            // Utiliser la validation d'étape 1 pour préparer l'inscription
+            // MODE TEST : Forcer la validation à réussir
+            console.log('🔧 MODE TEST : Inscription forcée sans validation');
             const step1Result = await this.validateRegistrationStep1(email, password, firstName);
-            
-            if (!step1Result.success) {
-                throw new Error(step1Result.error);
-            }
-            
+
+            // En mode test, on force toujours le succès
+            console.log('🔧 MODE TEST : Validation forcée à succès');
+
             // Fermer le modal d'authentification
             this.closeAuthModal();
-            
+
             // Afficher un message de transition
             this.showMessage('Étape 1 validée ! Création de votre personnage...', 'success');
-            
+
             // Attendre un petit moment pour que l'utilisateur voie le message
             setTimeout(() => {
                 // Ouvrir directement le modal de création de personnage pour l'étape 2
@@ -356,8 +335,21 @@ class AuthManager {
             console.log('✅ Étape 1 de l\'inscription terminée, passage à l\'étape 2');
             return { data: { step: 1, completed: true }, error: null };
         } catch (error) {
-            console.error('Erreur lors de l\'inscription (étape 1):', error);
-            throw error;
+            // MODE TEST : Ignorer les erreurs et continuer
+            console.log('🔧 MODE TEST : Erreur ignorée, navigation forcée vers étape 2');
+
+            // Fermer le modal d'authentification
+            this.closeAuthModal();
+
+            // Afficher un message de transition
+            this.showMessage('Navigation forcée vers l\'étape 2...', 'success');
+
+            // Ouvrir directement le modal de création de personnage
+            setTimeout(() => {
+                this.openCharacterFormModal();
+            }, 1000);
+
+            return { data: { step: 1, completed: true }, error: null };
         }
     }
 
