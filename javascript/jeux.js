@@ -404,16 +404,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Navigation entre les étapes
-    nextStepBtn.addEventListener('click', function() {
-        if (validateStep1()) {
+    // Navigation entre les étapes (formulaire statique uniquement)
+    if (nextStepBtn) {
+        nextStepBtn.addEventListener('click', function() {
+            // Permettre la navigation libre sans validation
             goToStep(2);
-        }
-    });
-    
-    prevStepBtn.addEventListener('click', function() {
-        goToStep(1);
-    });
+        });
+    }
+
+    if (prevStepBtn) {
+        prevStepBtn.addEventListener('click', function() {
+            goToStep(1);
+        });
+    }
     
     // Fermer en cliquant en dehors du formulaire
     characterModal.addEventListener('click', function(e) {
@@ -454,19 +457,21 @@ document.addEventListener('DOMContentLoaded', function() {
         goToStep(1); // Revenir à l'étape 1
     }
     
-    // Navigation entre les étapes
+    // Navigation entre les étapes (formulaire statique uniquement)
     function goToStep(stepNumber) {
         currentStep = stepNumber;
 
-        // Masquer toutes les étapes
-        step1.classList.remove('active');
-        step2.classList.remove('active');
+        if (step1 && step2) {
+            // Masquer toutes les étapes
+            step1.classList.remove('active');
+            step2.classList.remove('active');
 
-        // Afficher l'étape courante
-        if (stepNumber === 1) {
-            step1.classList.add('active');
-        } else if (stepNumber === 2) {
-            step2.classList.add('active');
+            // Afficher l'étape courante
+            if (stepNumber === 1) {
+                step1.classList.add('active');
+            } else if (stepNumber === 2) {
+                step2.classList.add('active');
+            }
         }
     }
     

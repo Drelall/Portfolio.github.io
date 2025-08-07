@@ -387,7 +387,7 @@ class AuthManager {
             <div id="characterFormModal" class="character-modal" style="display: none; opacity: 0;">
                 <div class="character-form-container">
                     <div class="character-form-header">
-                        <h2>Bienvenue dans l'univers de Saga - Étape 2/2</h2>
+                        <h2>Étape 2</h2>
                         <button id="closeCharacterFormBtn" class="close-btn">&times;</button>
                     </div>
                     <form id="characterForm" class="character-form">
@@ -396,18 +396,18 @@ class AuthManager {
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="characterFirstName">Prénom du personnage :</label>
-                                    <input type="text" id="characterFirstName" name="characterFirstName" required maxlength="20" placeholder="Prénom de votre personnage">
+                                    <input type="text" id="characterFirstName" name="characterFirstName" maxlength="20" placeholder="Prénom de votre personnage">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="characterLastName">Nom du personnage :</label>
-                                    <input type="text" id="characterLastName" name="characterLastName" required maxlength="20" placeholder="Nom de votre personnage">
+                                    <input type="text" id="characterLastName" name="characterLastName" maxlength="20" placeholder="Nom de votre personnage">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="characterClass">Classe de personnage :</label>
-                                <select id="characterClass" name="characterClass" required>
+                                <select id="characterClass" name="characterClass">
                                     <option value="">-- Choisissez une classe --</option>
                                     <option value="agent">Agent du Gouvernement</option>
                                     <option value="initie">Initié</option>
@@ -431,7 +431,7 @@ class AuthManager {
                         <div id="characterStep2" class="form-step" style="display: none;">
                             <div class="form-group">
                                 <label for="characterType">Type de personnage :</label>
-                                <select id="characterType" name="characterType" required>
+                                <select id="characterType" name="characterType">
                                     <option value="">-- Choisissez un type --</option>
                                 </select>
                             </div>
@@ -489,11 +489,27 @@ class AuthManager {
 
         // Navigation entre les étapes du personnage
         if (nextStepBtn) {
-            nextStepBtn.addEventListener('click', () => this.nextCharacterStep());
+            console.log('✅ Bouton Suivant trouvé, ajout événement');
+            nextStepBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Clic sur Suivant détecté');
+                this.nextCharacterStep();
+            });
+        } else {
+            console.error('❌ Bouton nextCharacterStepBtn non trouvé');
         }
 
         if (prevStepBtn) {
-            prevStepBtn.addEventListener('click', () => this.prevCharacterStep());
+            console.log('✅ Bouton Précédent trouvé, ajout événement');
+            prevStepBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('🖱️ Clic sur Précédent détecté');
+                this.prevCharacterStep();
+            });
+        } else {
+            console.error('❌ Bouton prevCharacterStepBtn non trouvé');
         }
 
         // Soumission du formulaire de personnage
@@ -513,12 +529,19 @@ class AuthManager {
     }
 
     nextCharacterStep() {
+        console.log('🔄 Fonction nextCharacterStep appelée');
         const step1 = document.getElementById('characterStep1');
         const step2 = document.getElementById('characterStep2');
 
+        console.log('📋 Éléments trouvés:', { step1, step2 });
+
         if (step1 && step2) {
+            console.log('✅ Navigation vers étape 2');
+            // Navigation libre sans validation
             step1.style.display = 'none';
             step2.style.display = 'block';
+        } else {
+            console.error('❌ Éléments manquants pour la navigation');
         }
     }
 
