@@ -39,15 +39,15 @@
             <form id="authForm" class="character-form">
                 <div class="form-group" id="firstNameGroup" style="display: none;">
                     <label for="firstName">Pseudo :</label>
-                    <input type="text" id="firstName" name="firstName" placeholder="Votre pseudo">
+                    <input type="text" id="firstName" name="firstName" placeholder="Votre pseudo" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="email">Email :</label>
-                    <input type="text" id="email" name="email" required placeholder="votre@email.com">
+                    <input type="text" id="email" name="email" required placeholder="votre@email.com" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="password">Mot de passe :</label>
-                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6" autocomplete="off">
                 </div>
                 <div class="form-actions">
                     <button type="button" id="prevAuthBtn" class="btn-secondary" style="display: none;">Précédent</button>
@@ -75,12 +75,12 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="characterFirstName">Prénom :</label>
-                            <input type="text" id="characterFirstName" name="characterFirstName" maxlength="20" placeholder="prénom">
+                            <input type="text" id="characterFirstName" name="characterFirstName" maxlength="20" placeholder="prénom" autocomplete="off">
                         </div>
 
                         <div class="form-group">
                             <label for="characterLastName">Nom :</label>
-                            <input type="text" id="characterLastName" name="characterLastName" maxlength="20" placeholder="nom">
+                            <input type="text" id="characterLastName" name="characterLastName" maxlength="20" placeholder="nom" autocomplete="off">
                         </div>
                     </div>
 

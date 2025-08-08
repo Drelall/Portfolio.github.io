@@ -388,12 +388,12 @@ class AuthManager {
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="characterFirstName">Prénom du personnage :</label>
-                                    <input type="text" id="characterFirstName" name="characterFirstName" maxlength="20" placeholder="Prénom de votre personnage">
+                                    <input type="text" id="characterFirstName" name="characterFirstName" maxlength="20" placeholder="Prénom de votre personnage" autocomplete="off">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="characterLastName">Nom du personnage :</label>
-                                    <input type="text" id="characterLastName" name="characterLastName" maxlength="20" placeholder="Nom de votre personnage">
+                                    <input type="text" id="characterLastName" name="characterLastName" maxlength="20" placeholder="Nom de votre personnage" autocomplete="off">
                                 </div>
                             </div>
 
