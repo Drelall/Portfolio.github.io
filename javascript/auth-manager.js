@@ -711,9 +711,9 @@ class AuthManager {
         if (!modal) return;
 
         if (mode === 'login') {
-            if (title) title.textContent = 'Se connecter';
+            if (title) title.textContent = 'Connexion';
             if (submitBtn) {
-                submitBtn.textContent = 'Se connecter';
+                submitBtn.textContent = 'Connexion';
                 submitBtn.style.display = 'inline-block';
             }
             if (nextToCharacterBtn) nextToCharacterBtn.style.display = 'none';
@@ -736,7 +736,7 @@ class AuthManager {
                 prevAuthBtn.style.display = this.tempRegistrationData ? 'inline-block' : 'none';
             }
 
-            if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
+            if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Connexion</a>';
             // Afficher le champ pseudo pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
             if (firstName) firstName.required = true;

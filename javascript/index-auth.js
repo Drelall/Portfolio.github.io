@@ -253,8 +253,8 @@ class IndexAuthManager {
         if (!modal) return;
 
         if (mode === 'login') {
-            if (title) title.textContent = 'Se connecter';
-            if (submitBtn) submitBtn.textContent = 'Se connecter';
+            if (title) title.textContent = 'Connexion';
+            if (submitBtn) submitBtn.textContent = 'Connexion';
             if (switchText) switchText.innerHTML = 'Pas encore de compte ? <a href="#" id="authSwitchLink">S\'inscrire</a>';
             // Masquer le champ pseudo pour la connexion
             if (firstNameGroup) firstNameGroup.style.display = 'none';
@@ -262,7 +262,7 @@ class IndexAuthManager {
         } else {
             if (title) title.textContent = 'S\'inscrire';
             if (submitBtn) submitBtn.textContent = 'S\'inscrire';
-            if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Se connecter</a>';
+            if (switchText) switchText.innerHTML = 'Déjà un compte ? <a href="#" id="authSwitchLink">Connexion</a>';
             // Afficher le champ pseudo pour l'inscription
             if (firstNameGroup) firstNameGroup.style.display = 'block';
             if (firstName) firstName.required = true;
