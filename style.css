@@ -316,7 +316,7 @@ a:focus {
 .class-description p {
     margin: 0;
     line-height: 1.5;
-    color: #333;
+    color: #f5deb3;
 }
 
 .type-description {
@@ -331,7 +331,22 @@ a:focus {
 .type-description p {
     margin: 0;
     line-height: 1.5;
-    color: #333;
+    color: #f5deb3;
+}
+
+.deity-description {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(34, 109, 84, 0.1);
+    border: 1px solid #226d54;
+    border-radius: 8px;
+    min-height: 60px;
+}
+
+.deity-description p {
+    margin: 0;
+    line-height: 1.5;
+    color: #f5deb3;
 }
 
 .form-actions {
