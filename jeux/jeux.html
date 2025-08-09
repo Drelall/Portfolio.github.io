@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                <!-- Étape 2: Type de personnage -->
+                                <!-- Étape 2: Type de personnage -->
                 <div id="step2" class="form-step">
                     <div class="form-group">
                         <label for="characterType">Type de personnage :</label>
@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <!-- Étape 4: Divinité -->
+                <!-- Étape 3: Divinité -->
                 <div id="step3" class="form-step">
                     <div class="form-group">
                         <label for="characterDeity">Divinité :</label>
@@ -140,6 +140,45 @@
 
                     <div class="form-actions">
                         <button type="button" id="prevStepBtn2" class="btn-secondary">Précédent</button>
+                        <button type="button" id="nextStepBtn3" class="btn-primary">Suivant</button>
+                    </div>
+                </div>
+
+                <!-- Étape 4: Récapitulatif -->
+                <div id="step4" class="form-step">
+                    <h3>Récapitulatif de votre personnage</h3>
+                    <div class="recap-content">
+                        <div class="recap-section">
+                            <h4>Informations personnelles</h4>
+                            <div class="recap-item">
+                                <span class="recap-label">Prénom :</span>
+                                <span id="recapFirstName" class="recap-value">-</span>
+                            </div>
+                            <div class="recap-item">
+                                <span class="recap-label">Nom :</span>
+                                <span id="recapLastName" class="recap-value">-</span>
+                            </div>
+                        </div>
+
+                        <div class="recap-section">
+                            <h4>Caractéristiques</h4>
+                            <div class="recap-item">
+                                <span class="recap-label">Classe :</span>
+                                <span id="recapClass" class="recap-value">-</span>
+                            </div>
+                            <div class="recap-item">
+                                <span class="recap-label">Type :</span>
+                                <span id="recapType" class="recap-value">-</span>
+                            </div>
+                            <div class="recap-item">
+                                <span class="recap-label">Divinité :</span>
+                                <span id="recapDeity" class="recap-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="prevStepBtn3" class="btn-secondary">Précédent</button>
                         <button type="submit" id="finalizeRegistrationBtn" class="btn-primary">Finaliser l'inscription</button>
                     </div>
                 </div>

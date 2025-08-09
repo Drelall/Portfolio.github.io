@@ -304,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
     const step3 = document.getElementById('step3');
+    const step4 = document.getElementById('step4');
     const characterDeity = document.getElementById('characterDeity');
     const deityDescription = document.getElementById('deityDescription');
     
@@ -477,7 +478,26 @@ document.addEventListener('DOMContentLoaded', function() {
             showCharacterForm();
         });
     }
-    
+
+    // Navigation étape 3 → étape 4 (récapitulatif)
+    const nextStepBtn3 = document.getElementById('nextStepBtn3');
+    const prevStepBtn3 = document.getElementById('prevStepBtn3');
+
+    if (nextStepBtn3) {
+        nextStepBtn3.addEventListener('click', function() {
+            console.log('🖱️ Clic sur nextStepBtn3 détecté, navigation vers étape 4 (récapitulatif)');
+            goToStep(4);
+        });
+    } else {
+        console.error('❌ nextStepBtn3 non trouvé');
+    }
+
+    if (prevStepBtn3) {
+        prevStepBtn3.addEventListener('click', function() {
+            goToStep(3);
+        });
+    }
+
     // Fermer en cliquant en dehors du formulaire
     characterModal.addEventListener('click', function(e) {
         if (e.target === characterModal) {
@@ -524,11 +544,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Changer le titre selon l'étape
         const titleElement = document.getElementById('characterFormTitle');
 
-        if (step1 && step2 && step3) {
+        if (step1 && step2 && step3 && step4) {
             // Masquer toutes les étapes
             step1.classList.remove('active');
             step2.classList.remove('active');
             step3.classList.remove('active');
+            step4.classList.remove('active');
 
             // Afficher l'étape courante et changer le titre
             if (stepNumber === 1) {
@@ -542,8 +563,42 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (titleElement) titleElement.textContent = 'Étape 4 - Divinité';
                 // Mettre à jour les options de divinité selon le type choisi
                 updateDeityOptions();
+            } else if (stepNumber === 4) {
+                step4.classList.add('active');
+                if (titleElement) titleElement.textContent = 'Étape 5 - Récapitulatif';
+                // Mettre à jour le récapitulatif
+                updateRecap();
             }
         }
+    }
+
+    // Mettre à jour le récapitulatif
+    function updateRecap() {
+        const recapFirstName = document.getElementById('recapFirstName');
+        const recapLastName = document.getElementById('recapLastName');
+        const recapClass = document.getElementById('recapClass');
+        const recapType = document.getElementById('recapType');
+        const recapDeity = document.getElementById('recapDeity');
+
+        const characterFirstName = document.getElementById('characterFirstName');
+        const characterLastName = document.getElementById('characterLastName');
+
+        if (recapFirstName && characterFirstName) recapFirstName.textContent = characterFirstName.value || '-';
+        if (recapLastName && characterLastName) recapLastName.textContent = characterLastName.value || '-';
+        if (recapClass) recapClass.textContent = getClassDisplayName(characterClass.value) || '-';
+        if (recapType) recapType.textContent = getTypeDisplayName(characterType.value) || '-';
+        if (recapDeity) recapDeity.textContent = getDeityDisplayName(characterDeity.value) || '-';
+    }
+
+    // Fonction pour obtenir le nom d'affichage de la divinité
+    function getDeityDisplayName(deityValue) {
+        if (!characterDeity || !characterDeity.options) return deityValue || '-';
+        for (let i = 0; i < characterDeity.options.length; i++) {
+            if (characterDeity.options[i].value === deityValue) {
+                return characterDeity.options[i].text;
+            }
+        }
+        return deityValue || '-';
     }
 
     // Mettre à jour les options de divinité selon le type de personnage
