@@ -164,3 +164,87 @@ class CharacterManager {
 
 // Initialiser le gestionnaire de personnages
 window.characterManager = new CharacterManager();
+
+// Gestionnaire pour le bouton "Finaliser l'inscription"
+document.addEventListener('DOMContentLoaded', function() {
+    const finalizeRegistrationBtn = document.getElementById('finalizeRegistrationBtn');
+    
+    if (finalizeRegistrationBtn) {
+        finalizeRegistrationBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            try {
+                // 1. Récupérer toutes les données du formulaire
+                const characterData = {
+                    firstName: document.getElementById('characterFirstName').value,
+                    lastName: document.getElementById('characterLastName').value,
+                    characterClass: document.getElementById('characterClass').value,
+                    characterType: document.getElementById('characterType').value,
+                    characterDeity: document.getElementById('characterDeity').value
+                };
+
+                // 2. Récupérer les données d'authentification
+                const userData = JSON.parse(localStorage.getItem('tempUserData') || '{}');
+                
+                if (!userData.email) {
+                    alert('Erreur : données utilisateur manquantes');
+                    return;
+                }
+
+                // 3. Sauvegarder les données complètes
+                const completeUserData = {
+                    ...userData,
+                    character: characterData,
+                    registrationComplete: true,
+                    createdAt: new Date().toISOString()
+                };
+
+                localStorage.setItem('userData', JSON.stringify(completeUserData));
+                localStorage.removeItem('tempUserData');
+
+                // 4. Envoyer l'email de confirmation
+                if (typeof sendWelcomeEmail === 'function') {
+                    await sendWelcomeEmail(userData.email, userData.firstName || userData.pseudo, characterData);
+                }
+
+                // 5. Fermer le modal
+                const characterFormModal = document.getElementById('characterFormModal');
+                if (characterFormModal) {
+                    characterFormModal.style.display = 'none';
+                }
+
+                // 6. Mettre à jour l'interface utilisateur
+                updateUIAfterRegistration(completeUserData);
+
+                // 7. Message de succès
+                alert('Inscription finalisée avec succès ! Un email de confirmation vous a été envoyé.');
+
+            } catch (error) {
+                console.error('Erreur lors de la finalisation:', error);
+                alert('Une erreur est survenue. Veuillez réessayer.');
+            }
+        });
+    }
+});
+
+// Fonction pour mettre à jour l'UI après inscription
+function updateUIAfterRegistration(userData) {
+    const authButtons = document.getElementById('authButtons');
+    const userInfo = document.getElementById('userInfo');
+    
+    if (authButtons) {
+        authButtons.style.display = 'none';
+    }
+    
+    if (userInfo) {
+        userInfo.style.display = 'flex';
+        
+        const userDisplayName = document.getElementById('userDisplayName');
+        if (userDisplayName) {
+            const displayName = userData.character?.firstName ? 
+                `${userData.character.firstName} ${userData.character.lastName}` : 
+                userData.firstName || userData.pseudo || 'Utilisateur';
+            userDisplayName.textContent = displayName;
+        }
+    }
+}

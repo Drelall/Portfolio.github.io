@@ -235,3 +235,43 @@ Note : Ceci est un email automatique, merci de ne pas y répondre.`;
 
 // Créer une instance globale du service
 window.emailService = new EmailService();
+async function sendWelcomeEmail(email, name, characterData) {
+    try {
+        const classNames = {
+            'agent': 'Agent du Gouvernement',
+            'initie': 'Initié',
+            'sorcier': 'Sorcier',
+            'citoyen': 'Citoyen'
+        };
+
+        const characterInfo = characterData ? `
+Informations de votre personnage :
+- Nom : ${characterData.firstName} ${characterData.lastName}
+- Classe : ${classNames[characterData.characterClass] || characterData.characterClass}
+- Type : ${characterData.characterType}
+- Divinité : ${characterData.characterDeity}
+        ` : '';
+
+        const emailContent = `
+Bienvenue ${name} !
+
+Votre inscription au Jeu du Tableau à Poudlard a été finalisée avec succès.
+
+${characterInfo}
+
+Vous pouvez maintenant vous connecter et commencer à jouer !
+
+Bonne aventure !
+        `;
+
+        console.log('Email de bienvenue envoyé à:', email);
+        console.log('Contenu:', emailContent);
+        
+        // Ici vous pouvez ajouter votre service d'email réel (EmailJS, etc.)
+        
+        return true;
+    } catch (error) {
+        console.error('Erreur lors de l\'envoi de l\'email:', error);
+        throw error;
+    }
+}

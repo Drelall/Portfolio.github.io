@@ -521,6 +521,20 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         await handleCharacterCreation();
     });
+
+    // Gérer spécifiquement le bouton "Finaliser l'inscription"
+    const finalizeBtn = document.getElementById('finalizeRegistrationBtn');
+    if (finalizeBtn) {
+        finalizeBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🖱️ Clic sur Finaliser l\'inscription détecté');
+            await handleCharacterCreation();
+        });
+        console.log('✅ Événement ajouté au bouton Finaliser l\'inscription');
+    } else {
+        console.error('❌ Bouton finalizeRegistrationBtn non trouvé');
+    }
     
     // Fonction pour afficher le formulaire
     function showCharacterForm() {
@@ -536,7 +550,11 @@ document.addEventListener('DOMContentLoaded', function() {
         resetForm();
         goToStep(1); // Revenir à l'étape 1
     }
-    
+
+    // Exposer les fonctions globalement pour auth-manager.js
+    window.showCharacterForm = showCharacterForm;
+    window.hideCharacterForm = hideCharacterForm;
+
     // Navigation entre les étapes (formulaire statique uniquement)
     function goToStep(stepNumber) {
         currentStep = stepNumber;
@@ -793,31 +811,59 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gérer la création du personnage
     async function handleCharacterCreation() {
         try {
+            console.log('🎯 Début de handleCharacterCreation');
+
             const characterFirstName = document.getElementById('characterFirstName').value.trim();
             const characterLastName = document.getElementById('characterLastName').value.trim();
             const selectedClass = characterClass.value;
             const selectedType = characterType.value;
+            const selectedDeity = characterDeity.value;
 
-            if (!characterFirstName || !characterLastName || !selectedClass || !selectedType) {
-                alert('Veuillez remplir tous les champs.');
+            console.log('📋 Données récupérées:', {
+                characterFirstName,
+                characterLastName,
+                selectedClass,
+                selectedType,
+                selectedDeity
+            });
+
+            if (!characterFirstName || !characterLastName || !selectedClass || !selectedType || !selectedDeity) {
+                alert('Veuillez remplir tous les champs, y compris la divinité.');
                 return;
             }
 
-            // Créer l'objet personnage
+            // Créer l'objet personnage complet
             const characterData = {
                 characterFirstName: characterFirstName,
                 characterLastName: characterLastName,
                 characterClass: selectedClass,
-                characterType: selectedType
+                characterType: selectedType,
+                characterDeity: selectedDeity
             };
 
+            console.log('📦 Données du personnage:', characterData);
+
             // Si nous sommes dans un processus d'inscription, finaliser l'inscription
-            if (window.authManager.tempRegistrationData) {
+            if (window.authManager && window.authManager.tempRegistrationData) {
+                console.log('🔄 Finalisation de l\'inscription...');
                 const result = await window.authManager.finalizeRegistration(characterData);
 
+                console.log('📊 Résultat de la finalisation:', result);
+
                 if (result.success) {
-                    // Le modal sera fermé par finalizeRegistration
+                    console.log('✅ Inscription finalisée avec succès');
+
+                    // Fermer le modal de jeux.html
+                    hideCharacterForm();
+
+                    // Rediriger vers la page de compte
+                    setTimeout(() => {
+                        console.log('🔄 Redirection vers la page de compte depuis jeux.js...');
+                        window.location.href = 'compte.html';
+                    }, 1000);
+
                 } else {
+                    console.error('❌ Erreur lors de la finalisation:', result.error);
                     window.authManager.showMessage(`❌ Erreur lors de la finalisation: ${result.error}`, 'error');
                 }
                 return;

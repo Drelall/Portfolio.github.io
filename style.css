@@ -2740,3 +2740,43 @@ body:has(#gameCanvas) .user-info span {
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 12px rgba(196, 30, 58, 0.4) !important;
 }
+/* Styles pour le récapitulatif */
+.recap-content {
+    margin: 20px 0;
+}
+
+.recap-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.recap-section h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.recap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.recap-item:last-child {
+    border-bottom: none;
+}
+
+.recap-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.recap-value {
+    color: #007bff;
+    font-weight: 500;
+}

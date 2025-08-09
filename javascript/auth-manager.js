@@ -174,6 +174,10 @@ class AuthManager {
     // Finalisation de l'inscription avec les données du personnage
     async finalizeRegistration(characterData) {
         try {
+            console.log('🔄 Début de finalizeRegistration');
+            console.log('📦 Données du personnage reçues:', characterData);
+            console.log('📋 Données temporaires:', this.tempRegistrationData);
+
             if (!this.tempRegistrationData) {
                 throw new Error('Données d\'inscription manquantes. Veuillez recommencer le processus.');
             }
@@ -186,9 +190,9 @@ class AuthManager {
             }
 
             // Valider les données du personnage
-            if (!characterData.characterFirstName || !characterData.characterLastName || 
-                !characterData.characterClass || !characterData.characterType) {
-                throw new Error('Toutes les informations du personnage sont requises');
+            if (!characterData.characterFirstName || !characterData.characterLastName ||
+                !characterData.characterClass || !characterData.characterType || !characterData.characterDeity) {
+                throw new Error('Toutes les informations du personnage sont requises (y compris la divinité)');
             }
 
             // Créer le compte complet
@@ -203,7 +207,8 @@ class AuthManager {
                     firstName: characterData.characterFirstName.trim(),
                     lastName: characterData.characterLastName.trim(),
                     class: characterData.characterClass,
-                    type: characterData.characterType
+                    type: characterData.characterType,
+                    deity: characterData.characterDeity
                 },
                 createdAt: new Date().toISOString(),
                 needsEmailConfirmation: true // Pour l'email de confirmation
@@ -212,15 +217,19 @@ class AuthManager {
             users.push(newUser);
             localStorage.setItem('saga_users', JSON.stringify(users));
 
+            console.log('👤 Nouvel utilisateur créé:', newUser);
+
             // Simuler l'envoi d'email de confirmation
+            console.log('📧 Envoi de l\'email de confirmation...');
             const emailResult = await this.sendConfirmationEmail(newUser);
+            console.log('📧 Résultat de l\'email:', emailResult);
 
             // Connecter l'utilisateur automatiquement
-            this.user = { 
-                email: newUser.email, 
-                id: newUser.id, 
+            this.user = {
+                email: newUser.email,
+                id: newUser.id,
                 firstName: newUser.firstName,
-                character: newUser.character 
+                character: newUser.character
             };
             this.isAuthenticated = true;
             localStorage.setItem('saga_current_user', JSON.stringify(this.user));
@@ -228,12 +237,16 @@ class AuthManager {
             // Nettoyer les données temporaires
             this.tempRegistrationData = null;
 
+            console.log('🔄 Mise à jour de l\'UI...');
             this.updateUI();
-            
+
+            console.log('❌ Fermeture des modals...');
             this.closeAuthModal();
             this.closeCharacterModal();
 
             console.log('✅ Inscription complète réussie:', newUser);
+
+            // La redirection sera gérée par jeux.js
             return { success: true, data: newUser };
         } catch (error) {
             console.error('Erreur finalisation inscription:', error);
@@ -800,14 +813,29 @@ class AuthManager {
     }
 
     closeCharacterModal() {
+        console.log('🔄 Tentative de fermeture du modal de personnage...');
+
         const modal = document.getElementById('characterFormModal');
         const characterForm = document.getElementById('characterForm');
-        
-        if (!modal) return;
-        
-        modal.style.display = 'none';
-        if (characterForm) {
-            characterForm.reset();
+
+        if (modal) {
+            console.log('📋 Modal trouvé, fermeture en cours...');
+
+            // Supprimer la classe 'show' pour masquer le modal
+            modal.classList.remove('show');
+
+            // Rétablir le scroll de la page
+            document.body.style.overflow = 'auto';
+
+            // Réinitialiser le formulaire
+            if (characterForm) {
+                characterForm.reset();
+                console.log('📝 Formulaire réinitialisé');
+            }
+
+            console.log('✅ Modal de création de personnage fermé avec succès');
+        } else {
+            console.error('❌ Modal characterFormModal non trouvé');
         }
     }
 
