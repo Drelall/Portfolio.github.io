@@ -290,29 +290,8 @@
             background: #545b62;
         }
 
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 5px;
-            z-index: 1001;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
+        /* Suppression des styles de notification */
+        /* .notification styles supprimés */
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -484,6 +463,7 @@
                     <div>
                         <button type="button" id="newCharacter" class="btn-secondary">🆕 Nouveau</button>
                         <button type="button" id="loadCharacter" class="btn-secondary">📂 Charger</button>
+                        <input type="file" id="fileInput" accept=".json" style="display: none;">
                     </div>
                     <div>
                         <button type="button" id="saveCharacter" class="btn-primary">💾 Sauvegarder</button>
@@ -525,6 +505,8 @@
             init() {
                 this.bindEvents();
                 this.updateAllStatModifiers();
+                // Vérifier si l'API File System Access est disponible
+                this.hasFileSystemAccess = 'showSaveFilePicker' in window;
             }
 
             bindEvents() {
@@ -532,6 +514,7 @@
                 const modal = document.getElementById('characterModal');
                 const closeBtn = document.getElementById('closeModal');
                 const frameHoverArea = document.getElementById('frameHoverArea');
+                const fileInput = document.getElementById('fileInput');
 
                 // Ouvrir le modal en cliquant sur le vortex
                 frameHoverArea.addEventListener('click', () => {
@@ -558,10 +541,13 @@
                 });
 
                 // Boutons d'action
-                document.getElementById('saveCharacter').addEventListener('click', () => this.saveCharacter());
-                document.getElementById('loadCharacter').addEventListener('click', () => this.loadCharacter());
+                document.getElementById('saveCharacter').addEventListener('click', () => this.saveCharacterToFile());
+                document.getElementById('loadCharacter').addEventListener('click', () => this.loadCharacterFromFile());
                 document.getElementById('newCharacter').addEventListener('click', () => this.newCharacter());
                 document.getElementById('rollStats').addEventListener('click', () => this.rollStats());
+
+                // Gestionnaire de fichier
+                fileInput.addEventListener('change', (e) => this.handleFileLoad(e));
 
                 // Stats
                 const statInputs = document.querySelectorAll('[id^="stat-"]');
@@ -617,8 +603,6 @@
                         this.updateStatModifier(input);
                     }
                 });
-
-                this.showNotification('🎲 Dés lancés !');
             }
 
             updateStatModifier(input) {
@@ -689,22 +673,167 @@
                 this.updateEquipmentList();
             }
 
-            saveCharacter() {
+            // Nouvelle méthode pour sauvegarder avec choix du dossier
+            async saveCharacterToFile() {
                 this.updateCharacterFromForm();
-                const characterName = this.character.name || 'Personnage sans nom';
-                localStorage.setItem('rpg-character', JSON.stringify(this.character));
-                this.showNotification(`💾 ${characterName} sauvegardé !`);
+                
+                // Créer le nom de fichier avec le nom du personnage ou un nom par défaut
+                const characterName = this.character.name || 'personnage_sans_nom';
+                const safeFileName = characterName.replace(/[^a-z0-9\s]/gi, '_').toLowerCase();
+                const fileName = `${safeFileName}_fiche_rpg.json`;
+                
+                // Créer le contenu JSON avec métadonnées
+                const characterData = {
+                    ...this.character,
+                    metadata: {
+                        version: '1.0',
+                        created: new Date().toISOString(),
+                        lastModified: new Date().toISOString(),
+                        application: 'Saga RPG Character Sheet'
+                    }
+                };
+                
+                const dataStr = JSON.stringify(characterData, null, 2);
+
+                // Utiliser l'API File System Access si disponible (Chrome, Edge, Opera)
+                if (this.hasFileSystemAccess) {
+                    try {
+                        const fileHandle = await window.showSaveFilePicker({
+                            suggestedName: fileName,
+                            types: [{
+                                description: 'Fichiers de personnage RPG',
+                                accept: {
+                                    'application/json': ['.json']
+                                }
+                            }]
+                        });
+
+                        const writable = await fileHandle.createWritable();
+                        await writable.write(dataStr);
+                        await writable.close();
+
+                        return;
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+                        console.error('Erreur API File System:', error);
+                        // Retomber sur la méthode classique en cas d'erreur
+                    }
+                }
+
+                // Méthode de sauvegarde classique (fallback)
+                this.saveCharacterToDownloads(dataStr, fileName);
             }
 
-            loadCharacter() {
-                const saved = localStorage.getItem('rpg-character');
-                if (saved) {
-                    this.character = JSON.parse(saved);
-                    this.populateForm();
-                    this.showNotification('📂 Personnage chargé !');
-                } else {
-                    this.showNotification('❌ Aucun personnage sauvegardé trouvé.');
+            // Méthode de sauvegarde classique dans le dossier Téléchargements
+            saveCharacterToDownloads(dataStr, fileName) {
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                
+                // Créer un lien de téléchargement
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(dataBlob);
+                downloadLink.download = fileName;
+                
+                // Déclencher le téléchargement
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                // Nettoyer l'URL
+                URL.revokeObjectURL(downloadLink.href);
+            }
+
+            // Nouvelle méthode pour charger avec choix du fichier
+            async loadCharacterFromFile() {
+                // Utiliser l'API File System Access si disponible
+                if (this.hasFileSystemAccess) {
+                    try {
+                        const [fileHandle] = await window.showOpenFilePicker({
+                            types: [{
+                                description: 'Fichiers de personnage RPG',
+                                accept: {
+                                    'application/json': ['.json']
+                                }
+                            }],
+                            multiple: false
+                        });
+
+                        const file = await fileHandle.getFile();
+                        await this.processCharacterFile(file);
+                        return;
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+                        console.error('Erreur API File System:', error);
+                        // Retomber sur la méthode classique en cas d'erreur
+                    }
                 }
+
+                // Méthode classique avec input file
+                const fileInput = document.getElementById('fileInput');
+                fileInput.click();
+            }
+
+            // Méthode pour traiter le fichier de personnage
+            async processCharacterFile(file) {
+                if (!file.name.toLowerCase().endsWith('.json')) {
+                    alert('Veuillez sélectionner un fichier JSON valide.');
+                    return;
+                }
+
+                try {
+                    const text = await file.text();
+                    const characterData = JSON.parse(text);
+                    
+                    if (this.validateCharacterData(characterData)) {
+                        // Fusionner avec la structure par défaut pour gérer les versions anciennes
+                        this.character = {
+                            ...this.character,
+                            ...characterData,
+                            stats: { ...this.character.stats, ...characterData.stats },
+                            skills: characterData.skills || [],
+                            equipment: characterData.equipment || []
+                        };
+                        
+                        this.populateForm();
+                    } else {
+                        alert('Le fichier ne contient pas de données de personnage valides.');
+                    }
+                } catch (error) {
+                    console.error('Erreur lors du chargement:', error);
+                    alert('Erreur lors de la lecture du fichier.');
+                }
+            }
+
+            // Gestionnaire pour le chargement de fichier (méthode classique)
+            handleFileLoad(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                this.processCharacterFile(file);
+                
+                // Réinitialiser l'input pour permettre de charger le même fichier plusieurs fois
+                event.target.value = '';
+            }
+
+            validateCharacterData(data) {
+                // Vérifications de base
+                if (!data || typeof data !== 'object') return false;
+                
+                // Vérifier que les propriétés essentielles existent
+                const requiredProps = ['name', 'race', 'class', 'level', 'stats'];
+                const hasRequiredProps = requiredProps.some(prop => data.hasOwnProperty(prop));
+                
+                // Vérifier la structure des stats si elle existe
+                if (data.stats) {
+                    const requiredStats = ['force', 'dexterite', 'constitution', 'intelligence', 'sagesse', 'charisme'];
+                    const hasValidStats = requiredStats.some(stat => data.stats.hasOwnProperty(stat));
+                    return hasRequiredProps && hasValidStats;
+                }
+                
+                return hasRequiredProps;
             }
 
             newCharacter() {
@@ -721,7 +850,6 @@
                         description: ''
                     };
                     this.populateForm();
-                    this.showNotification('🆕 Nouveau personnage créé !');
                 }
             }
 
@@ -763,16 +891,69 @@
                 this.updateSkillsList();
                 this.updateEquipmentList();
             }
+        }
 
-            showNotification(message) {
+        // Initialisation
+        let characterSheetManager;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            characterSheetManager = new CharacterSheetManager();
+        });
+
+        // Export global
+        window.characterSheetManager = characterSheetManager;
+    </script>
+</body>
+</html>
+                document.getElementById('char-background').value = this.character.background;
+                document.getElementById('char-description').value = this.character.description;
+
+                // Stats
+                Object.keys(this.character.stats).forEach(stat => {
+                    const input = document.getElementById(`stat-${stat}`);
+                    if (input) {
+                        input.value = this.character.stats[stat];
+                        this.updateStatModifier(input);
+                    }
+                });
+
+                // Listes
+                this.updateSkillsList();
+                this.updateEquipmentList();
+            }
+
+            showNotification(message, type = 'success') {
+                // Supprimer les notifications existantes
+                const existingNotifications = document.querySelectorAll('.notification');
+                existingNotifications.forEach(notif => notif.remove());
+
                 const notification = document.createElement('div');
-                notification.className = 'notification';
+                notification.className = `notification ${type}`;
                 notification.textContent = message;
+                
+                // Styles selon le type
+                if (type === 'error') {
+                    notification.style.background = '#dc3545';
+                } else if (type === 'info') {
+                    notification.style.background = '#17a2b8';
+                } else {
+                    notification.style.background = '#28a745';
+                }
+                
                 document.body.appendChild(notification);
 
                 setTimeout(() => {
                     notification.remove();
-                }, 3000);
+                }, 4000);
+            }
+
+            // Méthode pour afficher les informations sur les capacités du navigateur
+            showBrowserCapabilities() {
+                if (this.hasFileSystemAccess) {
+                    this.showNotification('✨ Votre navigateur supporte le choix du dossier de sauvegarde !', 'info');
+                } else {
+                    this.showNotification('ℹ️ Les fichiers seront sauvegardés dans votre dossier Téléchargements.', 'info');
+                }
             }
         }
 
