@@ -7,6 +7,333 @@
     <link rel="stylesheet" href="../style.css">
     <!-- Mode local - pas de dépendances externes -->
     <!-- Le style est déplacé dans style.css -->
+    <style>
+        /* Styles pour le modal de fiche personnage */
+        .character-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .character-modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .character-sheet {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border: 3px solid #226d54;
+        }
+
+        .character-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #226d54;
+        }
+
+        .character-header h2 {
+            color: #226d54;
+            margin: 0;
+            font-size: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .close-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #226d54;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .form-section h3 {
+            color: #226d54;
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #226d54;
+            box-shadow: 0 0 0 3px rgba(34, 109, 84, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .stat-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .stat-group label {
+            font-weight: 600;
+            color: #333;
+            min-width: 80px;
+            font-size: 13px;
+        }
+
+        .stat-group input {
+            width: 60px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        .stat-modifier {
+            font-weight: bold;
+            color: #226d54;
+            min-width: 35px;
+            text-align: center;
+            background: rgba(34, 109, 84, 0.1);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .skills-container,
+        .equipment-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .skills-input,
+        .equipment-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .skills-input input,
+        .equipment-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            background: #226d54;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .btn-small:hover {
+            background: #1a5642;
+        }
+
+        .skills-list,
+        .equipment-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-item,
+        .equipment-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(34, 109, 84, 0.1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            border: 1px solid rgba(34, 109, 84, 0.3);
+            font-size: 13px;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            font-size: 10px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #226d54;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #226d54;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a5642;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .character-sheet {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
@@ -15,8 +342,449 @@
     <!-- Zone de survol pour le tableau -->
     <div class="frame-hover-area" id="frameHoverArea"></div>
     
+    <!-- Modal de fiche personnage -->
+    <div id="characterModal" class="character-modal">
+        <div class="character-sheet">
+            <div class="character-header">
+                <h2>Fiche de Personnage RPG</h2>
+                <button id="closeModal" class="close-btn">&times;</button>
+            </div>
+
+            <form id="characterForm">
+                <!-- Informations de base -->
+                <section class="form-section">
+                    <h3>Informations de base</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="char-name">Nom du personnage :</label>
+                            <input type="text" id="char-name" name="name" placeholder="Ex: Gandalf le Gris">
+                        </div>
+                        <div class="form-group">
+                            <label for="char-level">Niveau :</label>
+                            <input type="number" id="char-level" name="level" min="1" max="20" value="1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="char-race">Race :</label>
+                            <select id="char-race" name="race">
+                                <option value="">Choisir une race</option>
+                                <option value="humain">Humain</option>
+                                <option value="elfe">Elfe</option>
+                                <option value="nain">Nain</option>
+                                <option value="halfelin">Halfelin</option>
+                                <option value="demi-elfe">Demi-Elfe</option>
+                                <option value="demi-orc">Demi-Orc</option>
+                                <option value="tieffelin">Tieffelin</option>
+                                <option value="dragonborn">Dragonborn</option>
+                                <option value="gnome">Gnome</option>
+                                <option value="demi-geant">Demi-Géant</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="char-class">Classe :</label>
+                            <select id="char-class" name="class">
+                                <option value="">Choisir une classe</option>
+                                <option value="guerrier">Guerrier</option>
+                                <option value="mage">Mage</option>
+                                <option value="voleur">Voleur/Roublard</option>
+                                <option value="clerc">Clerc</option>
+                                <option value="paladin">Paladin</option>
+                                <option value="ranger">Rôdeur</option>
+                                <option value="barde">Barde</option>
+                                <option value="druide">Druide</option>
+                                <option value="sorcier">Sorcier</option>
+                                <option value="warlock">Occultiste</option>
+                                <option value="moine">Moine</option>
+                                <option value="barbare">Barbare</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Caractéristiques -->
+                <section class="form-section">
+                    <h3>Caractéristiques</h3>
+                    <div class="stats-grid">
+                        <div class="stat-group">
+                            <label for="stat-force">Force :</label>
+                            <input type="number" id="stat-force" name="force" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                        <div class="stat-group">
+                            <label for="stat-dexterite">Dextérité :</label>
+                            <input type="number" id="stat-dexterite" name="dexterite" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                        <div class="stat-group">
+                            <label for="stat-constitution">Constitution :</label>
+                            <input type="number" id="stat-constitution" name="constitution" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                        <div class="stat-group">
+                            <label for="stat-intelligence">Intelligence :</label>
+                            <input type="number" id="stat-intelligence" name="intelligence" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                        <div class="stat-group">
+                            <label for="stat-sagesse">Sagesse :</label>
+                            <input type="number" id="stat-sagesse" name="sagesse" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                        <div class="stat-group">
+                            <label for="stat-charisme">Charisme :</label>
+                            <input type="number" id="stat-charisme" name="charisme" min="3" max="20" value="10">
+                            <span class="stat-modifier">+0</span>
+                        </div>
+                    </div>
+                    <button type="button" id="rollStats" class="btn-secondary">🎲 Lancer les dés (4d6)</button>
+                </section>
+
+                <!-- Compétences -->
+                <section class="form-section">
+                    <h3>Compétences</h3>
+                    <div class="skills-container">
+                        <div class="skills-input">
+                            <input type="text" id="skill-input" placeholder="Ajouter une compétence (ex: Acrobaties, Investigation...)">
+                            <button type="button" id="add-skill" class="btn-small">Ajouter</button>
+                        </div>
+                        <div id="skills-list" class="skills-list"></div>
+                    </div>
+                </section>
+
+                <!-- Équipement -->
+                <section class="form-section">
+                    <h3>Équipement</h3>
+                    <div class="equipment-container">
+                        <div class="equipment-input">
+                            <input type="text" id="equipment-input" placeholder="Ajouter un équipement (ex: Épée longue, Armure de cuir...)">
+                            <button type="button" id="add-equipment" class="btn-small">Ajouter</button>
+                        </div>
+                        <div id="equipment-list" class="equipment-list"></div>
+                    </div>
+                </section>
+
+                <!-- Histoire et description -->
+                <section class="form-section">
+                    <h3>Histoire et description</h3>
+                    <div class="form-group">
+                        <label for="char-background">Historique :</label>
+                        <textarea id="char-background" name="background" rows="3" 
+                            placeholder="L'origine et l'histoire de votre personnage..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="char-description">Description physique :</label>
+                        <textarea id="char-description" name="description" rows="3" 
+                            placeholder="Apparence, traits distinctifs, personnalité..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Boutons d'action -->
+                <div class="action-buttons">
+                    <div>
+                        <button type="button" id="newCharacter" class="btn-secondary">🆕 Nouveau</button>
+                        <button type="button" id="loadCharacter" class="btn-secondary">📂 Charger</button>
+                    </div>
+                    <div>
+                        <button type="button" id="saveCharacter" class="btn-primary">💾 Sauvegarder</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <!-- Scripts en mode local -->
     <script src="../javascript/character-manager.js"></script>
     <script src="../javascript/jeux.js"></script>
+
+    <script>
+        // Classe pour gérer la fiche personnage
+        class CharacterSheetManager {
+            constructor() {
+                this.character = {
+                    name: '',
+                    race: '',
+                    class: '',
+                    level: 1,
+                    stats: {
+                        force: 10,
+                        dexterite: 10,
+                        constitution: 10,
+                        intelligence: 10,
+                        sagesse: 10,
+                        charisme: 10
+                    },
+                    skills: [],
+                    equipment: [],
+                    background: '',
+                    description: ''
+                };
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateAllStatModifiers();
+            }
+
+            bindEvents() {
+                // Modal
+                const modal = document.getElementById('characterModal');
+                const closeBtn = document.getElementById('closeModal');
+                const frameHoverArea = document.getElementById('frameHoverArea');
+
+                // Ouvrir le modal en cliquant sur le vortex
+                frameHoverArea.addEventListener('click', () => {
+                    this.openModal();
+                });
+
+                // Fermer le modal
+                closeBtn.addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                // Fermer en cliquant en dehors
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        this.closeModal();
+                    }
+                });
+
+                // Échap pour fermer
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && modal.classList.contains('show')) {
+                        this.closeModal();
+                    }
+                });
+
+                // Boutons d'action
+                document.getElementById('saveCharacter').addEventListener('click', () => this.saveCharacter());
+                document.getElementById('loadCharacter').addEventListener('click', () => this.loadCharacter());
+                document.getElementById('newCharacter').addEventListener('click', () => this.newCharacter());
+                document.getElementById('rollStats').addEventListener('click', () => this.rollStats());
+
+                // Stats
+                const statInputs = document.querySelectorAll('[id^="stat-"]');
+                statInputs.forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        this.updateStatModifier(e.target);
+                    });
+                });
+
+                // Compétences
+                document.getElementById('add-skill').addEventListener('click', () => this.addSkill());
+                document.getElementById('skill-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.addSkill();
+                    }
+                });
+
+                // Équipement
+                document.getElementById('add-equipment').addEventListener('click', () => this.addEquipment());
+                document.getElementById('equipment-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.addEquipment();
+                    }
+                });
+            }
+
+            openModal() {
+                const modal = document.getElementById('characterModal');
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeModal() {
+                const modal = document.getElementById('characterModal');
+                modal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            }
+
+            rollStats() {
+                const statInputs = ['force', 'dexterite', 'constitution', 'intelligence', 'sagesse', 'charisme'];
+                
+                statInputs.forEach(stat => {
+                    // Lancer 4d6, garder les 3 meilleurs
+                    const rolls = Array.from({length: 4}, () => Math.floor(Math.random() * 6) + 1);
+                    rolls.sort((a, b) => b - a);
+                    const result = rolls.slice(0, 3).reduce((sum, roll) => sum + roll, 0);
+                    
+                    const input = document.getElementById(`stat-${stat}`);
+                    if (input) {
+                        input.value = result;
+                        this.updateStatModifier(input);
+                    }
+                });
+
+                this.showNotification('🎲 Dés lancés !');
+            }
+
+            updateStatModifier(input) {
+                const value = parseInt(input.value);
+                const modifier = Math.floor((value - 10) / 2);
+                const modifierSpan = input.parentElement.querySelector('.stat-modifier');
+                if (modifierSpan) {
+                    modifierSpan.textContent = modifier >= 0 ? `+${modifier}` : `${modifier}`;
+                }
+            }
+
+            updateAllStatModifiers() {
+                const statInputs = document.querySelectorAll('[id^="stat-"]');
+                statInputs.forEach(input => {
+                    this.updateStatModifier(input);
+                });
+            }
+
+            addSkill() {
+                const input = document.getElementById('skill-input');
+                const skillName = input.value.trim();
+                
+                if (skillName && !this.character.skills.includes(skillName)) {
+                    this.character.skills.push(skillName);
+                    this.updateSkillsList();
+                    input.value = '';
+                }
+            }
+
+            updateSkillsList() {
+                const container = document.getElementById('skills-list');
+                container.innerHTML = this.character.skills.map((skill, index) => `
+                    <div class="skill-item">
+                        <span>${skill}</span>
+                        <button type="button" class="remove-btn" onclick="characterSheetManager.removeSkill(${index})">×</button>
+                    </div>
+                `).join('');
+            }
+
+            removeSkill(index) {
+                this.character.skills.splice(index, 1);
+                this.updateSkillsList();
+            }
+
+            addEquipment() {
+                const input = document.getElementById('equipment-input');
+                const equipmentName = input.value.trim();
+                
+                if (equipmentName && !this.character.equipment.includes(equipmentName)) {
+                    this.character.equipment.push(equipmentName);
+                    this.updateEquipmentList();
+                    input.value = '';
+                }
+            }
+
+            updateEquipmentList() {
+                const container = document.getElementById('equipment-list');
+                container.innerHTML = this.character.equipment.map((item, index) => `
+                    <div class="equipment-item">
+                        <span>${item}</span>
+                        <button type="button" class="remove-btn" onclick="characterSheetManager.removeEquipment(${index})">×</button>
+                    </div>
+                `).join('');
+            }
+
+            removeEquipment(index) {
+                this.character.equipment.splice(index, 1);
+                this.updateEquipmentList();
+            }
+
+            saveCharacter() {
+                this.updateCharacterFromForm();
+                const characterName = this.character.name || 'Personnage sans nom';
+                localStorage.setItem('rpg-character', JSON.stringify(this.character));
+                this.showNotification(`💾 ${characterName} sauvegardé !`);
+            }
+
+            loadCharacter() {
+                const saved = localStorage.getItem('rpg-character');
+                if (saved) {
+                    this.character = JSON.parse(saved);
+                    this.populateForm();
+                    this.showNotification('📂 Personnage chargé !');
+                } else {
+                    this.showNotification('❌ Aucun personnage sauvegardé trouvé.');
+                }
+            }
+
+            newCharacter() {
+                if (confirm('Créer un nouveau personnage ? Les données actuelles seront perdues.')) {
+                    this.character = {
+                        name: '',
+                        race: '',
+                        class: '',
+                        level: 1,
+                        stats: { force: 10, dexterite: 10, constitution: 10, intelligence: 10, sagesse: 10, charisme: 10 },
+                        skills: [],
+                        equipment: [],
+                        background: '',
+                        description: ''
+                    };
+                    this.populateForm();
+                    this.showNotification('🆕 Nouveau personnage créé !');
+                }
+            }
+
+            updateCharacterFromForm() {
+                const form = document.getElementById('characterForm');
+                const formData = new FormData(form);
+                
+                this.character.name = formData.get('name') || '';
+                this.character.race = formData.get('race') || '';
+                this.character.class = formData.get('class') || '';
+                this.character.level = parseInt(formData.get('level')) || 1;
+                this.character.background = formData.get('background') || '';
+                this.character.description = formData.get('description') || '';
+
+                Object.keys(this.character.stats).forEach(stat => {
+                    this.character.stats[stat] = parseInt(formData.get(stat)) || 10;
+                });
+            }
+
+            populateForm() {
+                // Champs de base
+                document.getElementById('char-name').value = this.character.name;
+                document.getElementById('char-level').value = this.character.level;
+                document.getElementById('char-race').value = this.character.race;
+                document.getElementById('char-class').value = this.character.class;
+                document.getElementById('char-background').value = this.character.background;
+                document.getElementById('char-description').value = this.character.description;
+
+                // Stats
+                Object.keys(this.character.stats).forEach(stat => {
+                    const input = document.getElementById(`stat-${stat}`);
+                    if (input) {
+                        input.value = this.character.stats[stat];
+                        this.updateStatModifier(input);
+                    }
+                });
+
+                // Listes
+                this.updateSkillsList();
+                this.updateEquipmentList();
+            }
+
+            showNotification(message) {
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+
+        // Initialisation
+        let characterSheetManager;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            characterSheetManager = new CharacterSheetManager();
+        });
+
+        // Export global
+        window.characterSheetManager = characterSheetManager;
+    </script>
 </body>
 </html>
