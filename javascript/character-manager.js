@@ -338,6 +338,26 @@ class CharacterManager {
                 backdrop?.parentNode?.removeChild?.(backdrop);
             }
         }
+
+        // Fermer toutes les modales après finalisation
+        const characterFormModal = document.getElementById('characterFormModal');
+        const authModal = document.getElementById('authModal');
+        const accountModal = document.getElementById('accountModal');
+        if (characterFormModal) characterFormModal.style.display = 'none';
+        if (authModal) authModal.style.display = 'none';
+        if (accountModal) accountModal.style.display = 'none';
+
+        // Masquer toutes les étapes du formulaire de personnage
+        const steps = document.querySelectorAll('#characterForm .form-step');
+        steps.forEach(step => {
+            step.classList.remove('active');
+        });
+
+        // Réinitialiser le formulaire de création de personnage
+        const characterForm = document.getElementById('characterForm');
+        if (characterForm) {
+            characterForm.reset();
+        }
     }
 
     // Gère l'état "chargement" du bouton
