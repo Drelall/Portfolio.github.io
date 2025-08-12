@@ -325,7 +325,7 @@
     <div id="characterModal" class="character-modal">
         <div class="character-sheet">
             <div class="character-header">
-                <h2>Fiche de Personnage RPG</h2>
+                <h2>Fiche de Personnage</h2>
                 <button id="closeModal" class="close-btn">&times;</button>
             </div>
 
@@ -336,7 +336,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="char-name">Nom du personnage :</label>
-                            <input type="text" id="char-name" name="name" placeholder="Ex: Gandalf le Gris">
+                            <input type="text" id="char-name" name="name" placeholder="Ex: Agent Smith">
                         </div>
                         <div class="form-group">
                             <label for="char-level">Niveau :</label>
@@ -345,37 +345,27 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="char-race">Race :</label>
-                            <select id="char-race" name="race">
-                                <option value="">Choisir une race</option>
-                                <option value="humain">Humain</option>
-                                <option value="elfe">Elfe</option>
-                                <option value="nain">Nain</option>
-                                <option value="halfelin">Halfelin</option>
-                                <option value="demi-elfe">Demi-Elfe</option>
-                                <option value="demi-orc">Demi-Orc</option>
-                                <option value="tieffelin">Tieffelin</option>
-                                <option value="dragonborn">Dragonborn</option>
-                                <option value="gnome">Gnome</option>
-                                <option value="demi-geant">Demi-Géant</option>
+                            <label for="char-type">Type de personnage :</label>
+                            <select id="char-type" name="type">
+                                <option value="">Choisir un type</option>
+                                <option value="agent">Agent du Gouvernement</option>
+                                <option value="initie">Initié</option>
+                                <option value="sorcier">Sorcier</option>
+                                <option value="citoyen">Citoyen</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="char-class">Classe :</label>
-                            <select id="char-class" name="class">
-                                <option value="">Choisir une classe</option>
-                                <option value="guerrier">Guerrier</option>
-                                <option value="mage">Mage</option>
-                                <option value="voleur">Voleur/Roublard</option>
-                                <option value="clerc">Clerc</option>
-                                <option value="paladin">Paladin</option>
-                                <option value="ranger">Rôdeur</option>
-                                <option value="barde">Barde</option>
-                                <option value="druide">Druide</option>
-                                <option value="sorcier">Sorcier</option>
-                                <option value="warlock">Occultiste</option>
-                                <option value="moine">Moine</option>
-                                <option value="barbare">Barbare</option>
+                            <select id="char-class" name="class" disabled>
+                                <option value="">Choisir d'abord un type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="char-deity">Divinité :</label>
+                            <select id="char-deity" name="deity" disabled>
+                                <option value="">Choisir d'abord un type</option>
                             </select>
                         </div>
                     </div>
@@ -424,7 +414,7 @@
                     <h3>Compétences</h3>
                     <div class="skills-container">
                         <div class="skills-input">
-                            <input type="text" id="skill-input" placeholder="Ajouter une compétence (ex: Acrobaties, Investigation...)">
+                            <input type="text" id="skill-input" placeholder="Ajouter une compétence (ex: Investigation, Combat...)">
                             <button type="button" id="add-skill" class="btn-small">Ajouter</button>
                         </div>
                         <div id="skills-list" class="skills-list"></div>
@@ -436,7 +426,7 @@
                     <h3>Équipement</h3>
                     <div class="equipment-container">
                         <div class="equipment-input">
-                            <input type="text" id="equipment-input" placeholder="Ajouter un équipement (ex: Épée longue, Armure de cuir...)">
+                            <input type="text" id="equipment-input" placeholder="Ajouter un équipement (ex: Pistolet, Grimoire...)">
                             <button type="button" id="add-equipment" class="btn-small">Ajouter</button>
                         </div>
                         <div id="equipment-list" class="equipment-list"></div>
@@ -483,8 +473,9 @@
             constructor() {
                 this.character = {
                     name: '',
-                    race: '',
+                    type: '',
                     class: '',
+                    deity: '',
                     level: 1,
                     stats: {
                         force: 10,
@@ -499,14 +490,72 @@
                     background: '',
                     description: ''
                 };
+
+                // Configuration de l'univers
+                this.universe = {
+                    agent: {
+                        name: 'Agent du Gouvernement',
+                        classes: [
+                            { value: 'soldat', name: 'Soldat' },
+                            { value: 'archeologue', name: 'Archéologue' },
+                            { value: 'medecin', name: 'Médecin' },
+                            { value: 'ingenieur', name: 'Ingénieur' }
+                        ],
+                        deities: [
+                            { value: 'apophis', name: 'Apophis' },
+                            { value: 'thor', name: 'Thor' }
+                        ]
+                    },
+                    initie: {
+                        name: 'Initié',
+                        classes: [
+                            { value: 'exorciste', name: 'Exorciste' },
+                            { value: 'tueur_monstre', name: 'Tueur de Monstre' },
+                            { value: 'chasseur_fantome', name: 'Chasseur de Fantôme' }
+                        ],
+                        deities: [
+                            { value: 'magicien_oz', name: 'Magicien d\'Oz' }
+                        ]
+                    },
+                    sorcier: {
+                        name: 'Sorcier',
+                        classes: [
+                            { value: 'necromancien', name: 'Nécromancien' },
+                            { value: 'druide', name: 'Druide' },
+                            { value: 'chaman', name: 'Chaman' },
+                            { value: 'alchimiste', name: 'Alchimiste' },
+                            { value: 'enchanteur', name: 'Enchanteur' },
+                            { value: 'occultiste', name: 'Occultiste' },
+                            { value: 'elementaliste', name: 'Élémentaliste' },
+                            { value: 'thaumaturge', name: 'Thaumaturge' },
+                            { value: 'demonologue', name: 'Démonologue' }
+                        ],
+                        deities: [
+                            { value: 'phenix', name: 'Le Phénix' },
+                            { value: 'dragons', name: 'Les Dragons' },
+                            { value: 'elementaires', name: 'Les Élémentaires' },
+                            { value: 'obscurium', name: 'L\'Obscurium' }
+                        ]
+                    },
+                    citoyen: {
+                        name: 'Citoyen',
+                        classes: [
+                            { value: 'hacker', name: 'Hacker' },
+                            { value: 'lowtech', name: 'Lowtech' }
+                        ],
+                        deities: [
+                            { value: 'lapin_blanc', name: 'Le Lapin Blanc' },
+                            { value: 'grand_architecte', name: 'Le Grand Architecte' }
+                        ]
+                    }
+                };
+
                 this.init();
             }
 
             init() {
                 this.bindEvents();
                 this.updateAllStatModifiers();
-                // Vérifier si l'API File System Access est disponible
-                this.hasFileSystemAccess = 'showSaveFilePicker' in window;
             }
 
             bindEvents() {
@@ -515,6 +564,11 @@
                 const closeBtn = document.getElementById('closeModal');
                 const frameHoverArea = document.getElementById('frameHoverArea');
                 const fileInput = document.getElementById('fileInput');
+
+                // Sélecteurs en cascade
+                const typeSelect = document.getElementById('char-type');
+                const classSelect = document.getElementById('char-class');
+                const deitySelect = document.getElementById('char-deity');
 
                 // Ouvrir le modal en cliquant sur le vortex
                 frameHoverArea.addEventListener('click', () => {
@@ -548,6 +602,10 @@
 
                 // Gestionnaire de fichier
                 fileInput.addEventListener('change', (e) => this.handleFileLoad(e));
+
+                // Sélecteurs en cascade
+                typeSelect.addEventListener('change', () => this.updateClassOptions());
+                classSelect.addEventListener('change', () => this.updateDeityOptions());
 
                 // Stats
                 const statInputs = document.querySelectorAll('[id^="stat-"]');
@@ -673,8 +731,56 @@
                 this.updateEquipmentList();
             }
 
-            // Nouvelle méthode pour sauvegarder avec choix du dossier
-            async saveCharacterToFile() {
+            updateClassOptions() {
+                const typeSelect = document.getElementById('char-type');
+                const classSelect = document.getElementById('char-class');
+                const deitySelect = document.getElementById('char-deity');
+                
+                const selectedType = typeSelect.value;
+                console.log('Type sélectionné:', selectedType);
+                
+                // Réinitialiser les sélecteurs
+                classSelect.innerHTML = '<option value="">Choisir une classe</option>';
+                deitySelect.innerHTML = '<option value="">Choisir une divinité</option>';
+                
+                if (selectedType && this.universe[selectedType]) {
+                    console.log('Configuration trouvée:', this.universe[selectedType]);
+                    
+                    // Activer le sélecteur de classe
+                    classSelect.disabled = false;
+                    
+                    // Ajouter les classes disponibles
+                    this.universe[selectedType].classes.forEach(cls => {
+                        const option = document.createElement('option');
+                        option.value = cls.value;
+                        option.textContent = cls.name;
+                        classSelect.appendChild(option);
+                        console.log('Classe ajoutée:', cls.name);
+                    });
+                    
+                    // Activer et remplir le sélecteur de divinité
+                    deitySelect.disabled = false;
+                    this.universe[selectedType].deities.forEach(deity => {
+                        const option = document.createElement('option');
+                        option.value = deity.value;
+                        option.textContent = deity.name;
+                        deitySelect.appendChild(option);
+                        console.log('Divinité ajoutée:', deity.name);
+                    });
+                } else {
+                    console.log('Aucune configuration trouvée pour:', selectedType);
+                    classSelect.disabled = true;
+                    deitySelect.disabled = true;
+                }
+            }
+
+            updateDeityOptions() {
+                // Les divinités sont déjà filtrées par type, pas besoin de filtrage supplémentaire
+                console.log('updateDeityOptions appelée');
+            }
+
+            // Méthode simplifiée pour sauvegarder
+            saveCharacterToFile() {
                 this.updateCharacterFromForm();
                 
                 // Créer le nom de fichier avec le nom du personnage ou un nom par défaut
@@ -694,40 +800,6 @@
                 };
                 
                 const dataStr = JSON.stringify(characterData, null, 2);
-
-                // Utiliser l'API File System Access si disponible (Chrome, Edge, Opera)
-                if (this.hasFileSystemAccess) {
-                    try {
-                        const fileHandle = await window.showSaveFilePicker({
-                            suggestedName: fileName,
-                            types: [{
-                                description: 'Fichiers de personnage RPG',
-                                accept: {
-                                    'application/json': ['.json']
-                                }
-                            }]
-                        });
-
-                        const writable = await fileHandle.createWritable();
-                        await writable.write(dataStr);
-                        await writable.close();
-
-                        return;
-                    } catch (error) {
-                        if (error.name === 'AbortError') {
-                            return;
-                        }
-                        console.error('Erreur API File System:', error);
-                        // Retomber sur la méthode classique en cas d'erreur
-                    }
-                }
-
-                // Méthode de sauvegarde classique (fallback)
-                this.saveCharacterToDownloads(dataStr, fileName);
-            }
-
-            // Méthode de sauvegarde classique dans le dossier Téléchargements
-            saveCharacterToDownloads(dataStr, fileName) {
                 const dataBlob = new Blob([dataStr], { type: 'application/json' });
                 
                 // Créer un lien de téléchargement
@@ -744,34 +816,9 @@
                 URL.revokeObjectURL(downloadLink.href);
             }
 
-            // Nouvelle méthode pour charger avec choix du fichier
-            async loadCharacterFromFile() {
-                // Utiliser l'API File System Access si disponible
-                if (this.hasFileSystemAccess) {
-                    try {
-                        const [fileHandle] = await window.showOpenFilePicker({
-                            types: [{
-                                description: 'Fichiers de personnage RPG',
-                                accept: {
-                                    'application/json': ['.json']
-                                }
-                            }],
-                            multiple: false
-                        });
-
-                        const file = await fileHandle.getFile();
-                        await this.processCharacterFile(file);
-                        return;
-                    } catch (error) {
-                        if (error.name === 'AbortError') {
-                            return;
-                        }
-                        console.error('Erreur API File System:', error);
-                        // Retomber sur la méthode classique en cas d'erreur
-                    }
-                }
-
-                // Méthode classique avec input file
+            // Méthode simplifiée pour charger
+            loadCharacterFromFile() {
+                // Utiliser uniquement la méthode classique avec input file
                 const fileInput = document.getElementById('fileInput');
                 fileInput.click();
             }
@@ -823,7 +870,7 @@
                 if (!data || typeof data !== 'object') return false;
                 
                 // Vérifier que les propriétés essentielles existent
-                const requiredProps = ['name', 'race', 'class', 'level', 'stats'];
+                const requiredProps = ['name', 'type', 'class', 'level', 'stats'];
                 const hasRequiredProps = requiredProps.some(prop => data.hasOwnProperty(prop));
                 
                 // Vérifier la structure des stats si elle existe
@@ -840,8 +887,9 @@
                 if (confirm('Créer un nouveau personnage ? Les données actuelles seront perdues.')) {
                     this.character = {
                         name: '',
-                        race: '',
+                        type: '',
                         class: '',
+                        deity: '',
                         level: 1,
                         stats: { force: 10, dexterite: 10, constitution: 10, intelligence: 10, sagesse: 10, charisme: 10 },
                         skills: [],
@@ -858,8 +906,9 @@
                 const formData = new FormData(form);
                 
                 this.character.name = formData.get('name') || '';
-                this.character.race = formData.get('race') || '';
+                this.character.type = formData.get('type') || '';
                 this.character.class = formData.get('class') || '';
+                this.character.deity = formData.get('deity') || '';
                 this.character.level = parseInt(formData.get('level')) || 1;
                 this.character.background = formData.get('background') || '';
                 this.character.description = formData.get('description') || '';
@@ -873,40 +922,18 @@
                 // Champs de base
                 document.getElementById('char-name').value = this.character.name;
                 document.getElementById('char-level').value = this.character.level;
-                document.getElementById('char-race').value = this.character.race;
-                document.getElementById('char-class').value = this.character.class;
+                document.getElementById('char-type').value = this.character.type;
                 document.getElementById('char-background').value = this.character.background;
                 document.getElementById('char-description').value = this.character.description;
 
-                // Stats
-                Object.keys(this.character.stats).forEach(stat => {
-                    const input = document.getElementById(`stat-${stat}`);
-                    if (input) {
-                        input.value = this.character.stats[stat];
-                        this.updateStatModifier(input);
-                    }
-                });
-
-                // Listes
-                this.updateSkillsList();
-                this.updateEquipmentList();
-            }
-        }
-
-        // Initialisation
-        let characterSheetManager;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            characterSheetManager = new CharacterSheetManager();
-        });
-
-        // Export global
-        window.characterSheetManager = characterSheetManager;
-    </script>
-</body>
-</html>
-                document.getElementById('char-background').value = this.character.background;
-                document.getElementById('char-description').value = this.character.description;
+                // Mettre à jour les options de classe et divinité selon le type
+                this.updateClassOptions();
+                
+                // Définir les valeurs après mise à jour des options
+                setTimeout(() => {
+                    document.getElementById('char-class').value = this.character.class;
+                    document.getElementById('char-deity').value = this.character.deity;
+                }, 50); // Augmenter le délai pour s'assurer que les options sont créées
 
                 // Stats
                 Object.keys(this.character.stats).forEach(stat => {
