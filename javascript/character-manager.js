@@ -83,7 +83,6 @@ class CharacterSheetManager {
 
     init() {
         this.bindEvents();
-        this.updateAllStatModifiers();
     }
 
     bindEvents() {
@@ -125,13 +124,6 @@ class CharacterSheetManager {
         typeSelect.addEventListener('change', () => this.updateClassOptions());
         classSelect.addEventListener('change', () => this.updateDeityOptions());
 
-        const statInputs = document.querySelectorAll('[id^="stat-"]');
-        statInputs.forEach(input => {
-            input.addEventListener('input', (e) => {
-                this.updateStatModifier(e.target);
-            });
-        });
-
         document.getElementById('add-skill').addEventListener('click', () => this.addSkill());
         document.getElementById('skill-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -170,24 +162,7 @@ class CharacterSheetManager {
             const input = document.getElementById(`stat-${stat}`);
             if (input) {
                 input.value = result;
-                this.updateStatModifier(input);
             }
-        });
-    }
-
-    updateStatModifier(input) {
-        const value = parseInt(input.value);
-        const modifier = Math.floor((value - 10) / 2);
-        const modifierSpan = input.parentElement.querySelector('.stat-modifier');
-        if (modifierSpan) {
-            modifierSpan.textContent = modifier >= 0 ? `+${modifier}` : `${modifier}`;
-        }
-    }
-
-    updateAllStatModifiers() {
-        const statInputs = document.querySelectorAll('[id^="stat-"]');
-        statInputs.forEach(input => {
-            this.updateStatModifier(input);
         });
     }
 
@@ -396,13 +371,37 @@ class CharacterSheetManager {
             const input = document.getElementById(`stat-${stat}`);
             if (input) {
                 input.value = this.character.stats[stat];
-                this.updateStatModifier(input);
             }
         });
         this.updateSkillsList();
         this.updateEquipmentList();
     }
 }
+
+// Initialisation globale
+document.addEventListener('DOMContentLoaded', () => {
+    window.characterSheetManager = new CharacterSheetManager();
+});
+        document.getElementById('char-name').value = this.character.name;
+        document.getElementById('char-level').value = this.character.level;
+        document.getElementById('char-type').value = this.character.type;
+        document.getElementById('char-background').value = this.character.background;
+        document.getElementById('char-description').value = this.character.description;
+        this.updateClassOptions();
+        setTimeout(() => {
+            document.getElementById('char-class').value = this.character.class;
+            document.getElementById('char-deity').value = this.character.deity;
+        }, 50);
+        Object.keys(this.character.stats).forEach(stat => {
+            const input = document.getElementById(`stat-${stat}`);
+            if (input) {
+                input.value = this.character.stats[stat];
+                this.updateStatModifier(input);
+            }
+        });
+        this.updateSkillsList();
+        this.updateEquipmentList();
+    
 
 // Initialisation globale
 document.addEventListener('DOMContentLoaded', () => {
