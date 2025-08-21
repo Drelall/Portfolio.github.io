@@ -3062,3 +3062,21 @@ form select,
     color: #eaf6ff !important;
     border: 2px solid #23232b !important;
 }
+
+.btn-green-outline {
+  border: 2px solid #28a745;
+  color: #28a745;
+  background: transparent;
+  padding: 12px 25px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 120px;
+}
+.btn-green-outline:hover {
+  background: #e6f9ec;
+  color: #218838;
+  border-color: #218838;
+}
