@@ -105,9 +105,28 @@ class CharacterSheetManager {
         document.getElementById('saveCharacter').addEventListener('click', () => this.saveCharacterToFile());
         document.getElementById('loadCharacter').addEventListener('click', () => this.loadCharacterFromFile());
         document.getElementById('newCharacter').addEventListener('click', () => this.newCharacter());
-
-        // Mise à jour des classes et divinités selon le type choisi
         typeSelect.addEventListener('change', () => this.updateClassOptions());
+
+        // Modification : afficher le jeu dans la modal au clic sur "Jouer"
+        document.getElementById('playCharacter').addEventListener('click', () => {
+            this.updateCharacterFromForm();
+            if (typeof window.sagaStart === 'function') {
+                window.sagaStart(this.character, document.getElementById('characterModal'));
+            } else {
+                // Fallback : affiche un message dans la modal
+                const modal = document.getElementById('characterModal');
+                modal.innerHTML = `
+                    <div style="padding:40px;text-align:center;color:#28a745;">
+                        <h1>Bienvenue ${this.character.name ? 'à ' + this.character.name : ''} dans l’aventure !</h1>
+                        <p>Type : ${this.character.type || '-'}</p>
+                        <p>Classe : ${this.character.class || '-'}</p>
+                        <p>Divinité : ${this.character.deity || '-'}</p>
+                        <hr>
+                        <p>Le jeu commence ici...</p>
+                    </div>
+                `;
+            }
+        });
     }
 
     openModal() {
