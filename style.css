@@ -2404,6 +2404,7 @@ body.dark-mode .search-result-item:hover {
   opacity: 0;
   visibility: hidden;
  
+
   transition: opacity 0.3s ease, visibility 0.3s ease;
   pointer-events: none;
 }
@@ -2783,7 +2784,7 @@ body:has(#gameCanvas) .user-info span {
   overflow-y: auto;
   box-shadow: 0 8px 32px rgba(0, 174, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.7);
   position: relative;
-  border: 2px solid #00aeff;
+  border: none;
 }
 .character-header {
   display: flex;
@@ -2999,45 +3000,35 @@ body:has(#gameCanvas) .user-info span {
   background: #00aeff;
   color: #23232b;
 }
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 2px solid #226d54;
-}
+
 .btn-primary,
 .btn-secondary {
-  padding: 13px 28px;
+  padding: 12px 25px;
   border: none;
-  border-radius: 7px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  transition: all 0.3s;
-  font-family: "Segoe UI", "Arial", sans-serif;
+  transition: all 0.3s ease;
 }
+
 .btn-primary {
-  background: #00aeff;
-  color: #18181c;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 174, 255, 0.12);
+  background: #226d54;
+  color: white;
 }
+
 .btn-primary:hover {
-  background: #0090d0;
-  color: #fff;
+  background: #1a5642;
   transform: translateY(-2px);
 }
+
 .btn-secondary {
-  background: #23232b;
-  color: #00aeff;
-  border: 2px solid #00aeff;
-  font-weight: bold;
+  background: #412e28;
+  color: white;
 }
+
 .btn-secondary:hover {
-  background: #00aeff;
-  color: #23232b;
+  background: #545b62;
 }
 
 /* Suppression des styles de notification */
@@ -3066,7 +3057,7 @@ body:has(#gameCanvas) .user-info span {
 }
 .btn-primary,
 .btn-secondary {
-  padding: 13px 28px;
+  padding: 9px 28px;
   border: none;
   border-radius: 7px;
   cursor: pointer;
@@ -3117,10 +3108,9 @@ body:has(#gameCanvas) .user-info span {
   }
 }
 
-/* Ajout pour uniformiser le fond des menus déroulants du formulaire personnage */
-.form-group select {
-  background: #18181c !important;
-  color: #eaf6ff !important;
+/* Supprime la bordure verte en bas de la fiche personnage */
+.character-sheet {
+  border: none;
   border: 2px solid #23232b !important;
 }
 
@@ -3314,8 +3304,7 @@ body:has(#gameCanvas) .user-info span {
   gap: 10px;
   margin-top: 25px;
   padding-top: 20px;
-  border-top: 2px solid #226d54;
-}
+  }
 .btn-primary,
 .btn-secondary {
   padding: 12px 25px;
@@ -3372,7 +3361,7 @@ body:has(#gameCanvas) .user-info span {
 }
 .btn-primary,
 .btn-secondary {
-  padding: 13px 28px;
+  padding: 9px 28px;
   border: none;
   border-radius: 7px;
   cursor: pointer;
