@@ -300,7 +300,7 @@ a:focus {
 .form-group input[type="text"]::placeholder,
 .form-group input[type="email"]::placeholder,
 .form-group input[type="password"]::placeholder {
-  color: #ddc9a3;
+  color: #ffffff;
 }
 
 .class-description {
@@ -3008,32 +3008,35 @@ body:has(#gameCanvas) .user-info span {
 }
 .btn-primary,
 .btn-secondary {
-  padding: 12px 25px;
+  padding: 13px 28px;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.3s;
+  font-family: "Segoe UI", "Arial", sans-serif;
 }
-
 .btn-primary {
-  background: #226d54;
-  color: white;
+  background: #00aeff;
+  color: #18181c;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0, 174, 255, 0.12);
 }
-
 .btn-primary:hover {
-  background: #1a5642;
+  background: #0090d0;
+  color: #fff;
   transform: translateY(-2px);
 }
-
 .btn-secondary {
-  background: #412e28;
-  color: white;
+  background: #23232b;
+  color: #00aeff;
+  border: 2px solid #00aeff;
+  font-weight: bold;
 }
-
 .btn-secondary:hover {
-  background: #545b62;
+  background: #00aeff;
+  color: #23232b;
 }
 
 /* Suppression des styles de notification */
@@ -3054,9 +3057,6 @@ body:has(#gameCanvas) .user-info span {
   .action-buttons {
     flex-direction: column;
   }
-}
-body {
-  background: radial-gradient(ellipse at top left, #23232b 0%, #18181c 100%);
 }
 .character-modal {
   display: none;
