@@ -2405,6 +2405,7 @@ body.dark-mode .search-result-item:hover {
   visibility: hidden;
  
 
+
   transition: opacity 0.3s ease, visibility 0.3s ease;
   pointer-events: none;
 }
@@ -3031,6 +3032,18 @@ body:has(#gameCanvas) .user-info span {
   background: #545b62;
 }
 
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 0.5em 1.2em;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.btn-success:hover {
+    background-color: #218838;
+}
+
 /* Suppression des styles de notification */
 /* .notification styles supprimés */
 
@@ -3057,7 +3070,7 @@ body:has(#gameCanvas) .user-info span {
 }
 .btn-primary,
 .btn-secondary {
-  padding: 9px 28px;
+  padding: 5px 15px;
   border: none;
   border-radius: 7px;
   cursor: pointer;
@@ -3108,20 +3121,6 @@ body:has(#gameCanvas) .user-info span {
   }
 }
 
-/* Supprime la bordure verte en bas de la fiche personnage */
-.character-sheet {
-  border: none;
-  border: 2px solid #23232b !important;
-}
-
-/* Pour les options à l'intérieur des menus déroulants */
-.form-group select option {
-  background: #18181c !important;
-  color: #eaf6ff !important;
-  background: #00aeff;
-  color: #23232b;
-  transform: scale(1.1);
-}
 
 .form-section {
   margin-bottom: 28px;
