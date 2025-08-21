@@ -3361,7 +3361,7 @@ body:has(#gameCanvas) .user-info span {
 }
 .btn-primary,
 .btn-secondary {
-  padding: 9px 28px;
+  padding: 5px 15px;
   border: none;
   border-radius: 7px;
   cursor: pointer;
