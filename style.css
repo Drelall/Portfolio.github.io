@@ -3128,7 +3128,6 @@ body:has(#gameCanvas) .user-info span {
 .form-group select option {
   background: #18181c !important;
   color: #eaf6ff !important;
-}
   background: #00aeff;
   color: #23232b;
   transform: scale(1.1);
