@@ -33,10 +33,6 @@
                             <label for="char-name">Nom du personnage :</label>
                             <input type="text" id="char-name" name="name" class="input-uniform" placeholder="...">
                         </div>
-                        <div class="form-group">
-                            <label for="char-level">Niveau :</label>
-                            <input type="number" id="char-level" name="level" min="1" max="20" value="1">
-                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -66,66 +62,66 @@
                     </div>
                 </section>
 
-                <!-- Caractéristiques -->
-                <section class="form-section">
-                    <h3>Caractéristiques</h3>
-                    <div class="stats-grid">
-                        <div class="stat-group">
-                            <label for="stat-force">Force :</label>
-                            <input type="number" id="stat-force" name="force" min="3" max="20" value="10">
-                        </div>
-                        <div class="stat-group">
-                            <label for="stat-dexterite">Dextérité :</label>
-                            <input type="number" id="stat-dexterite" name="dexterite" min="3" max="20" value="10">
-                        </div>
-                        <div class="stat-group">
-                            <label for="stat-constitution">Constitution :</label>
-                            <input type="number" id="stat-constitution" name="constitution" min="3" max="20" value="10">
-                        </div>
-                        <div class="stat-group">
-                            <label for="stat-intelligence">Intelligence :</label>
-                            <input type="number" id="stat-intelligence" name="intelligence" min="3" max="20" value="10">
-                        </div>
-                        <div class="stat-group">
-                            <label for="stat-sagesse">Sagesse :</label>
-                            <input type="number" id="stat-sagesse" name="sagesse" min="3" max="20" value="10">
-                        </div>
-                        <div class="stat-group">
-                            <label for="stat-charisme">Charisme :</label>
-                            <input type="number" id="stat-charisme" name="charisme" min="3" max="20" value="10">
-                        </div>
+                <!-- Boutons d'action -->
+                <div class="action-buttons">
+                    <div>
+                        <button type="button" id="newCharacter" class="btn-secondary"> Nouveau</button>
+                        <button type="button" id="loadCharacter" class="btn-secondary"> Charger</button>
+                        <input type="file" id="fileInput" accept=".json" style="display: none;">
+                        <button type="button" id="saveCharacter" class="btn-secondary"> Sauvegarder</button>
+                        <button type="button" id="playCharacter" class="btn-success"> Jouer</button>
                     </div>
-                    <button type="button" id="rollStats" class="btn-secondary">
-                      <!-- Icône SVG dé moderne -->
-                      <svg width="22" height="22" viewBox="0 0 22 22" style="vertical-align: middle; margin-right: 7px;" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="2.5" y="2.5" width="17" height="17" rx="4" fill="#00aeff" stroke="#23232b" stroke-width="2"/>
-                        <circle cx="7" cy="7" r="1.5" fill="#23232b"/>
-                        <circle cx="15" cy="7" r="1.5" fill="#23232b"/>
-                        <circle cx="7" cy="15" r="1.5" fill="#23232b"/>
-                        <circle cx="15" cy="15" r="1.5" fill="#23232b"/>
-                        <circle cx="11" cy="11" r="1.5" fill="#23232b"/>
-                      </svg>
-                      Lancer les dés 
-                    </button>
-                </section>
-
-                <!-- Compétences -->
-                <section class="form-section">
-                    <h3>Compétences</h3>
-                    <div class="skills-container">
-                        <div class="skills-input">
-                            <input type="text" id="skill-input" placeholder="Ajouter une compétence (ex: Investigation, Combat...)">
-                            <button type="button" id="add-skill" class="btn-small">Ajouter</button>
-                        </div>
-                        <div id="skills-list" class="skills-list"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts en mode local -->
+    <script src="../javascript/character-manager.js"></script>
+    <script src="../javascript/jeux.js"></script>
+</body>
+</html>
+</body>
+</html>
+                    </div>
+                    <div>
+                        <button type="button" id="saveCharacter" class="btn-primary"> Sauvegarder</button>
+                        <button type="button" id="playCharacter" class="btn-success"> Jouer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts en mode local -->
+    <script src="../javascript/character-manager.js"></script>
+    <script src="../javascript/jeux.js"></script>
+</body>
+</html>
                     </div>
                 </section>
 
-                <!-- Équipement -->
-                <section class="form-section">
-                    <h3>Équipement</h3>
-                    <div class="equipment-container">
-                        <div class="equipment-input">
+                <!-- Boutons d'action -->
+                <div class="action-buttons">
+                    <div>
+                        <button type="button" id="newCharacter" class="btn-secondary"> Nouveau</button>
+                        <button type="button" id="loadCharacter" class="btn-secondary"> Charger</button>
+                        <input type="file" id="fileInput" accept=".json" style="display: none;">
+                    </div>
+                    <div>
+                        <button type="button" id="saveCharacter" class="btn-primary"> Sauvegarder</button>
+                        <button type="button" id="playCharacter" class="btn-success"> Jouer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Scripts en mode local -->
+    <script src="../javascript/character-manager.js"></script>
+    <script src="../javascript/jeux.js"></script>
+</body>
+</html>
                             <input type="text" id="equipment-input" placeholder="Ajouter un équipement (ex: Pistolet, Grimoire...)">
                             <button type="button" id="add-equipment" class="btn-small">Ajouter</button>
                         </div>
@@ -171,6 +167,10 @@
 </html>
     
     <!-- Scripts en mode local -->
+    <script src="../javascript/character-manager.js"></script>
+    <script src="../javascript/jeux.js"></script>
+</body>
+</html>
     <script src="../javascript/character-manager.js"></script>
     <script src="../javascript/jeux.js"></script>
 </body>
