@@ -35,21 +35,21 @@ class CharacterSheetManager {
             sorcier: {
                 name: 'Sorcier',
                 classes: [
-                    { value: 'necromancien', name: 'Nécromancien' },
-                    { value: 'druide', name: 'Druide' },
-                    { value: 'chaman', name: 'Chaman' },
-                    { value: 'alchimiste', name: 'Alchimiste' },
+                    /*{ value: 'necromancien', name: 'Nécromancien' },*/
+                    /*{ value: 'druide', name: 'Druide' },*/
+                    /*{ value: 'chaman', name: 'Chaman' },*/
+                    /*{ value: 'alchimiste', name: 'Alchimiste' },*/
                     { value: 'enchanteur', name: 'Enchanteur' },
-                    { value: 'occultiste', name: 'Occultiste' },
-                    { value: 'elementaliste', name: 'Élémentaliste' },
-                    { value: 'thaumaturge', name: 'Thaumaturge' },
-                    { value: 'demonologue', name: 'Démonologue' }
+                    /*{ value: 'occultiste', name: 'Occultiste' },*/
+                    /*{ value: 'elementaliste', name: 'Élémentaliste' },*/
+                    /*{ value: 'thaumaturge', name: 'Thaumaturge' },*/
+                    /*{ value: 'demonologue', name: 'Démonologue' }*/
                 ],
                 deities: [
-                    { value: 'phenix', name: 'Le Phénix' },
+                    /*{ value: 'phenix', name: 'Le Phénix' },*/
                     { value: 'dragons', name: 'Les Dragons' },
-                    { value: 'elementaires', name: 'Les Élémentaires' },
-                    { value: 'obscurium', name: 'L\'Obscurium' }
+                    /*{ value: 'elementaires', name: 'Les Élémentaires' },*/
+                    /*{ value: 'obscurium', name: 'L\'Obscurium' }*/
                 ]
             },
             citoyen: {
