@@ -2912,6 +2912,17 @@ body:has(#gameCanvas) .user-info span {
 .stat-group input:focus {
   border-color: #00aeff;
 }
+.stat-modifier {
+  font-weight: bold;
+  color: #00aeff;
+  min-width: 35px;
+  text-align: center;
+  background: rgba(0, 174, 255, 0.08);
+  padding: 3px 7px;
+  border-radius: 4px;
+  font-size: 13px;
+  box-shadow: 0 0 4px #00aeff;
+}
 .skills-container,
 .equipment-container {
   background: #23232b;
@@ -2990,75 +3001,11 @@ body:has(#gameCanvas) .user-info span {
 .action-buttons {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 2px solid #23232b;
-}
-.btn-primary,
-.btn-secondary {
-  padding: 13px 28px;
-  border: none;
-  border-radius: 7px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.3s;
-  font-family: "Segoe UI", "Arial", sans-serif;
-}
-.btn-primary {
-  background: #00aeff;
-  color: #18181c;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(0, 174, 255, 0.12);
-}
-.btn-primary:hover {
-  background: #0090d0;
-  color: #fff;
-  transform: translateY(-2px);
-}
-.btn-secondary {
-  background: #23232b;
-  color: #00aeff;
-  border: 2px solid #00aeff;
-  font-weight: bold;
-}
-.btn-secondary:hover {
-  background: #00aeff;
-  color: #23232b;
-}
-/* Suppression des styles de notification */
-/* .notification styles supprimés */
-
-/* Responsive */
-@media (max-width: 768px) {
-  .character-sheet {
-    padding: 18px;
-    margin: 8px;
-  }
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  .action-buttons {
-    flex-direction: column;
-  }
-}
-.remove-btn:hover {
-  background: #c82333;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
   gap: 10px;
   margin-top: 25px;
   padding-top: 20px;
   border-top: 2px solid #226d54;
 }
-
 .btn-primary,
 .btn-secondary {
   padding: 12px 25px;
@@ -3095,18 +3042,15 @@ body:has(#gameCanvas) .user-info span {
 /* Responsive */
 @media (max-width: 768px) {
   .character-sheet {
-    padding: 20px;
-    margin: 10px;
+    padding: 18px;
+    margin: 8px;
   }
-
   .stats-grid {
     grid-template-columns: 1fr;
   }
-
   .form-row {
     grid-template-columns: 1fr;
   }
-
   .action-buttons {
     flex-direction: column;
   }
@@ -3183,11 +3127,13 @@ body {
   transition: all 0.3s ease;
   box-shadow: 0 0 8px #00aeff;
 }
+
 .close-btn:hover {
   background: #00aeff;
   color: #23232b;
   transform: scale(1.1);
 }
+
 .form-section {
   margin-bottom: 28px;
   padding: 22px 20px;
@@ -3366,10 +3312,64 @@ body {
 .action-buttons {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 28px;
+  gap: 10px;
+  margin-top: 25px;
   padding-top: 20px;
-  border-top: 2px solid #23232b;
+  border-top: 2px solid #226d54;
+}
+.btn-primary,
+.btn-secondary {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #226d54;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #1a5642;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #412e28;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #545b62;
+}
+
+/* Suppression des styles de notification */
+/* .notification styles supprimés */
+
+/* Responsive */
+@media (max-width: 768px) {
+  .character-sheet {
+    padding: 18px;
+    margin: 8px;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+.input-uniform {
+    background: #18181c !important;
+    color: #eaf6ff !important;
+    border: 2px solid #23232b !important;
 }
 .btn-primary,
 .btn-secondary {
