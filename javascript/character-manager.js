@@ -113,18 +113,41 @@ class CharacterSheetManager {
             if (typeof window.sagaStart === 'function') {
                 window.sagaStart(this.character, document.getElementById('characterModal'));
             } else {
-                // Fallback : affiche un message dans la modal
+                // Fallback : affiche un message dans la modal en conservant la structure
                 const modal = document.getElementById('characterModal');
                 modal.innerHTML = `
-                    <div style="padding:40px;text-align:center;color:#28a745;">
-                        <h1>Bienvenue ${this.character.name ? 'à ' + this.character.name : ''} dans l’aventure !</h1>
-                        <p>Type : ${this.character.type || '-'}</p>
-                        <p>Classe : ${this.character.class || '-'}</p>
-                        <p>Divinité : ${this.character.deity || '-'}</p>
-                        <hr>
-                        <p>Le jeu commence ici...</p>
+                    <div class="character-sheet">
+                        <div class="character-header">
+                            <h2>Démarrage de l'Aventure</h2>
+                            <button id="closeModal" class="close-btn">&times;</button>
+                        </div>
+                        <div style="padding: 30px; text-align: center; color: #f5deb3;">
+                            <h1 style="color: #28a745; margin-bottom: 30px;">Bienvenue ${this.character.name ? this.character.name : 'Aventurier'} dans l'aventure !</h1>
+                            <div style="background: rgba(34, 109, 84, 0.1); border: 1px solid #226d54; border-radius: 8px; padding: 20px; margin: 20px 0;">
+                                <p><strong>Type :</strong> ${this.character.type || '-'}</p>
+                                <p><strong>Classe :</strong> ${this.character.class || '-'}</p>
+                                <p><strong>Divinité :</strong> ${this.character.deity || '-'}</p>
+                            </div>
+                            <hr style="border-color: #226d54; margin: 30px 0;">
+                            <p style="font-size: 1.2rem; color: #f5deb3;">Le jeu commence ici...</p>
+                            <div style="margin-top: 30px;">
+                                <button type="button" id="backToCharacter" class="btn-secondary">Retour à la fiche</button>
+                                <button type="button" id="startGame" class="btn-primary">Commencer l'aventure</button>
+                            </div>
+                        </div>
                     </div>
                 `;
+                
+                // Réattacher les événements pour les nouveaux boutons
+                document.getElementById('closeModal').addEventListener('click', () => this.closeModal());
+                document.getElementById('backToCharacter').addEventListener('click', () => {
+                    // Recharger la page pour revenir à la fiche personnage
+                    location.reload();
+                });
+                document.getElementById('startGame').addEventListener('click', () => {
+                    // Ici vous pouvez ajouter la logique pour démarrer le jeu
+                    alert('Le jeu va bientôt commencer !');
+                });
             }
         });
     }
